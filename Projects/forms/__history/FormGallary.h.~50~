@@ -1,0 +1,65 @@
+//---------------------------------------------------------------------------
+
+#ifndef FormGallaryH
+#define FormGallaryH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <Buttons.hpp>
+#include "DBLookupListBoxCentre.h"
+#include "my_DBCtrls.hpp"
+#include <DBGrids.hpp>
+#include <Grids.hpp>
+#include <DBCtrls.hpp>
+#include <ExtCtrls.hpp>
+#include "FormEditKart.h"
+#include "FormGallaryAddRemark.h"
+#include "IBCustomDataSet.hpp"
+#include "IBQuery.hpp"
+#include <DB.hpp>
+#include <Dialogs.hpp>
+#include <ExtDlgs.hpp>
+#include <CheckLst.hpp>
+#include <jpeg.hpp>
+#include <SysUtils.hpp>
+#include <string.h>
+#include <iostream.h>
+#include <stdlib.h>
+#include <float.h>
+#include <windows.h>
+#include <tchar.h>
+
+//---------------------------------------------------------------------------
+class TFormGall : public TForm
+{
+__published:	// IDE-managed Components
+	TPanel *Panel1;
+	TSpeedButton *But_add;
+	TSpeedButton *But_del;
+	TSpeedButton *But_get;
+	TSpeedButton *But_send;
+	TSpeedButton *SpeedButton5;
+	TDBGrid *DBMainGrid;
+	TCheckListBox *Image_CheckListBox;
+	TImage *Image1;
+	TLabel *Label1;
+	TLabel *Label2;
+	TOpenPictureDialog *OpenPictureDialog1;
+	void __fastcall But_addClick(TObject *Sender);
+	void __fastcall But_delClick(TObject *Sender);
+	void __fastcall ListBox1DrawItem(TWinControl *Control, int Index, TRect &Rect, TOwnerDrawState State);
+	void __fastcall Image_CheckListBoxClick(TObject *Sender);
+	void __fastcall But_sendClick(TObject *Sender);
+	void __fastcall But_getClick(TObject *Sender);
+
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormGall(TComponent* Owner, TIBDatabase * MainConnLoc,
+			TIBTransaction * MainTransactionLoc, TDataSource * TabPricelist_Datasource_MainLoc);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormGall *FormGall;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,115 @@
+object FormUpdateBanner: TFormUpdateBanner
+  Left = 0
+  Top = 0
+  BorderIcons = [biMinimize, biMaximize]
+  BorderStyle = bsSingle
+  ClientHeight = 635
+  ClientWidth = 999
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  WindowState = wsMaximized
+  OnActivate = FormActivate
+  OnPaint = Button1Click
+  OnResize = FormResize
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Image1: TImage
+    Left = 0
+    Top = 38
+    Width = 999
+    Height = 597
+    ParentCustomHint = False
+    Align = alClient
+    ParentShowHint = False
+    ShowHint = False
+    Stretch = True
+    ExplicitTop = 216
+    ExplicitHeight = 401
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 999
+    Height = 38
+    Align = alTop
+    Caption = 'Panel1'
+    ShowCaption = False
+    TabOrder = 0
+    object ProgressBar1: TProgressBar
+      Left = 1
+      Top = 1
+      Width = 997
+      Height = 17
+      Align = alTop
+      Max = 23
+      Step = 1
+      TabOrder = 0
+    end
+    object ProgressBar2: TProgressBar
+      Left = 1
+      Top = 19
+      Width = 997
+      Height = 18
+      Align = alBottom
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+    end
+  end
+  object Button1: TButton
+    Left = 816
+    Top = 61
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 1
+    Visible = False
+    OnClick = Button1Click
+    OnEnter = Button1Click
+  end
+  object Table_updatebanner: TMyTable
+    Left = 936
+    Top = 48
+  end
+  object Query_temp: TMyQuery
+    Left = 912
+    Top = 120
+  end
+  object Table_temp_load: TMyTable
+    Left = 816
+    Top = 56
+  end
+  object Query_updateexe: TMyQuery
+    Left = 824
+    Top = 136
+  end
+  object Query_updatescript: TMyQuery
+    Left = 896
+    Top = 208
+  end
+  object Query_reklama: TMyQuery
+    Left = 800
+    Top = 224
+  end
+  object IdHTTP1: TIdHTTP
+    OnWork = IdHTTP1Work
+    OnWorkBegin = IdHTTP1WorkBegin
+    AllowCookies = True
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.Accept = 'text/html, */*'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
+    HTTPOptions = [hoForceEncodeParams]
+    Left = 752
+    Top = 56
+  end
+end

@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormExcelExportAdd.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormExcelExportAdd *FormExcelExportAdd;
+//---------------------------------------------------------------------------
+__fastcall TFormExcelExportAdd::TFormExcelExportAdd(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExportAdd::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------

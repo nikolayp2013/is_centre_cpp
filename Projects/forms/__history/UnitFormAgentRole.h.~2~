@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormAgentRoleH
+#define UnitFormAgentRoleH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormAgentRole : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormAgentRole(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormAgentRole *FormAgentRole;
+//---------------------------------------------------------------------------
+#endif

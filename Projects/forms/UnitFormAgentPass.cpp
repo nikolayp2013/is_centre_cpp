@@ -1,0 +1,44 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormAgentPass.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormAgentPass *FormAgentPass;
+TDataSource * Agent_datasource = NULL;
+extern TDataSource * Agent_datasource;
+TIBTransaction * TransactionAgent = NULL;
+extern TIBTransaction * TransactionAgent;
+//---------------------------------------------------------------------------
+__fastcall TFormAgentPass::TFormAgentPass(TComponent* Owner, TDataSource * Agent_datasource_local,
+	TIBTransaction * TransactionAgent_loc)
+	: TForm(Owner)
+{
+	Agent_datasource = Agent_datasource_local;
+	TransactionAgent = TransactionAgent_loc;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormAgentPass::Button1Click(TObject *Sender)
+{
+	if (Edit1->Text.ToInt()!=Edit2->Text.ToInt()) {
+		AnsiString ds = "Пароли не совпадают. Повторите ввод.";
+		MessageBox(NULL,ds.c_str(),"Ошибка",MB_TOPMOST | MB_ICONWARNING);
+		Abort();
+	}
+	Agent_datasource->DataSet->Edit();
+	Agent_datasource->DataSet->FieldByName("PASSWORDV")->AsString= Edit1->Text;
+
+	//Фиксация изменений
+	Agent_datasource->DataSet->CheckBrowseMode();
+	TransactionAgent->CommitRetaining();
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormAgentPass::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------

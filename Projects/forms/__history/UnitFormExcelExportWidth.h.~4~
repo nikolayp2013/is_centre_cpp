@@ -1,0 +1,26 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormExcelExportWidthH
+#define UnitFormExcelExportWidthH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "FormExcelExport.h"
+//---------------------------------------------------------------------------
+class TFormExcelExportWidth : public TForm
+{
+__published:	// IDE-managed Components
+	TLabel *Label1;
+	TButton *Button1;
+	TButton *Button2;
+	TEdit *Edit1;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormExcelExportWidth(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormExcelExportWidth *FormExcelExportWidth;
+//---------------------------------------------------------------------------
+#endif

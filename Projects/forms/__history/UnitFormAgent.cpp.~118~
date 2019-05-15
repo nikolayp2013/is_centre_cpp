@@ -1,0 +1,301 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormAgent.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBQuery"
+#pragma link "IBDatabase"
+#pragma link "IBTable"
+#pragma resource "*.dfm"
+TFormAgent *FormAgent;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * TransactionAgent = NULL;
+extern TIBTransaction * TransactionAgent;
+// “аблица со списком агентов
+TIBTable * Table_Agent = NULL;
+extern TIBTable * Table_Agent;
+TDataSource * Agent_datasource = NULL;
+extern TDataSource * Agent_datasource;
+TIBTable * Table_Agent_Status = NULL;
+extern TIBTable * Table_Agent_Status;
+TDataSource * Agent_Status_datasource = NULL;
+extern TDataSource * Agent_Status_datasource;
+//---------------------------------------------------------------------------
+__fastcall TFormAgent::TFormAgent(TComponent* Owner, TIBDatabase * MainConnLoc)
+	: TForm(Owner)
+{
+	MainConn = MainConnLoc;
+	TransactionAgent = new TIBTransaction(NULL);
+	TransactionAgent->DefaultDatabase = MainConn;
+
+	//“аблица со списком ролей пользователей (статусов)
+	Table_Agent_Status = new TIBTable(NULL);
+	Table_Agent_Status->Database=MainConn;
+	Table_Agent_Status->Transaction=TransactionAgent;
+	Table_Agent_Status->TableName = "ITEMS";
+	Table_Agent_Status->Filter="RAZDEL=52";
+	Table_Agent_Status->Filtered=TRUE;
+	Table_Agent_Status->Active = true;
+	Table_Agent_Status->FetchAll();
+
+
+	//“аблица со списком агентов
+	Table_Agent = new TIBTable(NULL);
+	Table_Agent->Database=MainConn;
+	Table_Agent->Transaction=TransactionAgent;
+	Table_Agent->TableName = "PEOPLE";
+
+	TStringField *FKLookup = new TStringField (this);
+	FKLookup->Name = "Table_AgentSTATUSLOOKUP";
+	FKLookup->FieldName = "STATUSLOOKUP";
+	FKLookup->FieldKind = fkLookup;
+	FKLookup->Size = 200;
+	FKLookup->DataSet = Table_Agent;
+	FKLookup->KeyFields = "STATUSID"; // ключевое поле текущей таблицы
+	FKLookup->LookupDataSet = Table_Agent_Status; // таблица поле которой будем просматривать
+	FKLookup->LookupKeyFields = "CODE"; // ключевое поле из таблици которую будем просматривать
+	FKLookup->LookupResultField = "FULLNAME"; // просматриваемое поле в просматриваемой таблици
+	FKLookup->ReadOnly = true;
+
+	TIntegerField *FK1 = new TIntegerField (this);
+	FK1->Name = "Table_AgentID";
+	FK1->FieldName = "ID";
+	FK1->FieldKind = fkData;
+	FK1->DataSet = Table_Agent;
+
+	TIBStringField *FK2 = new TIBStringField (this);
+	FK2->Name = "Table_AgentFULLNAME";
+	FK2->FieldName = "FULLNAME";
+	FK2->FieldKind = fkData;
+	FK2->SetFieldType(ftString);
+	FK2->Size= 100;
+	FK2->DataSet = Table_Agent;
+
+	TIBStringField *FK3 = new TIBStringField (this);
+	FK3->Name = "Table_AgentMAINPHONE";
+	FK3->FieldName = "MAINPHONE";
+	FK3->FieldKind = fkData;
+	FK3->DataSet = Table_Agent;
+
+	TIBStringField *FK4 = new TIBStringField (this);
+	FK4->Name = "Table_AgentADVERTNAME";
+	FK4->FieldName = "ADVERTNAME";
+	FK4->FieldKind = fkData;
+	FK4->DataSet = Table_Agent;
+
+	TIBStringField *FK5 = new TIBStringField (this);
+	FK5->Name = "Table_AgentMOBILEPHONE";
+	FK5->FieldName = "MOBILEPHONE";
+	FK5->FieldKind = fkData;
+	FK5->DataSet = Table_Agent;
+
+	TIntegerField *FK6 = new TIntegerField (this);
+	FK6->Name = "Table_AgentCONTACTS";
+	FK6->FieldName = "CONTACTS";
+	FK6->FieldKind = fkData;
+	FK6->DataSet = Table_Agent;
+
+	TIntegerField *FK7 = new TIntegerField (this);
+	FK7->Name = "Table_AgentCOMPID";
+	FK7->FieldName = "COMPID";
+	FK7->FieldKind = fkData;
+	FK7->DataSet = Table_Agent;
+
+	TIBStringField *FK8 = new TIBStringField (this);
+	FK8->Name = "Table_AgentADDPHONE";
+	FK8->FieldName = "ADDPHONE";
+	FK8->FieldKind = fkData;
+	FK8->DataSet = Table_Agent;
+
+	TIBStringField *FK9 = new TIBStringField (this);
+	FK9->Name = "Table_AgentSURNAME";
+	FK9->FieldName = "SURNAME";
+	FK9->FieldKind = fkData;
+	FK9->DataSet = Table_Agent;
+
+	TIBStringField *FK10 = new TIBStringField (this);
+	FK10->Name = "Table_AgentNAME";
+	FK10->FieldName = "NAME";
+	FK10->FieldKind = fkData;
+	FK10->DataSet = Table_Agent;
+
+	TIBStringField *FK11 = new TIBStringField (this);
+	FK11->Name = "Table_AgentSECNAME";
+	FK11->FieldName = "SECNAME";
+	FK11->FieldKind = fkData;
+	FK11->DataSet = Table_Agent;
+
+	TDateField *FK12 = new TDateField (this);
+	FK12->Name = "Table_AgentDATEENTER";
+	FK12->FieldName = "DATEENTER";
+	FK12->FieldKind = fkData;
+	FK12->DataSet = Table_Agent;
+
+	TIntegerField *FK13 = new TIntegerField (this);
+	FK13->Name = "Table_AgentSTATUSID";
+	FK13->FieldName = "STATUSID";
+	FK13->FieldKind = fkData;
+	FK13->DataSet = Table_Agent;
+
+	TIBStringField *FK14 = new TIBStringField (this);
+	FK14->Name = "Table_AgentSTATUS";
+	FK14->FieldName = "STATUS";
+	FK14->FieldKind = fkData;
+	FK14->DataSet = Table_Agent;
+
+	TIBStringField *FK15 = new TIBStringField (this);
+	FK15->Name = "Table_AgentPASSWORDV";
+	FK15->FieldName = "PASSWORDV";
+	FK15->FieldKind = fkData;
+	FK15->DataSet = Table_Agent;
+
+	TIntegerField *FK16 = new TIntegerField (this);
+	FK16->Name = "Table_AgentNUMBID";
+	FK16->FieldName = "NUMBID";
+	FK16->FieldKind = fkData;
+	FK16->DataSet = Table_Agent;
+
+	TIBStringField *FK17 = new TIBStringField (this);
+	FK17->Name = "Table_AgentE_MAIL";
+	FK17->FieldName = "E_MAIL";
+	FK17->FieldKind = fkData;
+	FK17->DataSet = Table_Agent;
+
+	TIntegerField *FK18 = new TIntegerField (this);
+	FK18->Name = "Table_AgentCHKNAME";
+	FK18->FieldName = "CHKNAME";
+	FK18->FieldKind = fkData;
+	FK18->DataSet = Table_Agent;
+
+	TIntegerField *FK19 = new TIntegerField (this);
+	FK19->Name = "Table_AgentCHKPRICE";
+	FK19->FieldName = "CHKPRICE";
+	FK19->FieldKind = fkData;
+	FK19->DataSet = Table_Agent;
+
+	TIntegerField *FK20 = new TIntegerField (this);
+	FK20->Name = "Table_AgentCHKMAIN";
+	FK20->FieldName = "CHKMAIN";
+	FK20->FieldKind = fkData;
+	FK20->DataSet = Table_Agent;
+
+	TIntegerField *FK21 = new TIntegerField (this);
+	FK21->Name = "Table_AgentCHKADD";
+	FK21->FieldName = "CHKADD";
+	FK21->FieldKind = fkData;
+	FK21->DataSet = Table_Agent;
+
+	TIntegerField *FK22 = new TIntegerField (this);
+	FK22->Name = "Table_AgentCHKSOT";
+	FK22->FieldName = "CHKSOT";
+	FK22->FieldKind = fkData;
+	FK22->DataSet = Table_Agent;
+
+	TIntegerField *FK23 = new TIntegerField (this);
+	FK23->Name = "Table_AgentCHKE_MAIL";
+	FK23->FieldName = "CHKE_MAIL";
+	FK23->FieldKind = fkData;
+	FK23->DataSet = Table_Agent;
+
+	Table_Agent->Active = true;
+	Table_Agent->FetchAll();
+	Agent_datasource = new TDataSource(NULL);
+	Agent_datasource->DataSet=Table_Agent;
+
+	Agent_datasource->DataSet->Active=True;
+	GridAgent->DataSource = Agent_datasource;
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormAgent::SpeedButton2Click(TObject *Sender)
+{
+	FormAgKartEdit = new TFormAgKartEdit(FormAgent,Agent_datasource,MainConn,TransactionAgent);
+	FormAgKartEdit->ShowModal();
+	delete FormAgKartEdit;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormAgent::SpeedButton1Click(TObject *Sender)
+{
+	// ”знать max номер записи
+	int max_num=0;
+	int recnum = Agent_datasource->DataSet->RecNo;
+	Agent_datasource->DataSet->DisableControls();
+	Agent_datasource->DataSet->First();
+	while (!Agent_datasource->DataSet->Eof){
+		 if (Agent_datasource->DataSet->FieldByName("NUMBID")->AsInteger>max_num) {
+			 max_num = Agent_datasource->DataSet->FieldByName("NUMBID")->AsInteger;
+		 }
+		 Agent_datasource->DataSet->Next();
+	}
+	Agent_datasource->DataSet->RecNo = recnum;
+	Agent_datasource->DataSet->EnableControls();
+	// ------------
+	Agent_datasource->DataSet->Edit();
+	Agent_datasource->DataSet->Append();
+	Agent_datasource->DataSet->FieldByName("ID")->AsInteger=-1;
+	Agent_datasource->DataSet->FieldByName("COMPID")->AsInteger=OwnerCode;
+	Agent_datasource->DataSet->FieldByName("NUMBID")->AsInteger=max_num+1;
+	Agent_datasource->DataSet->FieldByName("CHKNAME")->AsInteger=1;
+	Agent_datasource->DataSet->FieldByName("CHKPRICE")->AsInteger=0;
+	Agent_datasource->DataSet->FieldByName("CHKMAIN")->AsInteger=1;
+	Agent_datasource->DataSet->FieldByName("CHKADD")->AsInteger=0;
+	Agent_datasource->DataSet->FieldByName("CHKSOT")->AsInteger=1;
+	Agent_datasource->DataSet->FieldByName("CHKE_MAIL")->AsInteger=0;
+
+	FormAgKartEdit = new TFormAgKartEdit(FormAgent,Agent_datasource,MainConn,TransactionAgent);
+	FormAgKartEdit->ShowModal();
+	delete FormAgKartEdit;
+
+	if (Table_Agent->RecordCount<2)
+		GridAgent->Columns->Items[7]->Width = 167;
+	else
+		GridAgent->Columns->Items[7]->Width = 149;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormAgent::FormShow(TObject *Sender)
+{
+	GridAgent->Columns->Items[0]->Width = 27;
+	GridAgent->Columns->Items[1]->Width = 30;
+	GridAgent->Columns->Items[2]->Width = 110;
+	GridAgent->Columns->Items[3]->Width = 95;
+	GridAgent->Columns->Items[4]->Width = 95;
+	GridAgent->Columns->Items[5]->Width = 90;
+	GridAgent->Columns->Items[6]->Width = 130;
+	if (Table_Agent->RecordCount<2)
+		GridAgent->Columns->Items[7]->Width = 167;
+	else
+		GridAgent->Columns->Items[7]->Width = 149;
+
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TFormAgent::SpeedButton4Click(TObject *Sender)
+{
+	AnsiString ds = "¬ы действительно хотите удалить запись?";
+	if (MessageBox(NULL,ds.c_str(),"ѕодтверждение удалени€",MB_YESNO | MB_TOPMOST | MB_ICONQUESTION)!=IDYES){
+		Abort();
+	}
+	Table_Agent->Delete();
+	TransactionAgent->CommitRetaining();
+	if (Table_Agent->RecordCount<2)
+		GridAgent->Columns->Items[7]->Width = 167;
+	else
+		GridAgent->Columns->Items[7]->Width = 149;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormAgent::SpeedButton9Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+

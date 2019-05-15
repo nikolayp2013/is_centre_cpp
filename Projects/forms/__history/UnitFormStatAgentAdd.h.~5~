@@ -1,0 +1,25 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormStatAgentAddH
+#define UnitFormStatAgentAddH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "FormStatAgent.h"
+//---------------------------------------------------------------------------
+class TFormStatAgAdd : public TForm
+{
+__published:	// IDE-managed Components
+	TButton *Button1;
+	TButton *Button2;
+	void __fastcall Button2Click(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormStatAgAdd(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormStatAgAdd *FormStatAgAdd;
+//---------------------------------------------------------------------------
+#endif

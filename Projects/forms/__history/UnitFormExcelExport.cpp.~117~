@@ -1,0 +1,365 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormExcelExport.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "DBLookupListBoxCentre"
+#pragma link "my_DBCtrls"
+#pragma resource "*.dfm"
+TFormExcelExport *FormExcelExport;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+//Создать табличку со списком полей для выгрузки в Excel
+TIBTable * Table_ExcelFields = NULL;
+extern TIBTable * Table_ExcelFields;
+TIBTable * Table_ExcelForm = NULL;
+extern TIBTable * Table_ExcelForm;
+TIBTable * Table_ExcelFormInt = NULL;
+extern TIBTable * Table_ExcelFormInt;
+TDataSource * ExcelFields_Datasource =NULL;
+extern TDataSource * ExcelFields_Datasource;
+TDataSource * ExcelFormInt_Datasource =NULL;
+extern TDataSource * ExcelFormInt_Datasource;
+//---------------------------------------------------------------------------
+__fastcall TFormExcelExport::TFormExcelExport(TComponent* Owner, TIBDatabase * MainConn_local)
+	: TForm(Owner)
+{
+	MainConn = MainConn_local;
+
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать табличку со списком полей для выгрузки в Excel
+	Table_ExcelFields = new TIBTable(NULL);
+	Table_ExcelFields->Database=MainConn;
+	Table_ExcelFields->Transaction=MainTransaction;
+	Table_ExcelFields->TableName = "EXCELFIELDS";
+	//Table_ExcelFields->IndexFieldNames="COMPID";
+	Table_ExcelFields->Filter = "BASEID=0";
+	Table_ExcelFields->Filtered = true;
+	Table_ExcelFields->Active=true;
+	Table_ExcelFields->FetchAll();
+	Table_ExcelFields->First();
+
+	Table_ExcelForm = new TIBTable(NULL);
+	Table_ExcelForm->Database=MainConn;
+	Table_ExcelForm->Transaction=MainTransaction;
+	Table_ExcelForm->TableName = "EXCELFORM";
+	//Table_ExcelForm->IndexFieldNames="ID";
+	Table_ExcelForm->Filter = "BASEID=0";
+	Table_ExcelForm->Filtered = true;
+	Table_ExcelForm->Active=true;
+	Table_ExcelForm->FetchAll();
+	Table_ExcelForm->First();
+
+	Table_ExcelFormInt = new TIBTable(NULL);
+	Table_ExcelFormInt->Database=MainConn;
+	Table_ExcelFormInt->Transaction=MainTransaction;
+	Table_ExcelFormInt->TableName = "EXCELFORMSINT";
+	Table_ExcelFormInt->Filter = "IDFORMEXCEL=";
+	Table_ExcelFormInt->Filter = Table_ExcelFormInt->Filter + Table_ExcelForm->FieldByName("ID")->AsString;
+	Table_ExcelFormInt->Filtered = true;
+	Table_ExcelFormInt->IndexFieldNames="IDBYGROUP";
+	Table_ExcelFormInt->Active=true;
+	Table_ExcelFormInt->FetchAll();
+
+	ExcelFields_Datasource = new TDataSource(NULL);
+	ExcelFields_Datasource->DataSet=Table_ExcelFields;
+
+	ExcelFormInt_Datasource = new TDataSource(NULL);
+	ExcelFormInt_Datasource->DataSet=Table_ExcelFormInt;
+
+	//Цикл по всем записям таблицы
+	 Table_ExcelForm->First();
+	 do {
+		ExcelForm_ComboBox->Items->Add(Table_ExcelForm->FieldByName("FNAME")->AsString);
+		Table_ExcelForm->Next();
+	 } while(!Table_ExcelForm->Eof);
+	 Table_ExcelForm->First();
+	 ExcelForm_ComboBox->ItemIndex=0;
+
+	 //Цикл по всем записям таблицы
+	 Table_ExcelFields->First();
+	 do {
+		ExcelFields_CheckListBox->Items->Add(Table_ExcelFields->FieldByName("DESCRIPTION")->AsString);
+		Table_ExcelFields->Next();
+	 } while(!Table_ExcelFields->Eof);
+	 Table_ExcelFields->First();
+	 ExcelFields_CheckListBox->ItemIndex=0;
+
+	/*Excelformsint_DBLookupListBox->ListSource=ExcelFields_Datasource;
+	Excelformsint_DBLookupListBox->ListField="DESCRIPTION";
+	Excelformsint_DBLookupListBox->KeyField="ID";
+	Excelformsint_DBLookupListBox->DataSource=ExcelFormInt_Datasource;
+	Excelformsint_DBLookupListBox->DataField="IDFIELDS";*/
+
+	Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExport::Formexelint_refresh(TObject *Sender)
+{
+	 //Цикл по всем записям таблицы
+	 Formexcelint_ListBox->Items->Clear();
+	 int currno = Table_ExcelFormInt->RecNo;
+	 Table_ExcelFormInt->First();
+	 while(!Table_ExcelFormInt->Eof)
+	 {
+		Table_ExcelFields->Locate("ID",Table_ExcelFormInt->FieldByName("IDFIELDS")->AsInteger,TLocateOptions());
+		Formexcelint_ListBox->Items->Add(Table_ExcelFields->FieldByName("DESCRIPTION")->AsString);
+		Table_ExcelFormInt->Next();
+	 };
+	 //Table_ExcelFormInt->First();
+	 Table_ExcelFormInt->RecNo = currno;
+	 Formexcelint_ListBox->ItemIndex=currno-1;
+	 Label2->Caption = "Возможные поля ("+(String)Table_ExcelFields->RecordCount+" поля)";
+	 Label3->Caption = "Поля в форме (сейчас "+(String)Table_ExcelFormInt->RecordCount+")";
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExport::ProcSave(TObject *Sender)
+{
+	//Фиксация изменений
+	Table_ExcelForm->CheckBrowseMode();
+	Table_ExcelFormInt->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	//Открыть набор данных
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExport::Button1Click(TObject *Sender)
+{
+	// Очистка чекбокса
+	 int i=0;
+	 int max_num;
+	 while (i<ExcelFields_CheckListBox->Items->Count){
+		if (ExcelFields_CheckListBox->Checked[i]) {
+			Table_ExcelFields->RecNo = i+1;
+			if (Table_ExcelFormInt->RecordCount==0 || !Table_ExcelFormInt->Locate("IDFIELDS",Table_ExcelFields->FieldByName("ID")->AsInteger,TLocateOptions())) {
+				// Узнать max номер записи
+				max_num=0;
+				Table_ExcelFormInt->First();
+				while (!Table_ExcelFormInt->Eof){
+					if (Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger>max_num) {
+						max_num = Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger;
+					}
+					Table_ExcelFormInt->Next();
+				}
+				Table_ExcelFormInt->Append();
+				Table_ExcelFormInt->FieldByName("ID")->AsInteger=-1;
+				Table_ExcelForm->RecNo = ExcelForm_ComboBox->ItemIndex+1;
+				Table_ExcelFormInt->FieldByName("IDFORMEXCEL")->AsInteger = Table_ExcelForm->FieldByName("ID")->AsInteger;
+				Table_ExcelFormInt->FieldByName("IDFIELDS")->AsInteger = Table_ExcelFields->FieldByName("ID")->AsInteger;
+				Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger = max_num+1;
+				Table_ExcelFormInt->FieldByName("FWIDTH")->AsInteger = 10;
+				//ExcelFields_CheckListBox->Checked[i] = false;
+			}
+		}
+		i++;
+	 }
+	 ProcSave(this);
+	 Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::Button5Click(TObject *Sender)
+{
+	 Table_ExcelFormInt->RecNo=Formexcelint_ListBox->ItemIndex+1;
+	 Table_ExcelFormInt->Delete();
+	 ProcSave(this);
+	 Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::Button3Click(TObject *Sender)
+{
+	// На одну позицию вверх
+	Table_ExcelFormInt->RecNo=Formexcelint_ListBox->ItemIndex+1;
+	int oldgroup = Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger;
+	Table_ExcelFormInt->Prior();
+	if (Table_ExcelFormInt->Bof) {
+		 Abort();
+	}
+	Table_ExcelFormInt->Edit();
+	int newgroup = Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger;
+	Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger = oldgroup;
+	Table_ExcelFormInt->Next();
+	Table_ExcelFormInt->Edit();
+	Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger = newgroup;
+	ProcSave(this);
+	Table_ExcelFormInt->Refresh();
+	Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormExcelExport::Button4Click(TObject *Sender)
+{
+	// На одну позицию вниз
+	Table_ExcelFormInt->RecNo=Formexcelint_ListBox->ItemIndex+1;
+	int oldgroup = Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger;
+	Table_ExcelFormInt->Next();
+	if (Table_ExcelFormInt->Eof) {
+		 Abort();
+	}
+	Table_ExcelFormInt->Edit();
+	int newgroup = Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger;
+	Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger = oldgroup;
+    Table_ExcelFormInt->Prior();
+	Table_ExcelFormInt->Edit();
+	Table_ExcelFormInt->FieldByName("IDBYGROUP")->AsInteger = newgroup;
+	ProcSave(this);
+	Table_ExcelFormInt->Refresh();
+	Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::ExcelForm_ComboBoxClick(TObject *Sender)
+{
+	Table_ExcelFormInt->Active=false;
+	Table_ExcelFormInt->Filtered = false;
+	Table_ExcelFormInt->Filter = "IDFORMEXCEL=";
+	Table_ExcelForm->RecNo = ExcelForm_ComboBox->ItemIndex + 1;
+	Table_ExcelFormInt->Filter = Table_ExcelFormInt->Filter + Table_ExcelForm->FieldByName("ID")->AsString;
+	Table_ExcelFormInt->Filtered = true;
+	Table_ExcelFormInt->IndexFieldNames="IDBYGROUP";
+	Table_ExcelFormInt->Active=true;
+	Table_ExcelFormInt->FetchAll();
+	Formexelint_refresh(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::Button2Click(TObject *Sender)
+{
+	// Добавление новой фомы
+	int * swenter = new int;
+	*swenter =0;
+	string * nameform = new string;
+	*nameform = "";
+	FormExcelExportAdd = new TFormExcelExportAdd(this,swenter,nameform);
+	FormExcelExportAdd->ShowModal();
+	if (*swenter!=0) {
+		Table_ExcelForm->Append();
+		Table_ExcelForm->FieldByName("ID")->AsInteger=-1;
+		Table_ExcelForm->FieldByName("FNAME")->AsString=(*nameform).c_str();
+		Table_ExcelForm->FieldByName("BASEID")->AsInteger=0;
+		ExcelForm_ComboBox->Items->Add((*nameform).c_str());
+		ProcSave(this);
+		Table_ExcelForm->Refresh();
+		Table_ExcelForm->Last();
+		ExcelForm_ComboBox->ItemIndex= Table_ExcelForm->RecNo-1;
+		ExcelForm_ComboBoxClick(this);
+	}
+	delete FormExcelExportAdd;
+	delete swenter;
+	delete nameform;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::SpeedButton1Click(TObject *Sender)
+{
+	 Table_ExcelForm->RecNo = ExcelForm_ComboBox->ItemIndex+1;
+	 Table_ExcelForm ->Delete();
+	 ExcelForm_ComboBox->Items->Delete(ExcelForm_ComboBox->ItemIndex);
+	 ProcSave(this);
+	 Table_ExcelForm->First();
+	 ExcelForm_ComboBox->ItemIndex= Table_ExcelForm->RecNo-1;
+	 ExcelForm_ComboBoxClick(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::Formexcelint_ListBoxDblClick(TObject *Sender)
+{
+	 // Изменение ширины колонки
+	int * swenter = new int;
+	*swenter =0;
+	int * newwidth = new int;
+	*newwidth = 10;
+	FormExcelExportWidth = new TFormExcelExportWidth(this,swenter,newwidth);
+	FormExcelExportWidth->ShowModal();
+	if (*swenter!=0) {
+		Table_ExcelFormInt->RecNo = Formexcelint_ListBox->ItemIndex + 1;
+		Table_ExcelFormInt->Edit();
+		Table_ExcelFormInt->FieldByName("FWIDTH")->AsInteger=*newwidth;
+        ProcSave(this);
+	}
+	delete FormExcelExportWidth;
+	delete swenter;
+	delete newwidth;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormExcelExport::Button6Click(TObject *Sender)
+{
+Variant
+  Ex, //Переменная Excel.Application
+  Wb, //Переменная WorkBook
+  Sh; //Переменная WorkSheet
+  OleInitialize(NULL);
+  if (SaveDialog1->Execute()){
+  try //Попытка открыть приложение Excel
+	{
+      Ex=CreateOleObject("Excel.Application");
+    }
+    catch (...) //Попытка не удалась
+	  {
+		MessageBox(NULL,"Не могу запустить сервер Microsoft Excel."
+		" Возможно, Excel не установлен на компьютере.",
+        "Ошибка",MB_OK | MB_ICONERROR);
+        return;
+      }
+  Ex.OlePropertySet("Visible", false); //Отключение визуального режима Excel
+  Ex.OlePropertySet("SheetsInNewWorkbook", 3); //Задание количества листов
+  Ex.OlePropertyGet("WorkBooks").OleFunction("Add", 1); //Создание книги Excel
+  Wb = Ex.OlePropertyGet("WorkBooks", 1);
+  Sh=Ex.OlePropertyGet("WorkSheets",1);
+  // Вывод информации
+  Sh.OlePropertyGet("Cells", 1, 1).OlePropertySet("Value",
+		"test");
+  Table_ExcelFormInt->First();
+  while(!Table_ExcelFormInt->Eof)
+  {
+		Sh.OlePropertyGet("Columns").OlePropertyGet("Item", Table_ExcelFormInt->RecNo).OlePropertySet("ColumnWidth", 50);
+		Table_ExcelFields->Locate("ID",Table_ExcelFormInt->FieldByName("IDFIELDS")->AsInteger,TLocateOptions());
+		Sh.OlePropertyGet("Cells", 1, Table_ExcelFormInt->RecNo).OlePropertySet("Value",
+		Table_ExcelFields->FieldByName("DESCRIPTION")->AsString.c_str());
+		Table_ExcelFormInt->Next();
+  }
+  if (SaveDialog1->FileName!="") //Если FileName не пустое
+    {
+      try //Попытка сохранить и закрыть приложение Excel
+        {
+          //НЕ отключить(true) вывод сообщений с вопросами типа "Заменить файл..."
+          Ex.OlePropertySet("DisplayAlerts",false);
+          //Сохранить книгу
+          Ex.OlePropertyGet("Workbooks").OlePropertyGet("Item",1).
+            OleProcedure("SaveAs",SaveDialog1->FileName.c_str());;
+          //Закрыть открытое приложение Excel
+          Ex.OleProcedure("Quit");
+          Sh.Clear();
+          Ex.Clear();
+          OleUninitialize();
+        }
+        catch(...) //Попытка не удалась
+          {
+            MessageBox(0, "Ошибка при сохранении документа в формате .xls",
+              "Ошибка", MB_OK);
+            Ex.OleProcedure("Quit");
+            Sh.Clear();
+            Ex.Clear();
+            OleUninitialize();
+            return;
+          }
+    }
+  else //Если FileName пустое
+    {
+      Ex.OlePropertySet("Visible", true); //Включить визуального режима Excel
+      Sh.Clear();
+      Ex.Clear();
+      OleUninitialize();
+	}}
+}

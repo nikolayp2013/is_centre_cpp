@@ -1,0 +1,28 @@
+//---------------------------------------------------------------------------
+
+#ifndef FormStatAgentH
+#define FormStatAgentH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <ExtCtrls.hpp>
+//---------------------------------------------------------------------------
+class TFormStatAg : public TForm
+{
+__published:	// IDE-managed Components
+	TShape *Shape5;
+	TLabel *Label1;
+	TCheckBox *CheckBox1;
+	TCheckBox *CheckBox2;
+	TCheckBox *CheckBox3;
+	TCheckBox *CheckBox4;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormStatAg(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormStatAg *FormStatAg;
+//---------------------------------------------------------------------------
+#endif

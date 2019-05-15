@@ -1,0 +1,24 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitUpdateExe.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormUpdateExe *FormUpdateExe;
+//---------------------------------------------------------------------------
+__fastcall TFormUpdateExe::TFormUpdateExe(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormUpdateExe::Button1Click(TObject *Sender)
+{
+	idFTP1->Host = "http://http://iscentre-samara.ru/files";
+	idFTP1->Passive = true;
+	idFTP1->Connect(true);
+	idFTP1->Get("centre.zip", "c:\\temp\\centre.zip", true);
+}
+//---------------------------------------------------------------------------

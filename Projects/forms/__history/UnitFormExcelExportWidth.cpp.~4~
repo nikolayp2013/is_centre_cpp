@@ -1,0 +1,22 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormExcelExportWidth.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormExcelExportWidth *FormExcelExportWidth;
+int * swenter;
+extern int * swenter;
+int * newwidth;
+extern int * newwidth;
+//---------------------------------------------------------------------------
+__fastcall TFormExcelExportWidth::TFormExcelExportWidth(TComponent* Owner, int * swenter_local, int * newwidth_local)
+	: TForm(Owner)
+{
+	swenter=swenter_local;
+	newwidth=newwidth_local;
+}
+//---------------------------------------------------------------------------

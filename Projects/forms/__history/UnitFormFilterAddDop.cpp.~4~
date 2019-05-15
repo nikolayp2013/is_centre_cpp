@@ -1,0 +1,78 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormFilterAddDop.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormFilterAddDop *FormFilterAddDop;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+TIBTable * Table_FilterDop = NULL;
+extern TIBTable * Table_FilterDop;
+//---------------------------------------------------------------------------
+__fastcall TFormFilterAddDop::TFormFilterAddDop(TComponent* Owner, TIBDatabase * MainConn_loc)
+	: TForm(Owner)
+{
+	MainConn = MainConn_loc;
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать табличку параметры фильтра
+	Table_FilterDop = new TIBTable(NULL);
+	Table_FilterDop->Database=MainConn;
+	Table_FilterDop->Transaction=MainTransaction;
+	Table_FilterDop->TableName = "FILTERDOP";
+	Table_FilterDop->Active=true;
+	Table_FilterDop->FetchAll();
+
+	Table_FilterDop->First();
+	while (!Table_FilterDop->Eof){
+		Filter_ListBox->Items->Add(Table_FilterDop->FieldByName("FLT_NAME")->AsString);
+		Table_FilterDop->Next();
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFilterAddDop::Button2Click(TObject *Sender)
+{
+    MainTransaction->RollbackRetaining();
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFilterAddDop::Button1Click(TObject *Sender)
+{
+	Table_FilterDop->CheckBrowseMode();
+	MainTransaction->CommitRetaining();
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFilterAddDop::Button5Click(TObject *Sender)
+{
+	// Помощь
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFilterAddDop::Button4Click(TObject *Sender)
+{
+	// Добавить
+	if (!Filter_Edit->Text.IsEmpty()) {
+		Filter_ListBox->Items->Add(Filter_Edit->Text);
+		Table_FilterDop->Edit();
+		Table_FilterDop->Append();
+		Table_FilterDop->FieldByName("ID")->AsInteger=-1;
+		Table_FilterDop->FieldByName("FLT_NAME")->AsString = Filter_Edit->Text;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFilterAddDop::Button3Click(TObject *Sender)
+{
+	// Удалить
+	Table_FilterDop->RecNo=Filter_ListBox->ItemIndex+1;
+	Filter_ListBox->Items->Delete(Filter_ListBox->ItemIndex);
+	Table_FilterDop->Delete();
+}
+//---------------------------------------------------------------------------

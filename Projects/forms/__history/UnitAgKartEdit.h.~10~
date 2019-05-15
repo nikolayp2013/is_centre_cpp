@@ -1,0 +1,71 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitAgKartEditH
+#define UnitAgKartEditH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <DBCtrls.hpp>
+#include <Mask.hpp>
+#include <ExtCtrls.hpp>
+#include <UnitFormAgent.h>
+#include "DBLookupComboBoxCentre.h"
+#include "my_DBCtrls.hpp"
+//---------------------------------------------------------------------------
+class TFormAgKartEdit : public TForm
+{
+__published:	// IDE-managed Components
+	TButton *ButtonPass;
+	TLabel *Label1;
+	TComboBox *Manager_ComboBox;
+	TLabel *Label2;
+	TDBEdit *LicKart_DBEdit;
+	TLabel *Label3;
+	TDBEdit *DateEnter_DBEdit;
+	TLabel *Label4;
+	TDBEdit *KartNo_DBEdit;
+	TShape *Shape2;
+	TLabel *Label5;
+	TLabel *Label6;
+	TLabel *Label7;
+	TDBEdit *Surname_DBEdit;
+	TDBEdit *Name_DBEdit;
+	TDBEdit *Secname_DBEdit;
+	TDBEdit *Fullname_DBEdit;
+	TShape *Shape1;
+	TLabel *Label8;
+	TDBEdit *ReklName_DBEdit;
+	TShape *Shape3;
+	TLabel *Label9;
+	TDBEdit *ReklPhone_DBEdit;
+	TLabel *Label10;
+	TDBEdit *PhoneAdd_DBEdit;
+	TShape *Shape4;
+	TLabel *Label11;
+	TLabel *Label12;
+	TDBEdit *SotPhone_DBEdit;
+	TDBEdit *E_mail_DBEdit;
+	TLabel *Label13;
+	TShape *Shape5;
+	TButton *Button1;
+	TShape *Shape6;
+	TLabel *Label14;
+	TDBCheckBox *DBCheckBox1;
+	TDBCheckBox *DBCheckBox2;
+	TDBCheckBox *DBCheckBox3;
+	TDBCheckBox *DBCheckBox4;
+	TDBCheckBox *DBCheckBox5;
+	TDBCheckBox *DBCheckBox6;
+	TDBLookupComboBoxCentre *Status_DBLookupComboBoxCentre;
+
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormAgKartEdit(TComponent* Owner, TDataSource * Agent_datasource_local,
+		TIBDatabase * MainConn_local);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormAgKartEdit *FormAgKartEdit;
+//---------------------------------------------------------------------------
+#endif

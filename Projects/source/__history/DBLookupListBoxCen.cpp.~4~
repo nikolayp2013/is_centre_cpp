@@ -1,0 +1,32 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+
+#pragma hdrstop
+
+#include "DBLookupListBoxCen.h"
+#pragma package(smart_init)
+//---------------------------------------------------------------------------
+// ValidCtrCheck is used to assure that the components created do not have
+// any pure virtual functions.
+//
+
+static inline void ValidCtrCheck(TDBLookupListBoxCen *)
+{
+	new TDBLookupListBoxCen(NULL);
+}
+//---------------------------------------------------------------------------
+__fastcall TDBLookupListBoxCen::TDBLookupListBoxCen(TComponent* Owner)
+	: TMyDBLookupListBox(Owner)
+{
+}
+//---------------------------------------------------------------------------
+namespace Dblookuplistboxcen
+{
+	void __fastcall PACKAGE Register()
+	{
+		TComponentClass classes[1] = {__classid(TDBLookupListBoxCen)};
+		RegisterComponents(L"Centre", classes, 0);
+	}
+}
+//---------------------------------------------------------------------------

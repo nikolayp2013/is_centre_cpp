@@ -1,0 +1,41 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormGridColumnH
+#define UnitFormGridColumnH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <CheckLst.hpp>
+#include "MainClass.h"
+#include <DBCtrls.hpp>
+#include <Mask.hpp>
+//---------------------------------------------------------------------------
+class TFormGridColumn : public TForm
+{
+__published:	// IDE-managed Components
+	TCheckListBox *Fields_CheckListBox;
+	TLabel *Label1;
+	TLabel *Label2;
+	TButton *Button1;
+	TButton *Button2;
+	TButton *Button3;
+	TButton *Commit_Button;
+	TDBEdit *Width_DBEdit;
+	void __fastcall Fields_CheckListBoxClick(TObject *Sender);
+	void __fastcall Commit_ButtonClick(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall Button3Click(TObject *Sender);
+	void __fastcall Button2Click(TObject *Sender);
+	void __fastcall Button1Click(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormGridColumn(TComponent* Owner, TIBDatabase * MainConn_local, int swview_local,
+		UnicodeString tablename_local, int tableid_local);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormGridColumn *FormGridColumn;
+//---------------------------------------------------------------------------
+#endif

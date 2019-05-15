@@ -1,0 +1,624 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{7ADD3E9D-D6DB-40BE-AE65-1D2198C47EEA}</ProjectGuid>
+			<ProjectVersion>12.0</ProjectVersion>
+			<MainSource>centre.cpp</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<LinkPackageStatics>rtl.lib;vcl.lib;dbrtl.lib;dsnap.lib;vcldb.lib;dbexpress.lib;DbxClientDriver.lib;DbxCommonDriver.lib;DBXInterBaseDriver.lib;dbxcds.lib;adortl.lib;ibxpress.lib;CentrePackage.lib;CentrePackege.lib;bdertl.lib;vclx.lib;vclie.lib;inet.lib;Rave76VCL.lib;DBXMySQLDriver.lib;bcbie.lib;IndyCore.lib;IndySystem.lib;IndyProtocols.lib;frx12.lib;fs12.lib;fqb120.lib;frxe12.lib;frxIBX12.lib;fsIBX12.lib;fsDB12.lib;frxDB12.lib;frxDBX12.lib;EhLib120.lib;EhLibDataDrivers120.lib;dac120.lib;mydac120.lib</LinkPackageStatics>
+			<OutputExt>exe</OutputExt>
+			<Multithreaded>true</Multithreaded>
+			<PackageImports>vclx.bpi;vcl.bpi;dbrtl.bpi;Rave76VCL.bpi;bdertl.bpi;rtl.bpi;bcbie.bpi;vclactnband.bpi;xmlrtl.bpi;bcbsmp.bpi;vcldb.bpi;vcldbx.bpi;dsnap.bpi;dsnapcon.bpi;TeeUI.bpi;TeeDB.bpi;Tee.bpi;adortl.bpi;vclib.bpi;ibxpress.bpi;IndyCore.bpi;IndySystem.bpi;IndyProtocols.bpi;inet.bpi;intrawebdb_100_120.bpi;Intraweb_100_120.bpi;VclSmp.bpi;vclie.bpi;websnap.bpi;webdsnap.bpi;inetdbbde.bpi;inetdbxpress.bpi;soaprtl.bpi;vclribbon.bpi;dbexpress.bpi;DbxCommonDriver.bpi;DataSnapIndy10ServerTransport.bpi;DataSnapProviderClient.bpi;DataSnapServer.bpi;DbxClientDriver.bpi;DBXInterBaseDriver.bpi;DBXMySQLDriver.bpi;dbxcds.bpi;DBXSybaseASEDriver.bpi;DBXSybaseASADriver.bpi;DBXOracleDriver.bpi;DBXMSSQLDriver.bpi;DBXInformixDriver.bpi;DBXDb2Driver.bpi;mydacvcl120.bpi;mydac120.bpi;dac120.bpi;dacvcl120.bpi</PackageImports>
+			<AllPackageLibs>rtl.lib;vcl.lib;dbrtl.lib;dsnap.lib;vcldb.lib;dbexpress.lib;DbxClientDriver.lib;DbxCommonDriver.lib;DBXInterBaseDriver.lib;dbxcds.lib;adortl.lib;ibxpress.lib;CentrePackage.lib;CentrePackege.lib;bdertl.lib;vclx.lib;vclie.lib;inet.lib;Rave76VCL.lib;DBXMySQLDriver.lib;bcbie.lib;IndyCore.lib;IndySystem.lib;IndyProtocols.lib;frx12.lib;fs12.lib;fqb120.lib;frxe12.lib;frxIBX12.lib;fsIBX12.lib;fsDB12.lib;frxDB12.lib;frxDBX12.lib;EhLib120.lib;EhLibDataDrivers120.lib;dac120.lib;mydac120.lib</AllPackageLibs>
+			<ProjectType>CppVCLApplication</ProjectType>
+			<DCC_CBuilderOutput>JPHNE</DCC_CBuilderOutput>
+			<Defines>NO_STRICT</Defines>
+			<IncludePath>$(BDS)\ehlib;..\PrintSMI;C:\Program Files\FastReports\FastReport 4\LibD12;C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects;source;forms;$(CG_BOOST_ROOT)\boost\tr1\tr1;$(BDS)\include;$(BDS)\include\dinkumware;$(BDS)\include\vcl;$(CG_BOOST_ROOT);$(IncludePath)</IncludePath>
+			<ILINK_LibraryPath>$(BDS)\ehlib;..\PrintSMI;$(BDS)\lib\release;C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects;source;forms;$(BDS)\lib\obj;$(BDS)\lib\psdk;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<BCC_wpar>false</BCC_wpar>
+			<BCC_OptimizeForSpeed>true</BCC_OptimizeForSpeed>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
+			<BCC_DisableOptimizations>true</BCC_DisableOptimizations>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+			<Defines>_DEBUG;$(Defines)</Defines>
+			<BCC_InlineFunctionExpansion>false</BCC_InlineFunctionExpansion>
+			<IntermediateOutputDir>Debug</IntermediateOutputDir>
+			<ILINK_DisableIncrementalLinking>true</ILINK_DisableIncrementalLinking>
+			<BCC_UseRegisterVariables>None</BCC_UseRegisterVariables>
+			<DCC_Define>DEBUG</DCC_Define>
+			<BCC_DebugLineNumbers>true</BCC_DebugLineNumbers>
+			<TASM_DisplaySourceLines>true</TASM_DisplaySourceLines>
+			<BCC_StackFrames>true</BCC_StackFrames>
+			<ILINK_LibraryPath>$(BDS)\lib\debug;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+			<ILINK_FullDebugInfo>true</ILINK_FullDebugInfo>
+			<TASM_Debugging>Full</TASM_Debugging>
+			<BCC_SourceDebuggingOn>true</BCC_SourceDebuggingOn>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<Defines>NDEBUG;$(Defines)</Defines>
+			<IntermediateOutputDir>Release</IntermediateOutputDir>
+			<TASM_Debugging>None</TASM_Debugging>
+		</PropertyGroup>
+		<ItemGroup>
+			<CppCompile Include="forms\UnitFormEditGarageSell.cpp">
+				<Form>FormEditGarageSell</Form>
+				<DependentOn>forms\UnitFormEditGarageSell.h</DependentOn>
+				<BuildOrder>52</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAddHouse.cpp">
+				<Form>FormFilterAddHouse</Form>
+				<DependentOn>forms\UnitFormFilterAddHouse.h</DependentOn>
+				<BuildOrder>64</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditCommercSell1.cpp">
+				<Form>FormEditCommercSell1</Form>
+				<DependentOn>forms\UnitFormEditCommercSell1.h</DependentOn>
+				<BuildOrder>55</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormExcelExportWidth.cpp">
+				<Form>FormExcelExportWidth</Form>
+				<DependentOn>forms\UnitFormExcelExportWidth.h</DependentOn>
+				<BuildOrder>37</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitAgKartEdit.cpp">
+				<Form>FormAgKartEdit</Form>
+				<DependentOn>forms\UnitAgKartEdit.h</DependentOn>
+				<BuildOrder>12</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormKartHistory.cpp">
+				<Form>FormKartHistory</Form>
+				<DependentOn>forms\UnitFormKartHistory.h</DependentOn>
+				<BuildOrder>34</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormSelectBlue.cpp">
+				<Form>FormSelectBlue</Form>
+				<DependentOn>forms\UnitFormSelectBlue.h</DependentOn>
+				<BuildOrder>58</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditLandSell.cpp">
+				<Form>FormEditLandSell</Form>
+				<DependentOn>forms\UnitFormEditLandSell.h</DependentOn>
+				<BuildOrder>56</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditCommercSell4.cpp">
+				<Form>FormEditCommercSell4</Form>
+				<DependentOn>forms\UnitFormEditCommercSell4.h</DependentOn>
+				<BuildOrder>54</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditCommercSell3.cpp">
+				<Form>FormEditCommercSell3</Form>
+				<DependentOn>forms\UnitFormEditCommercSell3.h</DependentOn>
+				<BuildOrder>53</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormTest.cpp">
+				<Form>FormTest</Form>
+				<DependentOn>forms\UnitFormTest.h</DependentOn>
+				<BuildOrder>33</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgentPass.cpp">
+				<Form>FormAgentPass</Form>
+				<DependentOn>forms\UnitFormAgentPass.h</DependentOn>
+				<BuildOrder>13</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormGallaryAddRemark.cpp">
+				<Form>FormGallaryAddRem</Form>
+				<DependentOn>forms\FormGallaryAddRemark.h</DependentOn>
+				<BuildOrder>9</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormPrint.cpp">
+				<Form>FormPr</Form>
+				<DependentOn>forms\FormPrint.h</DependentOn>
+				<BuildOrder>6</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormGridColumn.cpp">
+				<Form>FormGridColumn</Form>
+				<DependentOn>forms\UnitFormGridColumn.h</DependentOn>
+				<BuildOrder>38</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditArendPurch.cpp">
+				<Form>FormEditArendPurch</Form>
+				<DependentOn>forms\UnitFormEditArendPurch.h</DependentOn>
+				<BuildOrder>42</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditBusinessSell.cpp">
+				<Form>FormEditBusinessSell</Form>
+				<DependentOn>forms\UnitFormEditBusinessSell.h</DependentOn>
+				<BuildOrder>43</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgentRole.cpp">
+				<Form>FormAgentRole</Form>
+				<DependentOn>forms\UnitFormAgentRole.h</DependentOn>
+				<BuildOrder>17</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormInfoWindow.cpp">
+				<Form>FormInfoWindow</Form>
+				<DependentOn>forms\UnitFormInfoWindow.h</DependentOn>
+				<BuildOrder>22</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgentPrint.cpp">
+				<Form>FormAgentPrint</Form>
+				<DependentOn>forms\UnitFormAgentPrint.h</DependentOn>
+				<BuildOrder>14</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditRoomsSell.cpp">
+				<Form>FormEditRoomsSell</Form>
+				<DependentOn>forms\UnitFormEditRoomsSell.h</DependentOn>
+				<BuildOrder>57</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAddRooms.cpp">
+				<Form>FormFilterAddRooms</Form>
+				<DependentOn>forms\UnitFormFilterAddRooms.h</DependentOn>
+				<BuildOrder>59</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="EhLibIBX.pas">
+				<BuildOrder>76</BuildOrder>
+			</DelphiCompile>
+			<DelphiCompile Include="EhLibMTE.pas">
+				<BuildOrder>77</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitFormReklamAdd.cpp">
+				<Form>FormReklamAdd</Form>
+				<DependentOn>forms\UnitFormReklamAdd.h</DependentOn>
+				<BuildOrder>75</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormUpdateBanner.cpp">
+				<Form>FormUpdateBanner</Form>
+				<DependentOn>forms\UnitFormUpdateBanner.h</DependentOn>
+				<BuildOrder>69</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormHelp.cpp">
+				<Form>FormHelp</Form>
+				<DependentOn>forms\UnitFormHelp.h</DependentOn>
+				<BuildOrder>74</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="EhLibDBX.Pas">
+				<BuildOrder>81</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitUpdateExe.cpp">
+				<Form>FormUpdateExe</Form>
+				<DependentOn>forms\UnitUpdateExe.h</DependentOn>
+				<BuildOrder>85</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="EhLibConsts.pas">
+				<BuildOrder>80</BuildOrder>
+			</DelphiCompile>
+			<DelphiCompile Include="EhLibBDE.pas">
+				<BuildOrder>78</BuildOrder>
+			</DelphiCompile>
+			<DelphiCompile Include="EhLibCDS.pas">
+				<BuildOrder>79</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitFormReg.cpp">
+				<Form>FormReg</Form>
+				<DependentOn>forms\UnitFormReg.h</DependentOn>
+				<BuildOrder>72</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditCommercSell2.cpp">
+				<Form>FormEditCommercSell2</Form>
+				<DependentOn>forms\UnitFormEditCommercSell2.h</DependentOn>
+				<BuildOrder>51</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormSelect.cpp">
+				<Form>FormSelect</Form>
+				<DependentOn>forms\UnitFormSelect.h</DependentOn>
+				<BuildOrder>61</BuildOrder>
+			</CppCompile>
+			<None Include="dbxmys.dll"/>
+			<CppCompile Include="forms\FormGallaryViewAdd.cpp">
+				<Form>FormGallViewAdd</Form>
+				<DependentOn>forms\FormGallaryViewAdd.h</DependentOn>
+				<BuildOrder>70</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditSellAll.cpp">
+				<Form>FormEditSellAll</Form>
+				<DependentOn>forms\UnitFormEditSellAll.h</DependentOn>
+				<BuildOrder>40</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormStart.cpp">
+				<Form>FormStart</Form>
+				<DependentOn>forms\UnitFormStart.h</DependentOn>
+				<BuildOrder>71</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAddArend.cpp">
+				<Form>FormFilterAddArend</Form>
+				<DependentOn>forms\UnitFormFilterAddArend.h</DependentOn>
+				<BuildOrder>63</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormStatAgent.cpp">
+				<Form>FormStatAg</Form>
+				<DependentOn>forms\FormStatAgent.h</DependentOn>
+				<BuildOrder>7</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAbonent.cpp">
+				<Form>FormAbonent</Form>
+				<DependentOn>forms\UnitFormAbonent.h</DependentOn>
+				<BuildOrder>16</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAdd.cpp">
+				<Form>FormFilterAdd</Form>
+				<DependentOn>forms\UnitFormFilterAdd.h</DependentOn>
+				<BuildOrder>65</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditRoomsPurch.cpp">
+				<Form>FormEditRoomsPurch</Form>
+				<DependentOn>forms\UnitFormEditRoomsPurch.h</DependentOn>
+				<BuildOrder>46</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="MainClass.cpp">
+				<Form>MainForm</Form>
+				<DependentOn>MainClass.h</DependentOn>
+				<BuildOrder>2</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditHouseSell.cpp">
+				<Form>FormEditHouseSell</Form>
+				<DependentOn>forms\UnitFormEditHouseSell.h</DependentOn>
+				<BuildOrder>47</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormEditKart.cpp">
+				<Form>FormEdit</Form>
+				<DependentOn>forms\FormEditKart.h</DependentOn>
+				<BuildOrder>41</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditAbroadSell.cpp">
+				<Form>FormEditAbroadSell</Form>
+				<DependentOn>forms\UnitFormEditAbroadSell.h</DependentOn>
+				<BuildOrder>45</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormThems.cpp">
+				<Form>FormThems</Form>
+				<DependentOn>forms\UnitFormThems.h</DependentOn>
+				<BuildOrder>26</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormGallary.cpp">
+				<Form>FormGall</Form>
+				<DependentOn>forms\FormGallary.h</DependentOn>
+				<BuildOrder>8</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormReklam.cpp">
+				<Form>FormReklam</Form>
+				<DependentOn>forms\UnitFormReklam.h</DependentOn>
+				<BuildOrder>31</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgentFilter.cpp">
+				<Form>FormAgentFilter</Form>
+				<DependentOn>forms\UnitFormAgentFilter.h</DependentOn>
+				<BuildOrder>15</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAddDop.cpp">
+				<Form>FormFilterAddDop</Form>
+				<DependentOn>forms\UnitFormFilterAddDop.h</DependentOn>
+				<BuildOrder>60</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFindKart.cpp">
+				<Form>FormFindKart</Form>
+				<DependentOn>forms\UnitFormFindKart.h</DependentOn>
+				<BuildOrder>23</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormKlientsKart.cpp">
+				<Form>FormKlientsKart</Form>
+				<DependentOn>forms\UnitFormKlientsKart.h</DependentOn>
+				<BuildOrder>20</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormNastr.cpp">
+				<Form>FormNastr</Form>
+				<DependentOn>forms\UnitFormNastr.h</DependentOn>
+				<BuildOrder>27</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormExcelExportAdd.cpp">
+				<Form>FormExcelExportAdd</Form>
+				<DependentOn>forms\UnitFormExcelExportAdd.h</DependentOn>
+				<BuildOrder>36</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormGroupEdit.cpp">
+				<Form>FormGroupEdit</Form>
+				<DependentOn>forms\UnitFormGroupEdit.h</DependentOn>
+				<BuildOrder>24</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitExportData.cpp">
+				<Form>FormExportData</Form>
+				<DependentOn>forms\UnitExportData.h</DependentOn>
+				<BuildOrder>32</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormReestrAbonent.cpp">
+				<Form>FormReestrAbonent</Form>
+				<DependentOn>forms\UnitFormReestrAbonent.h</DependentOn>
+				<BuildOrder>30</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditHousePurch.cpp">
+				<Form>FormEditHousePurch</Form>
+				<DependentOn>forms\UnitFormEditHousePurch.h</DependentOn>
+				<BuildOrder>48</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAddGroupName.cpp">
+				<Form>FormAddGroupName</Form>
+				<DependentOn>forms\UnitFormAddGroupName.h</DependentOn>
+				<BuildOrder>35</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditGaragePurch.cpp">
+				<Form>FormEditGaragePurch</Form>
+				<DependentOn>forms\UnitFormEditGaragePurch.h</DependentOn>
+				<BuildOrder>50</BuildOrder>
+			</CppCompile>
+			<ResFiles Include="centre.res">
+				<BuildOrder>1</BuildOrder>
+			</ResFiles>
+			<CppCompile Include="forms\FormConvert.cpp">
+				<Form>FormConv</Form>
+				<DependentOn>forms\FormConvert.h</DependentOn>
+				<BuildOrder>4</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormStatFirm.cpp">
+				<Form>FormStatFirm</Form>
+				<DependentOn>forms\UnitFormStatFirm.h</DependentOn>
+				<BuildOrder>28</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormSpravAgent.cpp">
+				<Form>FormSpravAgent</Form>
+				<DependentOn>forms\UnitFormSpravAgent.h</DependentOn>
+				<BuildOrder>29</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditArendSell.cpp">
+				<Form>FormEditArendSell</Form>
+				<DependentOn>forms\UnitFormEditArendSell.h</DependentOn>
+				<BuildOrder>3</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="source\My_DBCtrls.pas">
+				<BuildOrder>5</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitFormKlientsFind.cpp">
+				<Form>FormKlientsFind</Form>
+				<DependentOn>forms\UnitFormKlientsFind.h</DependentOn>
+				<BuildOrder>21</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormMap.cpp">
+				<Form>FormMap</Form>
+				<DependentOn>forms\UnitFormMap.h</DependentOn>
+				<BuildOrder>10</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormExcelExport.cpp">
+				<Form>FormExcelExport</Form>
+				<DependentOn>forms\UnitFormExcelExport.h</DependentOn>
+				<BuildOrder>25</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormKlients.cpp">
+				<Form>FormKlients</Form>
+				<DependentOn>forms\UnitFormKlients.h</DependentOn>
+				<BuildOrder>19</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormStatAgentAdd.cpp">
+				<Form>FormStatAgAdd</Form>
+				<DependentOn>forms\UnitFormStatAgentAdd.h</DependentOn>
+				<BuildOrder>73</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgent.cpp">
+				<Form>FormAgent</Form>
+				<DependentOn>forms\UnitFormAgent.h</DependentOn>
+				<BuildOrder>11</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="centre.cpp">
+				<BuildOrder>0</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditApartPurch.cpp">
+				<Form>FormEditApartPurch</Form>
+				<DependentOn>forms\UnitFormEditApartPurch.h</DependentOn>
+				<BuildOrder>44</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="C:\Program Files\CodeGear\RAD Studio\6.0\ehlib\MemTableEh.pas">
+				<BuildOrder>83</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitFormSwap.cpp">
+				<Form>FormSwap</Form>
+				<DependentOn>forms\UnitFormSwap.h</DependentOn>
+				<BuildOrder>67</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormAgentRoleAdd.cpp">
+				<Form>FormAgentRoleAdd</Form>
+				<DependentOn>forms\UnitFormAgentRoleAdd.h</DependentOn>
+				<BuildOrder>18</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditNewBuildsSell.cpp">
+				<Form>FormEditNewBuildsSell</Form>
+				<DependentOn>forms\UnitFormEditNewBuildsSell.h</DependentOn>
+				<BuildOrder>49</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\FormGallaryView.cpp">
+				<Form>FormGallView</Form>
+				<DependentOn>forms\FormGallaryView.h</DependentOn>
+				<BuildOrder>69</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormFilterAddSearch.cpp">
+				<Form>FormFilterAddSearch</Form>
+				<DependentOn>forms\UnitFormFilterAddSearch.h</DependentOn>
+				<BuildOrder>62</BuildOrder>
+			</CppCompile>
+			<CppCompile Include="forms\UnitFormEditCommercPurch.cpp">
+				<Form>FormEditCommercPurch</Form>
+				<DependentOn>forms\UnitFormEditCommercPurch.h</DependentOn>
+				<BuildOrder>39</BuildOrder>
+			</CppCompile>
+			<DelphiCompile Include="C:\Program Files\CodeGear\RAD Studio\6.0\ehlib\IBXDataDriverEh.pas">
+				<BuildOrder>84</BuildOrder>
+			</DelphiCompile>
+			<DelphiCompile Include="C:\Program Files\CodeGear\RAD Studio\6.0\ehlib\DBGridEh.pas">
+				<BuildOrder>82</BuildOrder>
+			</DelphiCompile>
+			<CppCompile Include="forms\UnitFormExportGrid.cpp">
+				<Form>FormExportGrid</Form>
+				<DependentOn>forms\UnitFormExportGrid.h</DependentOn>
+				<BuildOrder>86</BuildOrder>
+			</CppCompile>
+			<FormResources Include="forms\UnitFormEditGarageSell.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAddHouse.dfm"/>
+			<FormResources Include="forms\UnitFormEditCommercSell1.dfm"/>
+			<FormResources Include="forms\UnitFormExcelExportWidth.dfm"/>
+			<FormResources Include="forms\UnitAgKartEdit.dfm"/>
+			<FormResources Include="forms\UnitFormKartHistory.dfm"/>
+			<FormResources Include="forms\UnitFormSelectBlue.dfm"/>
+			<FormResources Include="forms\UnitFormEditLandSell.dfm"/>
+			<FormResources Include="forms\UnitFormEditCommercSell4.dfm"/>
+			<FormResources Include="forms\UnitFormEditCommercSell3.dfm"/>
+			<FormResources Include="forms\UnitFormTest.dfm"/>
+			<FormResources Include="forms\UnitFormAgentPass.dfm"/>
+			<FormResources Include="forms\FormGallaryAddRemark.dfm"/>
+			<FormResources Include="forms\FormPrint.dfm"/>
+			<FormResources Include="forms\UnitFormGridColumn.dfm"/>
+			<FormResources Include="forms\UnitFormEditArendPurch.dfm"/>
+			<FormResources Include="forms\UnitFormEditBusinessSell.dfm"/>
+			<FormResources Include="forms\UnitFormAgentRole.dfm"/>
+			<FormResources Include="forms\UnitFormInfoWindow.dfm"/>
+			<FormResources Include="forms\UnitFormAgentPrint.dfm"/>
+			<FormResources Include="forms\UnitFormEditRoomsSell.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAddRooms.dfm"/>
+			<FormResources Include="forms\UnitFormReklamAdd.dfm"/>
+			<FormResources Include="forms\UnitFormUpdateBanner.dfm"/>
+			<FormResources Include="forms\UnitFormHelp.dfm"/>
+			<FormResources Include="forms\UnitUpdateExe.dfm"/>
+			<FormResources Include="forms\UnitFormReg.dfm"/>
+			<FormResources Include="forms\UnitFormEditCommercSell2.dfm"/>
+			<FormResources Include="forms\UnitFormSelect.dfm"/>
+			<FormResources Include="forms\FormGallaryViewAdd.dfm"/>
+			<FormResources Include="forms\UnitFormEditSellAll.dfm"/>
+			<FormResources Include="forms\UnitFormStart.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAddArend.dfm"/>
+			<FormResources Include="forms\FormStatAgent.dfm"/>
+			<FormResources Include="forms\UnitFormAbonent.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAdd.dfm"/>
+			<FormResources Include="forms\UnitFormEditRoomsPurch.dfm"/>
+			<FormResources Include="MainClass.dfm"/>
+			<FormResources Include="forms\UnitFormEditHouseSell.dfm"/>
+			<FormResources Include="forms\FormEditKart.dfm"/>
+			<FormResources Include="forms\UnitFormEditAbroadSell.dfm"/>
+			<FormResources Include="forms\UnitFormThems.dfm"/>
+			<FormResources Include="forms\FormGallary.dfm"/>
+			<FormResources Include="forms\UnitFormReklam.dfm"/>
+			<FormResources Include="forms\UnitFormAgentFilter.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAddDop.dfm"/>
+			<FormResources Include="forms\UnitFormFindKart.dfm"/>
+			<FormResources Include="forms\UnitFormKlientsKart.dfm"/>
+			<FormResources Include="forms\UnitFormNastr.dfm"/>
+			<FormResources Include="forms\UnitFormExcelExportAdd.dfm"/>
+			<FormResources Include="forms\UnitFormGroupEdit.dfm"/>
+			<FormResources Include="forms\UnitExportData.dfm"/>
+			<FormResources Include="forms\UnitFormReestrAbonent.dfm"/>
+			<FormResources Include="forms\UnitFormEditHousePurch.dfm"/>
+			<FormResources Include="forms\UnitFormAddGroupName.dfm"/>
+			<FormResources Include="forms\UnitFormEditGaragePurch.dfm"/>
+			<FormResources Include="forms\FormConvert.dfm"/>
+			<FormResources Include="forms\UnitFormStatFirm.dfm"/>
+			<FormResources Include="forms\UnitFormSpravAgent.dfm"/>
+			<FormResources Include="forms\UnitFormEditArendSell.dfm"/>
+			<FormResources Include="forms\UnitFormKlientsFind.dfm"/>
+			<FormResources Include="forms\UnitFormMap.dfm"/>
+			<FormResources Include="forms\UnitFormExcelExport.dfm"/>
+			<FormResources Include="forms\UnitFormKlients.dfm"/>
+			<FormResources Include="forms\UnitFormStatAgentAdd.dfm"/>
+			<FormResources Include="forms\UnitFormAgent.dfm"/>
+			<FormResources Include="forms\UnitFormEditApartPurch.dfm"/>
+			<FormResources Include="forms\UnitFormSwap.dfm"/>
+			<FormResources Include="forms\UnitFormAgentRoleAdd.dfm"/>
+			<FormResources Include="forms\UnitFormEditNewBuildsSell.dfm"/>
+			<FormResources Include="forms\FormGallaryView.dfm"/>
+			<FormResources Include="forms\UnitFormFilterAddSearch.dfm"/>
+			<FormResources Include="forms\UnitFormEditCommercPurch.dfm"/>
+			<FormResources Include="forms\UnitFormExportGrid.dfm"/>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Cpp.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Cpp.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>CPlusPlusBuilder.Personality.12</Borland.Personality>
+			<Borland.ProjectType>CppVCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<CPlusPlusBuilder.Personality>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">1</VersionInfo>
+						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">1</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1049</VersionInfo>
+						<VersionInfo Name="CodePage">1251</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">1.0.0.1</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Debugging>
+						<Debugging Name="DebugSourceDirs"/>
+					</Debugging>
+					<Parameters>
+						<Parameters Name="RunParams"/>
+						<Parameters Name="Launcher"/>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="DebugCWD"/>
+						<Parameters Name="HostApplication">C:\ISCentre\Projects\Debug\centre.exe</Parameters>
+						<Parameters Name="RemoteHost"/>
+						<Parameters Name="RemotePath"/>
+						<Parameters Name="RemoteParams"/>
+						<Parameters Name="RemoteLauncher"/>
+						<Parameters Name="UseRemoteLauncher">False</Parameters>
+						<Parameters Name="RemoteCWD"/>
+						<Parameters Name="RemoteDebug">False</Parameters>
+						<Parameters Name="Debug Symbols Search Path"/>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<ProjectProperties>
+						<ProjectProperties Name="AutoShowDeps">False</ProjectProperties>
+						<ProjectProperties Name="ManagePaths">True</ProjectProperties>
+						<ProjectProperties Name="VerifyPackages">True</ProjectProperties>
+					</ProjectProperties>
+					<Source>
+						<Source Name="MainSource">centre.cpp</Source>
+					</Source>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\EhLib120.bpl">EhLib 5.0</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\MyDAC\CRControls120.bpl">Devart Controls</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\MyDAC\mydac120.bpl">Data Access Components for MySQL</Excluded_Packages>
+					</Excluded_Packages>
+				</CPlusPlusBuilder.Personality>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

@@ -1,0 +1,42 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormFindKart.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormFindKart *FormFindKart;
+TDataSource * TabPricelist_Datasource_Main =NULL;
+extern TDataSource * TabPricelist_Datasource_Main;
+int * retval;
+extern int * retval;
+//---------------------------------------------------------------------------
+__fastcall TFormFindKart::TFormFindKart(TComponent* Owner, TDataSource * TabPricelist_Datasource_Main_Local, int * retval_local)
+	: TForm(Owner)
+{
+	retval = retval_local;
+	char * tmpint = new char[17];
+	itoa(OwnerCode,tmpint,10);
+	Edit1->Text = tmpint;
+	Edit2->Text = "0";
+	delete tmpint;
+	TabPricelist_Datasource_Main = TabPricelist_Datasource_Main_Local;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFindKart::Button1Click(TObject *Sender)
+{
+	//  Кнопка поиска
+	if (TabPricelist_Datasource_Main->DataSet->Locate("NUM_CARD",Edit2->Text.ToInt(),TLocateOptions()) {
+		 retval = 1;
+		 Close();
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormFindKart::Button2Click(TObject *Sender)
+{
+	// Кнопка отмена
+	Close();
+}
+//---------------------------------------------------------------------------

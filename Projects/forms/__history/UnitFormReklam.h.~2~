@@ -1,0 +1,24 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormReklamH
+#define UnitFormReklamH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormReklam : public TForm
+{
+__published:	// IDE-managed Components
+	TLabel *Label1;
+	TListBox *ListBox1;
+	TButton *Button1;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormReklam(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormReklam *FormReklam;
+//---------------------------------------------------------------------------
+#endif

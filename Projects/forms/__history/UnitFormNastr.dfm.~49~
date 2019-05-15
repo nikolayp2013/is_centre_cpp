@@ -1,0 +1,720 @@
+object FormNastr: TFormNastr
+  Left = 0
+  Top = 0
+  BorderStyle = bsToolWindow
+  Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080' '#1087#1088#1086#1075#1088#1072#1084#1084#1099
+  ClientHeight = 394
+  ClientWidth = 636
+  Color = clBtnFace
+  Font.Charset = ANSI_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Shape1: TShape
+    Left = 3
+    Top = 4
+    Width = 630
+    Height = 53
+    Brush.Style = bsClear
+    Pen.Color = clMedGray
+  end
+  object Image1: TImage
+    Left = 33
+    Top = 14
+    Width = 36
+    Height = 39
+    Picture.Data = {
+      07544269746D6170520C0000424D520C00000000000036000000280000002100
+      00001F00000001001800000000001C0C00000000000000000000000000000000
+      0000D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECC6DEE7C6D6E7E7EFF7E7EFF7E7EF
+      F7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7
+      EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7E7EFF7C6D6E7E7EFF7
+      D8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECDEE7EF4A8CB5086BB5087BBD0884C608
+      8CC60894CE0894CE0894CE0894CE0894CE0894CE089CCE089CCE089CCE089CCE
+      089CCE089CCE0894CE0894CE0894CE0894CE0894CE088CCE088CC6087BBD0873
+      BD297BB5A5C6D6D8E9ECD8E9EC00D8E9ECCEDEE75A94BD0073C6007BD6008CD6
+      0094DE00A5DE00A5DE00ADDE00ADE700ADE700B5E700B5E700B5E700B5E700B5
+      E700B5E700B5E700B5E700B5E700B5E700ADE700ADE700A5DE00A5DE009CDE00
+      8CD60084D60073CE1073B5B5CEDED8E9EC00D8E9ECBDD6DE5A94BD1094D60084
+      D6008CD60094DE009CDE009CDE009CDE00A5DE00A5DE00A5DE00ADE700ADE700
+      ADE710B5EF00B5E700ADE700ADE700A5DE00A5DE00A5DE00A5DE009CDE009CDE
+      0094DE008CD60084D6008CDE299CCE73A5C6D8E9EC00D8E9ECC6DEE75A94B529
+      B5E7008CDE008CDE0094DE0094DE009CDE00A5DE00A5DE00A5DE00ADE700ADE7
+      00ADE739BDDE63ADCE42B5DE08B5E700ADE700ADE700A5E700A5DE00A5DE009C
+      DE009CDE0094DE0094DE008CD621B5E73194BDB5CEDED8E9EC00D8E9ECEFF7F7
+      ADC6DE39A5CE18ADE70094DE009CDE009CE700A5E700ADE700ADE700ADE700B5
+      E700B5E708BDEF3184A5084A73296B9418B5DE00B5EF00B5E700B5E700ADE700
+      ADE700A5E700A5E7009CDE0094DE10A5E739B5DE6B9CC6F7F7F7D8E9EC00D8E9
+      ECD8E9ECD8E9EC4A8CB542BDEF08A5E7009CE700A5E700ADE700ADE700B5EF00
+      B5EF00BDEF00BDEF00BDE7105A7B10527310527B08ADD600C6F700BDEF00B5EF
+      00B5EF00B5E700ADE700A5E700A5E7009CE739C6EF4A94BDE7EFF7D8E9ECD8E9
+      EC00D8E9ECD8E9ECD8E9ECCEDEE742A5CE31BDF700A5E700ADEF00ADEF00B5EF
+      00BDEF00BDEF00BDEF00C6EF00CEF70894B50852730884A500C6EF00C6EF00C6
+      EF00BDEF00BDEF00B5EF00B5EF00ADEF00A5E721BDEF4AB5DEA5BDD6D8E9ECD8
+      E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9EC73A5C652C6E710B5EF00ADEF00B5
+      EF00BDEF00BDEF00C6EF00C6F700CEF700CEF708D6F729DEF700D6F700CEF700
+      CEF700CEF700C6F700C6EF00BDEF00B5EF00B5EF08B5EF52CEEF4A94BDF7FFFF
+      D8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECE7EFEF4294C642CEF700
+      B5EF00BDEF00BDF700C6F700CEF700CEF700D6F700D6F710CEEF429CB510D6F7
+      00D6F700D6F700CEF700CEF700C6F700C6F700BDEF00B5EF39CEF752A5CEC6DE
+      E7D8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9EC8CB5CE
+      5AC6E721C6F700BDF700C6F700CEF700CEF700D6F700D6F700DEFF10C6E72163
+      8418BDDE00DEFF00D6F700D6F700CEF700CEF700C6F700BDF718C6F763CEEF73
+      A5C6D8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECE7EFF7529CC65ADEFF08C6F700C6F700CEF700D6FF00D6FF00DEFF00E7FF10
+      BDD618527B21B5CE00E7FF00DEFF00DEFF00D6FF00CEF700CEF700C6F752DEFF
+      4A9CC6DEEFEFD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECADC6DE63BDDE39D6FF00C6FF08CEFF08D6FF08DEFF08DEFF
+      08EFFF21ADC6104A7321ADC600EFFF08DEFF08DEFF08D6FF08D6FF00CEFF31D6
+      FF6BC6E78CB5CED8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECF7FFFF63A5C66BDEFF18D6FF08D6FF10D6FF10DE
+      FF10DEFF10E7FF2994B5104A731894B510EFFF08E7FF10DEFF10D6FF08D6FF10
+      CEFF73DEFF5A9CC6E7EFF7D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECBDD6E763B5DE5ADEFF10D6FF18
+      D6FF18DEFF18DEFF18E7FF2984A5084A7318849C21EFFF18E7FF18DEFF18DEFF
+      10D6FF52DEFF6BBDDEADCEDED8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC639CBD84DEF7
+      31D6FF18D6FF21DEFF21DEFF21E7FF217394084A7321739431DEF721E7FF21DE
+      FF21DEFF31DEFF84DEF76BA5C6D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD6DE
+      EF5AA5CE73E7FF29D6FF31DEFF31DEFF31DEF7186384085273216B9439D6EF31
+      E7FF31DEFF29DEFF73E7FF6BB5D6C6D6E7D8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9EC73A5C684D6EF52DEFF31DEFF39DEFF39DEF718638408426B186B8C
+      39D6F739DEFF31DEFF52DEFF8CDEF7639CBDD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECE7EFF763A5CE8CE7FF42DEFF42DEFF4ADEFF31ADCE2173
+      9431ADCE4AE7FF42DEFF42DEFF8CEFFF63ADCEDEE7EFD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC9CBDD684CEEF73E7FF4ADEFF52DEFF52
+      E7FF52EFFF52E7FF52DEFF4ADEFF73E7FF84D6EF8CB5CED8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECF7F7FF5AA5C6A5EFFF63E7FF
+      5ADEFF5AE7FF5AE7FF5AE7FF5ADEFF63DEFFA5EFFF63A5C6EFF7F7D8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECA5C6DE8CC6
+      E794EFFF63E7FF6BE7FF6BE7FF6BE7FF63E7FF94EFFF8CCEE7A5C6D6D8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECF7
+      F7FF639CC6BDEFFF7BEFFF6BE7FF73E7FF6BE7FF7BEFFFBDEFFF5A9CBDD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECADCEDE84C6DEBDF7FF73EFFF73EFFF7BEFFFBDFFFF84C6DEC6D6
+      E7D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9EC73ADC6C6EFF7C6F7FFADF7FFCEF7FFC6EFFF73
+      ADCED8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECDEE7EF6BADCED6FFFFE7FFFFCEF7FF
+      52A5C6DEEFEFD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECCEDEEF6BADCE73BD
+      DE6BADC6B5CEDED8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECAD
+      CEDE7BADCEB5D6DEF7F7FFD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00D8E9ECD8E9EC
+      D8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9
+      ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8
+      E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9ECD8E9EC00}
+  end
+  object Label1: TLabel
+    Left = 93
+    Top = 15
+    Width = 401
+    Height = 13
+    Caption = #1042#1053#1048#1052#1040#1053#1048#1045'! '#1053#1077#1087#1088#1072#1074#1080#1083#1100#1085#1072#1103' '#1091#1089#1090#1072#1085#1086#1074#1082#1072' '#1087#1072#1088#1072#1084#1077#1090#1088#1086#1074' '#1084#1086#1078#1077#1090' '#1087#1088#1080#1074#1077#1089#1090#1080' '#1082
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 93
+    Top = 32
+    Width = 272
+    Height = 13
+    Caption = #1085#1077#1088#1072#1073#1086#1090#1086#1089#1087#1086#1089#1086#1073#1085#1086#1089#1090#1080' '#1082#1083#1080#1077#1085#1090#1089#1082#1086#1081' '#1087#1088#1086#1075#1088#1072#1084#1084#1099'.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object PageControl1: TPageControl
+    Left = 3
+    Top = 63
+    Width = 630
+    Height = 284
+    ActivePage = TabSheet4
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    OwnerDraw = True
+    ParentFont = False
+    TabOrder = 0
+    Visible = False
+    OnDrawTab = PageControl1DrawTab
+    object TabSheet2: TTabSheet
+      Caption = #1054#1090#1087#1088#1072#1074#1083#1103#1077#1084#1099#1077' '#1090#1072#1073#1083#1080#1094#1099
+      ImageIndex = 1
+      object Label3: TLabel
+        Left = 11
+        Top = 216
+        Width = 179
+        Height = 13
+        Caption = #1060#1072#1081#1083' '#1089' '#1086#1087#1080#1089#1072#1085#1080#1077#1084' '#1087#1086#1088#1103#1076#1082#1072' '#1088#1091#1073#1088#1080#1082':'
+      end
+      object CheckListBox1: TCheckListBox
+        Left = 11
+        Top = 18
+        Width = 594
+        Height = 186
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemHeight = 20
+        ParentFont = False
+        Style = lbOwnerDrawFixed
+        TabOrder = 0
+      end
+      object Edit1: TEdit
+        Left = 196
+        Top = 213
+        Width = 205
+        Height = 21
+        TabOrder = 1
+      end
+      object CheckBox1: TCheckBox
+        Left = 427
+        Top = 210
+        Width = 166
+        Height = 23
+        Caption = #1054#1090#1087#1088#1072#1074#1083#1103#1090#1100' '#1090#1086#1083#1100#1082#1086' '#1087#1088#1080' '#1085#1072#1083#1080#1095#1080#1080' '#1085#1086#1074#1099#1093' '#1086#1073#1098#1077#1082#1090#1086#1074
+        TabOrder = 2
+        WordWrap = True
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1087#1086' '#1091#1084#1086#1083#1095#1072#1085#1080#1102
+      ImageIndex = 2
+      object Shape2: TShape
+        Left = 369
+        Top = 21
+        Width = 239
+        Height = 89
+        Brush.Style = bsClear
+        Pen.Color = clMedGray
+      end
+      object Label4: TLabel
+        Left = 388
+        Top = 14
+        Width = 117
+        Height = 13
+        Caption = ' '#1055#1088#1077#1092#1080#1082#1089#1099' '#1090#1077#1083#1077#1092#1086#1085#1086#1074' '
+        Transparent = False
+      end
+      object Label5: TLabel
+        Left = 397
+        Top = 57
+        Width = 75
+        Height = 13
+        Caption = '1-'#1081' '#1090#1077#1083'. ('#1076#1086#1084'.)'
+      end
+      object Label6: TLabel
+        Left = 397
+        Top = 83
+        Width = 74
+        Height = 13
+        Caption = '2-'#1081' '#1090#1077#1083'. ('#1088#1072#1073'.)'
+      end
+      object Label7: TLabel
+        Left = 360
+        Top = 127
+        Width = 101
+        Height = 13
+        Caption = #1060#1086#1088#1084#1072#1090' '#1090#1077#1083#1077#1092#1086#1085#1086#1074':'
+      end
+      object Label8: TLabel
+        Left = 360
+        Top = 192
+        Width = 117
+        Height = 13
+        Caption = #1050#1072#1090#1072#1083#1086#1075' '#1089' '#1082#1072#1088#1090#1080#1085#1082#1072#1084#1080':'
+      end
+      object CheckBox2: TCheckBox
+        Left = 16
+        Top = 14
+        Width = 217
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1076#1080#1085#1072#1084#1080#1095#1077#1089#1082#1080#1081' '#1092#1080#1083#1100#1090#1088
+        Checked = True
+        State = cbChecked
+        TabOrder = 0
+      end
+      object CheckBox3: TCheckBox
+        Left = 16
+        Top = 37
+        Width = 241
+        Height = 17
+        Caption = #1053#1077' '#1086#1090#1086#1073#1088#1072#1078#1072#1090#1100' '#1085#1077' '#1086#1090#1092#1080#1083#1100#1090#1088#1086#1074#1072#1085#1085#1091#1102' '#1073#1072#1079#1091
+        TabOrder = 1
+      end
+      object CheckBox4: TCheckBox
+        Left = 16
+        Top = 70
+        Width = 241
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1088#1072#1073#1086#1090#1091' '#1089' '#1092#1080#1083#1080#1072#1083#1072#1084#1080
+        TabOrder = 2
+      end
+      object CheckBox5: TCheckBox
+        Left = 16
+        Top = 93
+        Width = 241
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1086#1073#1097#1080#1077' '#1082#1072#1076#1088#1099' '#1074' '#1092#1080#1083#1080#1072#1083#1072#1093
+        TabOrder = 3
+      end
+      object CheckBox6: TCheckBox
+        Left = 16
+        Top = 126
+        Width = 241
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1089#1078#1072#1090#1080#1077' '#1073#1072#1079#1099' '#1087#1088#1080' '#1074#1099#1093#1086#1076#1077
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
+      end
+      object CheckBox7: TCheckBox
+        Left = 16
+        Top = 149
+        Width = 249
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1087#1088#1080#1074#1103#1079#1082#1091' '#1091#1083#1080#1094' '#1082' '#1088#1072#1081#1086#1085#1072#1084
+        Checked = True
+        State = cbChecked
+        TabOrder = 5
+      end
+      object CheckBox8: TCheckBox
+        Left = 16
+        Top = 174
+        Width = 241
+        Height = 17
+        Caption = #1044#1086#1073#1072#1074#1083#1103#1090#1100' '#1085#1086#1084#1077#1088' '#1076#1086#1084#1072' '#1082' '#1091#1083#1080#1094#1077
+        Checked = True
+        State = cbChecked
+        TabOrder = 6
+      end
+      object CheckBox9: TCheckBox
+        Left = 16
+        Top = 197
+        Width = 241
+        Height = 17
+        Caption = #1057#1086#1079#1076#1072#1074#1072#1090#1100' '#1088#1077#1079#1077#1088#1074#1085#1091#1102' '#1082#1086#1087#1080#1102' '#1073#1072#1079#1099
+        Checked = True
+        State = cbChecked
+        TabOrder = 7
+      end
+      object CheckBox10: TCheckBox
+        Left = 16
+        Top = 220
+        Width = 217
+        Height = 17
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1091#1087#1088#1086#1097#1077#1085#1085#1099#1077' '#1082#1072#1088#1090#1086#1095#1082#1080
+        TabOrder = 8
+      end
+      object CheckBox11: TCheckBox
+        Left = 430
+        Top = 33
+        Width = 163
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = #1044#1086#1087#1080#1089#1099#1074#1072#1090#1100' '#1087#1088#1077#1092#1080#1082#1089#1099' '#1090#1077#1083'.'
+        TabOrder = 9
+      end
+      object Edit2: TEdit
+        Left = 478
+        Top = 54
+        Width = 121
+        Height = 21
+        TabOrder = 10
+        Text = #1076#1086#1084'.'
+      end
+      object Edit3: TEdit
+        Left = 477
+        Top = 81
+        Width = 121
+        Height = 21
+        TabOrder = 11
+        Text = #1088#1072#1073'.'
+      end
+      object Edit4: TEdit
+        Left = 477
+        Top = 124
+        Width = 121
+        Height = 21
+        TabOrder = 12
+        Text = '###-##-##'
+      end
+      object Edit5: TEdit
+        Left = 360
+        Top = 215
+        Width = 238
+        Height = 21
+        TabOrder = 13
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = #1053#1072#1089#1090#1088#1086#1081#1082#1080' '#1091#1076#1072#1083'. '#1076#1086#1089#1090#1091#1087#1072
+      ImageIndex = 3
+      object Label9: TLabel
+        Left = 16
+        Top = 16
+        Width = 53
+        Height = 13
+        Caption = #1058#1080#1087' '#1089#1074#1103#1079#1080':'
+      end
+      object Label10: TLabel
+        Left = 16
+        Top = 49
+        Width = 138
+        Height = 13
+        Caption = #1048#1089#1087#1086#1083#1100#1079#1091#1077#1084#1086#1077' '#1089#1086#1077#1076#1080#1085#1077#1085#1080#1077':'
+      end
+      object Label11: TLabel
+        Left = 16
+        Top = 81
+        Width = 112
+        Height = 13
+        Caption = #1058#1077#1083#1077#1092#1086#1085' '#1087#1088#1086#1074#1072#1081#1076#1077#1088#1072':'
+      end
+      object Label12: TLabel
+        Left = 262
+        Top = 81
+        Width = 44
+        Height = 13
+        Caption = #1055#1088#1077#1092#1080#1082#1089
+      end
+      object Shape3: TShape
+        Left = 96
+        Top = 117
+        Width = 262
+        Height = 68
+        Brush.Style = bsClear
+        Pen.Color = clMedGray
+      end
+      object Label13: TLabel
+        Left = 121
+        Top = 109
+        Width = 43
+        Height = 13
+        Caption = ' '#1044#1086#1089#1090#1091#1087' '
+        Transparent = False
+      end
+      object Label14: TLabel
+        Left = 118
+        Top = 131
+        Width = 97
+        Height = 13
+        Caption = #1048#1084#1103' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103':'
+      end
+      object Label15: TLabel
+        Left = 174
+        Top = 156
+        Width = 41
+        Height = 13
+        Caption = #1055#1072#1088#1086#1083#1100':'
+      end
+      object Shape4: TShape
+        Left = 382
+        Top = 25
+        Width = 163
+        Height = 68
+        Brush.Style = bsClear
+        Pen.Color = clMedGray
+      end
+      object Label16: TLabel
+        Left = 400
+        Top = 19
+        Width = 86
+        Height = 13
+        Caption = ' '#1055#1088#1077#1092#1080#1082#1089' '#1075#1086#1088#1086#1076#1072
+        Transparent = False
+      end
+      object Shape5: TShape
+        Left = 382
+        Top = 117
+        Width = 163
+        Height = 68
+        Brush.Style = bsClear
+        Pen.Color = clMedGray
+      end
+      object Label17: TLabel
+        Left = 400
+        Top = 110
+        Width = 110
+        Height = 13
+        Caption = ' '#1055#1086#1074#1090#1086#1088' '#1087#1088#1080' '#1088#1072#1079#1088#1099#1074#1077' '
+        Transparent = False
+      end
+      object Label18: TLabel
+        Left = 410
+        Top = 158
+        Width = 54
+        Height = 13
+        Caption = #1063#1077#1088#1077#1079', '#1089#1077#1082
+      end
+      object ComboBox1: TComboBox
+        Left = 75
+        Top = 13
+        Width = 283
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 0
+        Text = #1053#1077' '#1080#1089#1087#1086#1083#1100#1079#1086#1074#1072#1090#1100' '#1084#1086#1076#1077#1084#1085#1086#1077' '#1089#1086#1077#1076#1080#1085#1077#1085#1080#1077
+      end
+      object Edit6: TEdit
+        Left = 160
+        Top = 46
+        Width = 198
+        Height = 21
+        TabOrder = 1
+      end
+      object Edit7: TEdit
+        Left = 160
+        Top = 78
+        Width = 97
+        Height = 21
+        TabOrder = 2
+      end
+      object Edit8: TEdit
+        Left = 317
+        Top = 78
+        Width = 41
+        Height = 21
+        TabOrder = 3
+      end
+      object Edit9: TEdit
+        Left = 221
+        Top = 128
+        Width = 127
+        Height = 21
+        TabOrder = 4
+      end
+      object Edit10: TEdit
+        Left = 221
+        Top = 155
+        Width = 127
+        Height = 21
+        TabOrder = 5
+      end
+      object Edit11: TEdit
+        Left = 400
+        Top = 46
+        Width = 121
+        Height = 21
+        TabOrder = 6
+      end
+      object CheckBox12: TCheckBox
+        Left = 400
+        Top = 132
+        Width = 97
+        Height = 17
+        Caption = #1040#1074#1090#1086#1087#1086#1074#1090#1086#1088
+        TabOrder = 7
+      end
+      object Edit12: TEdit
+        Left = 476
+        Top = 155
+        Width = 51
+        Height = 21
+        TabOrder = 8
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = #1055#1072#1088#1072#1084#1077#1090#1088#1099' '#1089#1077#1090#1080
+      ImageIndex = 4
+      object Label19: TLabel
+        Left = 72
+        Top = 37
+        Width = 84
+        Height = 13
+        Caption = 'IP '#1087#1086#1088#1090' '#1084#1072#1096#1080#1085#1099':'
+      end
+      object Label20: TLabel
+        Left = 32
+        Top = 67
+        Width = 124
+        Height = 13
+        Caption = #1053#1086#1084#1077#1088' '#1088#1072#1073#1086#1095#1077#1081' '#1089#1090#1072#1085#1094#1080#1080':'
+      end
+      object Label21: TLabel
+        Left = 32
+        Top = 96
+        Width = 223
+        Height = 13
+        Caption = #1050#1072#1090#1072#1083#1086#1075' '#1089' '#1089#1086#1086#1073#1097#1077#1085#1080#1103#1084#1080' '#1044#1086#1089#1082#1080' '#1086#1073#1098#1103#1074#1083#1077#1085#1080#1081':'
+      end
+      object Label22: TLabel
+        Left = 32
+        Top = 168
+        Width = 91
+        Height = 13
+        Caption = 'IP '#1072#1076#1088#1077#1089' '#1089#1077#1088#1074#1077#1088#1072':'
+      end
+      object Label23: TLabel
+        Left = 32
+        Top = 198
+        Width = 85
+        Height = 13
+        Caption = 'IP '#1087#1086#1088#1090' '#1089#1077#1088#1074#1077#1088#1072':'
+      end
+      object Label24: TLabel
+        Left = 352
+        Top = 37
+        Width = 75
+        Height = 13
+        Caption = #1040#1076#1088#1077#1089' '#1089#1077#1088#1074#1077#1088#1072
+      end
+      object Label25: TLabel
+        Left = 352
+        Top = 67
+        Width = 93
+        Height = 13
+        Caption = #1048#1084#1103' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103
+      end
+      object Label26: TLabel
+        Left = 352
+        Top = 96
+        Width = 37
+        Height = 13
+        Caption = #1055#1072#1088#1086#1083#1100
+      end
+      object Label27: TLabel
+        Left = 352
+        Top = 122
+        Width = 102
+        Height = 13
+        Caption = #1055#1091#1090#1100' '#1082' '#1073#1072#1079#1077' '#1076#1072#1085#1085#1099#1093
+      end
+      object Edit13: TEdit
+        Left = 168
+        Top = 34
+        Width = 121
+        Height = 21
+        TabOrder = 0
+        Text = '3103'
+      end
+      object Edit14: TEdit
+        Left = 168
+        Top = 61
+        Width = 121
+        Height = 21
+        TabOrder = 1
+        Text = '1'
+      end
+      object Edit15: TEdit
+        Left = 32
+        Top = 117
+        Width = 257
+        Height = 21
+        TabOrder = 2
+      end
+      object Edit16: TEdit
+        Left = 134
+        Top = 168
+        Width = 121
+        Height = 21
+        TabOrder = 3
+        Text = '192.168.0.11'
+      end
+      object Edit17: TEdit
+        Left = 134
+        Top = 195
+        Width = 121
+        Height = 21
+        TabOrder = 4
+        Text = '5014'
+      end
+      object hostname: TEdit
+        Left = 464
+        Top = 34
+        Width = 121
+        Height = 21
+        TabOrder = 5
+      end
+      object username: TEdit
+        Left = 464
+        Top = 64
+        Width = 121
+        Height = 21
+        TabOrder = 6
+      end
+      object password: TEdit
+        Left = 464
+        Top = 93
+        Width = 121
+        Height = 21
+        PasswordChar = '*'
+        TabOrder = 7
+      end
+      object DBPath: TEdit
+        Left = 350
+        Top = 141
+        Width = 235
+        Height = 21
+        TabOrder = 8
+      end
+      object Button3: TButton
+        Left = 588
+        Top = 141
+        Width = 21
+        Height = 21
+        Caption = '...'
+        TabOrder = 9
+        OnClick = Button3Click
+      end
+    end
+  end
+  object Button1: TButton
+    Left = 456
+    Top = 357
+    Width = 75
+    Height = 25
+    Caption = #1054#1050
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 537
+    Top = 357
+    Width = 75
+    Height = 25
+    Caption = #1054#1090#1084#1077#1085#1072
+    TabOrder = 2
+    OnClick = Button2Click
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 584
+    Top = 256
+  end
+end

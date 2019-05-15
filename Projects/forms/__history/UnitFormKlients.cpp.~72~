@@ -1,0 +1,163 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormKlients.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma resource "*.dfm"
+TFormKlients *FormKlients;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+TIBDataSet * Table_Clients = NULL;
+extern TIBDataSet * Table_Clients;
+//TIBTable * Table_Clients = NULL;
+//extern TIBTable * Table_Clients;
+TDataSource * Clients_Datasource =NULL;
+extern TDataSource * Clients_Datasource;
+long * retval;
+extern long * retval;
+AnsiString sqltext = "select * from CLIENTS where COMPID=";
+//AnsiString sqltext = "select * from CLIENTS";
+extern AnsiString sqltext;
+//---------------------------------------------------------------------------
+__fastcall TFormKlients::TFormKlients(TComponent* Owner, TIBDatabase * MainConn_local, long * retid)
+	: TForm(Owner)
+{
+	retval = retid;
+	MainConn = MainConn_local;
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать табличку со списко клиентов
+	/*Table_Clients = new TIBTable(NULL);
+	Table_Clients->Database=MainConn;
+	Table_Clients->Transaction=MainTransaction;
+	Table_Clients->TableName = "CLIENTS";
+	Table_Clients->Filter = "COMPID=";
+	char * tmpint = new char[17];
+	itoa(OwnerCode,tmpint,10);
+	Table_Clients->Filter = Table_Clients->Filter+tmpint;
+	delete tmpint;
+	Table_Clients->Filtered = true;
+	Table_Clients->Active=true;
+	Table_Clients->First();  */
+
+	Table_Clients = new TIBDataSet(NULL);
+	Table_Clients->Database=MainConn;
+	Table_Clients->Transaction=MainTransaction;
+	Table_Clients->SelectSQL->Clear();
+	char * tmpint = new char[17];
+	itoa(OwnerCode,tmpint,10);
+	Table_Clients->SelectSQL->Append(sqltext+tmpint);
+	delete tmpint;
+	Table_Clients->InsertSQL->Append("insert into CLIENTS (ID,NAME,COMPID,KATID,COMP,PHONE,HOUSE,MOBILE,PAGER,OPERATOR,MISC,WHO,DOCUMENTS,RS,BANK,KS,INN,BIK,OKONH,OKPO,STATUS,FACE) values (:ID,:NAME,:COMPID,:KATID,:COMP,:PHONE,:HOUSE,:MOBILE,:PAGER,:OPERATOR,:MISC,:WHO,:DOCUMENTS,:RS,:BANK,:KS,:INN,:BIK,:OKONH,:OKPO,:STATUS,:FACE)");
+	Table_Clients->ModifySQL->Append("update CLIENTS set NAME=:NAME,COMPID=:COMPID,KATID=:KATID,COMP=:COMP,PHONE=:PHONE,HOUSE=:HOUSE,MOBILE=:MOBILE,PAGER=:PAGER,OPERATOR=:OPERATOR,MISC=:MISC,WHO=:WHO,DOCUMENTS=:DOCUMENTS,RS=:RS,BANK=:BANK,KS=:KS,INN=:INN,BIK=:BIK,OKONH=:OKONH,OKPO=:OKPO,STATUS=:STATUS,FACE=:FACE where ID = :OLD_ID");
+	Table_Clients->DeleteSQL->Append("delete from CLIENTS where ID = :OLD_ID");
+	Table_Clients->RefreshSQL->Append("select ID,NAME,COMPID,KATID,COMP,PHONE,HOUSE,MOBILE,PAGER,OPERATOR,MISC,WHO,DOCUMENTS,RS,BANK,KS,INN,BIK,OKONH,OKPO,STATUS,FACE from CLIENTS where ID = :ID");
+	Table_Clients->Filtered = true;
+	Table_Clients->Active = TRUE;
+	Table_Clients->FetchAll();
+	Table_Clients->Edit();
+
+	Table_Clients->FieldByName("PHONE")->EditMask="000\-00\-00;1;_";
+
+	//Создать объект DataSource для таблицы клиентов
+	Clients_Datasource = new TDataSource(NULL);
+	Clients_Datasource->DataSet=Table_Clients;
+	Clients_Datasource->DataSet->Active=TRUE;
+
+	//Присвоить гриду ссылку на DataSource
+	Clients_DBGrid->DataSource=Clients_Datasource;
+}
+void __fastcall TFormKlients::SetFilterClient(TObject *Sender)
+{
+	String tmpstr="";
+	Table_Clients->Active = false;
+	Table_Clients->SelectSQL->Clear();
+	char * tmpint = new char[17];
+	itoa(OwnerCode,tmpint,10);
+	if (Who1_CheckBox->Checked && !Who3_CheckBox->Checked) {
+		tmpstr = tmpstr+" and WHO=1";
+	}
+	if (Who3_CheckBox->Checked && !Who1_CheckBox->Checked) {
+		tmpstr = tmpstr+" and WHO=3";
+	}
+	Table_Clients->SelectSQL->Append(sqltext+tmpint+tmpstr);
+	Table_Clients->Filtered = true;
+	Table_Clients->Active = TRUE;
+	Table_Clients->FetchAll();
+	Table_Clients->Edit();
+
+	delete tmpint;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormKlients::Button1Click(TObject *Sender)
+{
+	*retval = Clients_Datasource->DataSet->FieldByName("ID")->AsInteger;
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormKlients::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormKlients::SpeedButton1Click(TObject *Sender)
+{
+	Table_Clients->Append();
+	Table_Clients->FieldByName("ID")->AsInteger=-1;
+	Table_Clients->FieldByName("COMPID")->AsInteger=OwnerCode;
+	Table_Clients->FieldByName("WHO")->AsInteger=1;
+	FormKlientsKart = new TFormKlientsKart(this,MainConn,MainTransaction,
+		Clients_Datasource);
+	FormKlientsKart->ShowModal();
+	delete FormKlientsKart;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormKlients::SpeedButton3Click(TObject *Sender)
+{
+	FormKlientsFind = new TFormKlientsFind(this,Clients_Datasource);
+	FormKlientsFind->ShowModal();
+	delete FormKlientsFind;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormKlients::SpeedButton2Click(TObject *Sender)
+{
+	FormKlientsKart = new TFormKlientsKart(this,MainConn,MainTransaction,
+		Clients_Datasource);
+	FormKlientsKart->ShowModal();
+	delete FormKlientsKart;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormKlients::Who1_CheckBoxClick(TObject *Sender)
+{
+	SetFilterClient(this);
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormKlients::Who3_CheckBoxClick(TObject *Sender)
+{
+	SetFilterClient(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormKlients::SpeedButton4Click(TObject *Sender)
+{
+	AnsiString ds = "Вы действительно хотите удалить запись?";
+	if (MessageBox(NULL,ds.c_str(),"Подтверждение удаления",MB_YESNO | MB_TOPMOST | MB_ICONQUESTION)!=IDYES){
+		Abort();
+	}
+	Table_Clients->Delete();
+	MainTransaction->CommitRetaining();
+}
+//---------------------------------------------------------------------------
+

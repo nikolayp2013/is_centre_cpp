@@ -1,0 +1,159 @@
+object FormExcelExport: TFormExcelExport
+  Left = 0
+  Top = 0
+  BorderStyle = bsDialog
+  Caption = #1069#1082#1089#1087#1086#1088#1090' '#1074' Excel'
+  ClientHeight = 416
+  ClientWidth = 689
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 59
+    Top = 16
+    Width = 121
+    Height = 13
+    Caption = #1060#1086#1088#1084#1072' '#1101#1082#1089#1087#1086#1088#1090#1072' '#1074'  Excel'
+  end
+  object Label2: TLabel
+    Left = 32
+    Top = 64
+    Width = 84
+    Height = 13
+    Caption = #1042#1086#1079#1084#1086#1078#1085#1099#1077' '#1087#1086#1083#1103
+  end
+  object Label3: TLabel
+    Left = 288
+    Top = 64
+    Width = 69
+    Height = 13
+    Caption = #1055#1086#1083#1103' '#1074' '#1092#1086#1088#1084#1077
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 453
+    Top = 12
+    Width = 23
+    Height = 22
+    Glyph.Data = {
+      76010000424D760100000000000036000000280000000A0000000A0000000100
+      1800000000004001000000000000000000000000000000000000DFDFE17171AE
+      B0B0BFE0E0E0E0E0E0E0E0E0E0E0E0A4A4C16C6C9BE0E0E000005F5FC20202ED
+      2222B6B9B9C2E0E0E0E0E0E0A7A7C21515A90202BD6F6F9D00009090FB0808E4
+      0000E72323B9BFBFD0ADADC61616B40000C11515ADA5A5C20000FBFBFF9B9BF8
+      0808EF0101ED1D1DBF1515BC0000CD1313B9A5A5C4E0E0E00000E0E0E0FEFEFF
+      A1A1F00606E40000F20000E71111C5A7A7C8E0E0E0E0E0E00000E0E0E0E0E0E0
+      B8B8E03C3CE31F1FF81010F71F1FCCBEBED0E0E0E0E0E0E00000E0E0E0ACACC6
+      5C5CD76F6FFD6A6AEB5E5EEC5858FF5757CCC0C0C7E0E0E00000AAAAC66868DB
+      7D7DFF7373E0B4B4D5B6B6EB7E7EF57A7AFF6262CFC0C0D100007F7FDA8282F6
+      7D7DDFB0B0CCE0E0E0E0E0E0B5B5F37C7CEF7F7FFF8181B60000D2D2F68E8EE0
+      AFAFCBE0E0E0E0E0E0E0E0E0FEFEFFB6B6F78686D0D3D3DA0000}
+    OnClick = SpeedButton1Click
+  end
+  object Label4: TLabel
+    Left = 496
+    Top = 232
+    Width = 152
+    Height = 39
+    Caption = 
+      #1044#1083#1103'  '#1080#1079#1084#1077#1085#1077#1085#1080#1103' '#1096#1080#1088#1080#1085#1099'  '#1087#1086#1083#1103' '#1089#1076#1077#1083#1072#1081#1090#1077' '#1076#1074#1086#1081#1085#1086#1081' '#1097#1077#1083#1095#1086#1082' '#1085#1072' '#1074#1099#1073#1088#1072#1085#1085#1086#1084 +
+      ' '#1087#1086#1083#1077
+    WordWrap = True
+  end
+  object ExcelForm_ComboBox: TComboBox
+    Left = 195
+    Top = 13
+    Width = 257
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 0
+    OnClick = ExcelForm_ComboBoxClick
+  end
+  object ExcelFields_CheckListBox: TCheckListBox
+    Left = 8
+    Top = 85
+    Width = 185
+    Height = 323
+    ItemHeight = 13
+    TabOrder = 1
+  end
+  object Button1: TButton
+    Left = 199
+    Top = 160
+    Width = 50
+    Height = 25
+    Caption = '-->'
+    TabOrder = 2
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 488
+    Top = 9
+    Width = 193
+    Height = 38
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100' '#1092#1086#1088#1084#1091
+    TabOrder = 3
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 488
+    Top = 64
+    Width = 193
+    Height = 38
+    Caption = '   '#1055#1077#1088#1077#1084#1077#1089#1090#1080#1090#1100' '#1087#1086#1083#1077' '#1085#1072' '#1086#1076#1085#1091' '#1087#1086#1079#1080#1094#1080#1102' '#1074#1074#1077#1088#1093
+    TabOrder = 4
+    WordWrap = True
+    OnClick = Button3Click
+  end
+  object Button4: TButton
+    Left = 488
+    Top = 120
+    Width = 193
+    Height = 38
+    Caption = '   '#1055#1077#1088#1077#1084#1077#1089#1090#1080#1090#1100' '#1087#1086#1083#1077' '#1085#1072' '#1086#1076#1085#1091' '#1087#1086#1079#1080#1094#1080#1102' '#1074#1085#1080#1079
+    TabOrder = 5
+    WordWrap = True
+    OnClick = Button4Click
+  end
+  object Button5: TButton
+    Left = 488
+    Top = 176
+    Width = 193
+    Height = 38
+    Caption = #1059#1076#1072#1083#1080#1090#1100' '#1087#1086#1083#1077
+    TabOrder = 6
+    WordWrap = True
+    OnClick = Button5Click
+  end
+  object Button6: TButton
+    Left = 488
+    Top = 371
+    Width = 193
+    Height = 38
+    Caption = #1057#1086#1079#1076#1072#1090#1100' '#1092#1072#1081#1083
+    TabOrder = 7
+    WordWrap = True
+    OnClick = Button6Click
+  end
+  object Formexcelint_ListBox: TListBox
+    Left = 257
+    Top = 85
+    Width = 194
+    Height = 323
+    ItemHeight = 13
+    TabOrder = 8
+    OnDblClick = Formexcelint_ListBoxDblClick
+  end
+  object SaveDialog1: TSaveDialog
+    Filter = #1060#1072#1081#1083#1099' Excel(*.xls)|*.xls'
+    Left = 496
+    Top = 312
+  end
+end

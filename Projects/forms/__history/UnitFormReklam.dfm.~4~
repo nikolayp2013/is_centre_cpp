@@ -1,0 +1,50 @@
+object FormReklam: TFormReklam
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'FormReklam'
+  ClientHeight = 277
+  ClientWidth = 463
+  Color = clRed
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 8
+    Top = 8
+    Width = 138
+    Height = 13
+    Caption = #1054#1082#1085#1086' '#1088#1077#1082#1083#1072#1084#1072#1094#1080#1080' '#1085#1072' '#1086#1098#1077#1082#1090
+  end
+  object ListBox1: TListBox
+    Left = 8
+    Top = 27
+    Width = 441
+    Height = 198
+    ItemHeight = 13
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 360
+    Top = 237
+    Width = 89
+    Height = 26
+    Caption = #1047#1072#1082#1088#1099#1090#1100
+    TabOrder = 1
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 17
+    Top = 238
+    Width = 88
+    Height = 25
+    Caption = #1044#1086#1073#1072#1074#1080#1090#1100
+    TabOrder = 2
+  end
+end

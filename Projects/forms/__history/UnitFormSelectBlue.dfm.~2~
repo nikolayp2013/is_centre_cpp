@@ -1,0 +1,51 @@
+object FormSelectBlue: TFormSelectBlue
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'FormSelectBlue'
+  ClientHeight = 229
+  ClientWidth = 225
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 1
+    Top = 1
+    Width = 247
+    Height = 227
+    BevelWidth = 2
+    Caption = 'Panel1'
+    ShowCaption = False
+    TabOrder = 0
+    object SpeedButton1: TSpeedButton
+      Left = 3
+      Top = 191
+      Width = 218
+      Height = 33
+      Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlue
+      Font.Height = -12
+      Font.Name = 'Arial'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = SpeedButton1Click
+    end
+    object Item_ListBox: TListBox
+      Left = 3
+      Top = 3
+      Width = 218
+      Height = 187
+      ItemHeight = 13
+      MultiSelect = True
+      TabOrder = 0
+    end
+  end
+end

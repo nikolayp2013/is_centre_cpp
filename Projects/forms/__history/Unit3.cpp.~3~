@@ -1,0 +1,30 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit3.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBDatabase"
+#pragma link "IBTable"
+#pragma resource "*.dfm"
+TForm3 *Form3;
+//---------------------------------------------------------------------------
+__fastcall TForm3::TForm3(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::Button1Click(TObject *Sender)
+{
+	//DataSource1->DataSet->FieldList["ZFULLNAME"].Values
+	//MessageBox( 0, "Ошибка при открытии Excel", "Ошибка", MB_OK );
+	//MessageBox( 0, DataSource1->DataSet->FieldValues["ZFULLNAME"], "Ошибка", MB_OK );
+	//Label1->Caption = DataSource1->DataSet->FieldValues["ZFULLNAME"].Type();
+	//MessageBox( 0, IntToStr(3).c_str(), "Ошибка", MB_OK );
+	//MessageBox( 0, IntToStr(DataSource1->DataSet->FieldValues["ZFULLNAME"].Type()).c_str(), "Ошибка", MB_OK );
+}
+//---------------------------------------------------------------------------
+

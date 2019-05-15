@@ -1,0 +1,37 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormStatFirmH
+#define UnitFormStatFirmH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <DBGrids.hpp>
+#include <Grids.hpp>
+#include "MainClass.h"
+#include "IBCustomDataSet.hpp"
+#include "IBDatabase.hpp"
+#include "IBQuery.hpp"
+#include <DB.hpp>
+#include "UnitFormStart.h"
+//---------------------------------------------------------------------------
+class TFormStatFirm : public TForm
+{
+__published:	// IDE-managed Components
+	TDBGrid *DBGrid1;
+	TCheckBox *CheckBox1;
+	TButton *Button1;
+	TButton *Button2;
+	TIBQuery *IBQuery1;
+	TIBTransaction *IBTransaction1;
+	TDataSource *DataSource1;
+	void __fastcall Button2Click(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormStatFirm(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormStatFirm *FormStatFirm;
+//---------------------------------------------------------------------------
+#endif

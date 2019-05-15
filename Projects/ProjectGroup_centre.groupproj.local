@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2012.01.15 00:03:46.480.groupproj,C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects\ProjectGroup1.groupproj=C:\ISCentre\Projects\ProjectGroup1.groupproj</Transaction>
+    <Transaction>2012.01.15 00:36:32.977.groupproj,C:\ISCentre\Projects\ProjectGroup1.groupproj=C:\ISCentre\Projects\ProjectGroup_centre.groupproj</Transaction>
+  </Transactions>
+	<Default.Personality>
+		<Projects ActiveProject="centre.exe"/>
+	</Default.Personality>
+</BorlandProject>

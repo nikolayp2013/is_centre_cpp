@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef FormStatAgentH
+#define FormStatAgentH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormStatAg : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormStatAg(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormStatAg *FormStatAg;
+//---------------------------------------------------------------------------
+#endif

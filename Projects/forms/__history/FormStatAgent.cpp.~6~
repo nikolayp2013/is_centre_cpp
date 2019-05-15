@@ -1,0 +1,31 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "FormStatAgent.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBQuery"
+#pragma resource "*.dfm"
+TFormStatAg *FormStatAg;
+//---------------------------------------------------------------------------
+__fastcall TFormStatAg::TFormStatAg(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormStatAg::Button2Click(TObject *Sender)
+{
+	FormStatAg->Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormStatAg::Button1Click(TObject *Sender)
+{
+	FormStatAgAdd = new TFormStatAgAdd(this);
+	FormStatAgAdd->ShowModal();
+	delete FormStatAgAdd;
+}
+//---------------------------------------------------------------------------
+

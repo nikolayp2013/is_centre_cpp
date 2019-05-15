@@ -1,0 +1,25 @@
+//---------------------------------------------------------------------------
+
+#ifndef FormGallaryAddRemarkH
+#define FormGallaryAddRemarkH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormGallaryAddRem : public TForm
+{
+__published:	// IDE-managed Components
+	TLabel *Label1;
+	TButton *ButOK;
+	TButton *ButCancel;
+	TEdit *Edit_Remark;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormGallaryAddRem(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormGallaryAddRem *FormGallaryAddRem;
+//---------------------------------------------------------------------------
+#endif

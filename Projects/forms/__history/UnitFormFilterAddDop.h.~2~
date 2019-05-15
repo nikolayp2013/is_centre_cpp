@@ -1,0 +1,28 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormFilterAddDopH
+#define UnitFormFilterAddDopH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormFilterAddDop : public TForm
+{
+__published:	// IDE-managed Components
+	TListBox *ListBox1;
+	TButton *Button1;
+	TEdit *Edit1;
+	TButton *Button2;
+	TButton *Button3;
+	TButton *Button4;
+	TButton *Button5;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormFilterAddDop(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormFilterAddDop *FormFilterAddDop;
+//---------------------------------------------------------------------------
+#endif

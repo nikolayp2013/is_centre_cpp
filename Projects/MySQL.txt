@@ -1,0 +1,11 @@
+root
+developer
+118329
+0ea03vuF
+
+server.iscentre-samara.ru
+80.234.41.40
+
+
+ALTER TABLE apartsell
+        CONVERT TO CHARACTER SET utf8;

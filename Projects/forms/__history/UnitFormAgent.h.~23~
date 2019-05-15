@@ -1,0 +1,67 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormAgentH
+#define UnitFormAgentH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <Buttons.hpp>
+#include <DBGrids.hpp>
+#include <Grids.hpp>
+#include "MainClass.h"
+#include "UnitAgKartEdit.h"
+#include "IBCustomDataSet.hpp"
+#include "IBQuery.hpp"
+#include <DB.hpp>
+#include "IBDatabase.hpp"
+#include "IBTable.hpp"
+//---------------------------------------------------------------------------
+class TFormAgent : public TForm
+{
+__published:	// IDE-managed Components
+	TSpeedButton *SpeedButton1;
+	TSpeedButton *SpeedButton2;
+	TSpeedButton *SpeedButton4;
+	TSpeedButton *SpeedButton5;
+	TSpeedButton *SpeedButton6;
+	TSpeedButton *SpeedButton7;
+	TSpeedButton *SpeedButton8;
+	TSpeedButton *SpeedButton9;
+	TDBGrid *GridAgent;
+	TIBDatabase *IBDatabase1;
+	TIBTable *IBTable1;
+	TIBTransaction *IBTransaction1;
+	TIntegerField *IBTable1ID;
+	TIBStringField *IBTable1FULLNAME;
+	TIBStringField *IBTable1MAINPHONE;
+	TIBStringField *IBTable1ADVERTNAME;
+	TIBStringField *IBTable1MOBILEPHONE;
+	TIntegerField *IBTable1CONTACTS;
+	TIntegerField *IBTable1COMPID;
+	TIBStringField *IBTable1ADDPHONE;
+	TIBStringField *IBTable1SURNAME;
+	TIBStringField *IBTable1NAME;
+	TIBStringField *IBTable1SECNAME;
+	TDateField *IBTable1DATEENTER;
+	TIBStringField *IBTable1STATUS;
+	TIBStringField *IBTable1PASSWORDV;
+	TIntegerField *IBTable1NUMBID;
+	TIBTable *IBTable2;
+	TDataSource *DataSource1;
+	TIntegerField *IBTable1STATUSID2;
+	TStringField *IBTable1STATUSTEXT;
+	void __fastcall SpeedButton2Click(TObject *Sender);
+	void __fastcall SpeedButton1Click(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
+	void __fastcall SpeedButton4Click(TObject *Sender);
+	void __fastcall SpeedButton9Click(TObject *Sender);
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormAgent(TComponent* Owner, TIBDatabase * MainConnLoc);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormAgent *FormAgent;
+//---------------------------------------------------------------------------
+#endif

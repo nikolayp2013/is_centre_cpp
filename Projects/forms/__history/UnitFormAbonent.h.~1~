@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormAbonentH
+#define UnitFormAbonentH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormAbonent : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormAbonent(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormAbonent *FormAbonent;
+//---------------------------------------------------------------------------
+#endif

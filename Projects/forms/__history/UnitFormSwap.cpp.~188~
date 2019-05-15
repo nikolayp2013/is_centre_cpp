@@ -1,0 +1,937 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormSwap.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "DBAccess"
+#pragma link "MemDS"
+#pragma link "MyAccess"
+#pragma resource "*.dfm"
+TFormSwap *FormSwap;
+TDataSource * TabPricelist_Datasource_Main =NULL;
+extern TDataSource * TabPricelist_Datasource_Main;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+// Таблица квартиры
+TIBTable * Table_Apartsell = NULL;
+extern TIBTable * Table_Apartsell;
+//TSimpleDataSet * Table_MySQL_Apartsell = NULL;
+//extern TSimpleDataSet * Table_MySQL_Apartsell;
+// Таблица квартиры спрос
+TIBTable * Table_Apartpurch = NULL;
+extern TIBTable * Table_Apartpurch;
+//TSimpleDataSet * Table_MySQL_Apartpurch = NULL;
+//extern TSimpleDataSet * Table_MySQL_Apartpurch;
+// Таблица со списком удаленных записей
+TIBTable * Table_Delrecords = NULL;
+extern TIBTable * Table_Delrecords;
+extern int swactive = 0;
+TIniFile *IniSer = new TIniFile(StartDirF+"ini\\server.ini");
+//---------------------------------------------------------------------------
+__fastcall TFormSwap::TFormSwap(TComponent* Owner, TIBDatabase * MainConn_local,
+		TIBTransaction * MainTransaction_local)
+	: TForm(Owner)
+{
+	MainConn = MainConn_local;
+	//Создать объект транзакций
+	//MainTransaction = new TIBTransaction(NULL);
+	MainTransaction=MainTransaction_local;
+	//MainTransaction->DefaultDatabase = MainConn;
+
+	//Таблица со списком удаленных записей
+	Table_Delrecords = new TIBTable(NULL);
+	Table_Delrecords->Database=MainConn;
+	Table_Delrecords->Transaction=MainTransaction;
+	Table_Delrecords->TableName = "DELRECORDS";
+
+	//Таблица квартиры
+	Table_Apartsell = new TIBTable(NULL);
+	Table_Apartsell->Database=MainConn;
+	Table_Apartsell->Transaction=MainTransaction;
+	Table_Apartsell->TableName = "APARTSELL";
+	Table_Apartsell->Filter="(pricetype=1 or (pricetype=3 and rekltext is not null)) and (swsend=0 or swsend is null)";
+	Table_Apartsell->Filtered=true;
+	Table_Apartsell->Active = TRUE;
+	Table_Apartsell->FetchAll();
+	// Таблица MySQL
+	/*Table_MySQL_Apartsell = new TSimpleDataSet(NULL);
+	Table_MySQL_Apartsell->Connection = SQLConnection1;
+	Table_MySQL_Apartsell->DataSet->CommandType = ctTable;
+	Table_MySQL_Apartsell->DataSet->CommandText = "APARTSELL";
+	Table_MySQL_Apartsell->PacketRecords =-1; */
+
+	//Таблица квартиры спрос
+	Table_Apartpurch = new TIBTable(NULL);
+	Table_Apartpurch->Database=MainConn;
+	Table_Apartpurch->Transaction=MainTransaction;
+	Table_Apartpurch->TableName = "APARTPURCH";
+	Table_Apartpurch->Active = TRUE;
+	Table_Apartpurch->FetchAll();
+	// Таблица MySQL
+	/*Table_MySQL_Apartpurch = new TSimpleDataSet(NULL);
+	Table_MySQL_Apartpurch->Connection = SQLConnection1;
+	Table_MySQL_Apartpurch->DataSet->CommandType = ctTable;
+	Table_MySQL_Apartpurch->DataSet->CommandText = "APARTPURCH";
+	Table_MySQL_Apartpurch->PacketRecords =-1;*/  \
+	DataSource1->DataSet = Table_Apartsell;
+
+	// Настройки сервера
+	SQLConnection1->Connected=false;
+	//SQLConnection1->Params->Values["HostName"] = IniSer->ReadString("ServerConf","HostName","");
+	SQLConnection1->Server = IniSer->ReadString("ServerConf","HostName","");
+	//QLConnection1->Params->Values["User_Name"] = IniSer->ReadString("ServerConf","UserName","");
+	SQLConnection1->Username = IniSer->ReadString("ServerConf","UserName","");
+	//SQLConnection1->Params->Values["Password"] = IniSer->ReadString("ServerConf","PassWord","");
+	SQLConnection1->Password = IniSer->ReadString("ServerConf","PassWord","");
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormSwap::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormSwap::Button3Click(TObject *Sender)
+{
+	/*int swexist;
+	Image1->Refresh();
+	Table_MySQL_Apartsell->Connection->Connected=true;
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+            	Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates(0);
+	ProgressBar1->StepIt();
+    Label6->Visible=false;
+	Label7->Visible=false;
+	ProgressBar1->Visible=false;  */
+	//Table_MySQL_Apartsell->Post(); AnsiToUtf8(Edit1->Text)
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSwap::Button4Click(TObject *Sender)
+{
+	//Table_MySQL_Apartsell->Connection->Connected=true;
+	//Table_MySQL_Apartsell->Active=true;
+	//DataSource1->DataSet->Active=true;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSwap::Button5Click(TObject *Sender)
+{
+	//SQLQuery1->SQL
+	//SQLQuery1->Active=false;
+	/*SQLQuery1->SQL->Clear();
+	//SQLQuery1->SQL->Add("insert into apartsell (agent) values (17);");
+	SQLQuery1->SQL->Add("select * from apartsell");
+	SQLQuery1->ExecSQL(); //*/
+	/*ShowMessage("Готово");
+	SQLQuery1->SQL->Clear();
+	SQLQuery1->SQL->Add("select * from apartpurch");
+	SQLQuery1->ExecSQL();
+	ShowMessage("Готово"); */
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TFormSwap::Button6Click(TObject *Sender)
+{
+	/*if (Label1->Transparent) {
+	   ShowMessage("1Да");
+	}
+    if (Label2->Transparent) {
+	   ShowMessage("2Да");
+	}*/
+	//ProgressBar1->StepIt();
+	//MyTable1->Active=true;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormSwap::FormActivate(TObject *Sender)
+{
+	Image1->Refresh();
+	// Подготовка к отпраке данных
+	Table_MySQL_Apartsell->Filter="agent="+(UnicodeString)OwnerCode;
+	Table_MySQL_Apartsell->Active=true;
+    // Отправка данных
+	int swexist;
+	int countobj;
+	// Квартиры
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	// Удаление записей
+	Table_Delrecords->Active = true;
+	Table_Delrecords->Filtered=true;
+	Table_Delrecords->Filter="tablename='ApartSell'";
+	Table_Delrecords->Filtered=true;
+	Table_Delrecords->Active = true;
+	Table_Delrecords->FetchAll();
+	//ShowMessage(Table_Delrecords->RecordCount);
+	Table_Delrecords->First();
+	//Abort();
+	while (!Table_Delrecords->Eof) {
+		 if (Table_MySQL_Apartsell->Locate("GUID",Table_Delrecords->FieldByName("GUID")->AsString,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->FieldByName("DATEDEL")->AsDateTime = Table_Delrecords->FieldByName("DATEDEL")->AsDateTime;
+			Table_Delrecords->Edit();
+			Table_Delrecords->Delete();
+		} else {
+			Table_Delrecords->Next();
+        }
+    }
+
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_Apartsell->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	Table_MySQL_Apartsell->ApplyUpdates();
+	Table_MySQL_Apartsell->ApplyUpdates();
+	//Table_MySQL_Apartsell->CommitUpdates();
+	//Table_MySQL_Apartsell->
+	ProgressBar1->StepIt();
+	Apartsell_Label->Visible = true;
+	Apartsell_Label->Caption = Apartsell_Label->Caption+countobj;
+	Table_Apartsell->Active = false;
+
+	//MyQuery1.ApplyUpdates;
+	//MyQuery1.CommitUpdates;
+
+	// Квартиры спрос
+	Image1->Refresh();
+
+	/*Table_MySQL_Apartsell->TableName = "apartpurch";
+	//Table_MySQL_Apartsell->DataSet->CommandText = "streets";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="APARTPURCH";
+	//Table_Apartsell->TableName="STREETS";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Apartpurch_Label->Visible = true;
+	Apartpurch_Label->Caption = Apartpurch_Label->Caption+countobj;
+	//Abort();
+	// Комнаты
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "roomssell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="ROOMSSELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Roomssell_Label->Visible = true;
+	Roomssell_Label->Caption = Roomssell_Label->Caption+countobj;
+	// Комнаты спрос
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "roomspurch";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="ROOMSPURCH";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Roomspurch_Label->Visible = true;
+	Roomspurch_Label->Caption = Roomspurch_Label->Caption+countobj;
+	// Аренда квартир, комнат
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "arendsell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="ARENDSELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Arendsell_Label->Visible = true;
+	Arendsell_Label->Caption = Arendsell_Label->Caption+countobj;
+	// Аренда - спрос
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "arendpurch";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="ARENDPURCH";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Arendpurch_Label->Visible = true;
+	Arendpurch_Label->Caption = Arendpurch_Label->Caption+countobj;
+	// Дома дачи, коттеджи
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "housesell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="HOUSESELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Housesell_Label->Visible = true;
+	Housesell_Label->Caption = Housesell_Label->Caption+countobj;
+	// Дома, дачи спрос
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "housepurch";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="HOUSEPURCH";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Housepurch_Label->Visible = true;
+	Housepurch_Label->Caption = Housepurch_Label->Caption+countobj;
+	// Гаражи, уч-ки
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "garagesell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="GARAGESELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Garagesell_Label->Visible = true;
+	Garagesell_Label->Caption = Garagesell_Label->Caption+countobj;
+	// Гаражи спрос
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "garagepurch";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="GARAGEPURCH";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Garagepurch_Label->Visible = true;
+	Garagepurch_Label->Caption = Garagepurch_Label->Caption+countobj;
+	// Земельные участки
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "landsell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="LANDSELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Landsell_Label->Visible = true;
+	Landsell_Label->Caption = Landsell_Label->Caption+countobj;
+	// Новостройки
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "newbuildssell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="NEWBUILDSSELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Newbuildssell_Label->Visible = true;
+	Newbuildssell_Label->Caption = Newbuildssell_Label->Caption+countobj;
+	// Здания, сооружения
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "commercsell1";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="COMMERCSELL1";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Commercsell1_Label->Visible = true;
+	Commercsell1_Label->Caption = Commercsell1_Label->Caption+countobj;
+	// Комм. недвижимость - спрос
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "commercpurch";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="COMMERCPURCH";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Commercpurch_Label->Visible = true;
+	Commercpurch_Label->Caption = Commercpurch_Label->Caption+countobj;
+	// Офисы
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "commercsell2";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="COMMERCSELL2";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Commercsell2_Label->Visible = true;
+	Commercsell2_Label->Caption = Commercsell2_Label->Caption+countobj;
+	// Торговые помещения
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "commercsell3";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="COMMERCSELL3";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Commercsell3_Label->Visible = true;
+	Commercsell3_Label->Caption = Commercsell3_Label->Caption+countobj;
+	// Производство
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "commercsell4";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="COMMERCSELL4";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Commercsell4_Label->Visible = true;
+	Commercsell4_Label->Caption = Commercsell4_Label->Caption+countobj;
+	// Готовый бизнесс продажа
+	Image1->Refresh();
+
+	Table_MySQL_Apartsell->TableName = "businesssell";
+	Table_MySQL_Apartsell->Active=true;
+	Table_Apartsell->Active=false;
+	Table_Apartsell->TableName="BUSINESSSELL";
+	Table_Apartsell->Active=true;
+	Table_Apartsell->First();
+	Table_MySQL_Apartsell->First();
+	countobj = 0;
+	while (!Table_Apartsell->Eof){
+		if (!Table_MySQL_Apartsell->Locate("ID",Table_Apartsell->FieldByName("ID")->AsInteger,TLocateOptions())){
+			Table_MySQL_Apartsell->Edit();
+			Table_MySQL_Apartsell->Append();
+		}
+		for (int i = 0; i < Table_Apartsell->Fields->Count; i++) {
+			swexist=0;
+			for (int j = 0; j < Table_MySQL_Apartsell->Fields->Count; j++) {
+				if (Table_MySQL_Apartsell->FieldDefs->Items[j]->Name ==
+					Table_Apartsell->FieldDefs->Items[i]->Name) {
+					swexist=1;
+				}
+			}
+			if (swexist==1) {
+				Table_MySQL_Apartsell->Edit();
+				Table_MySQL_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString =
+					Table_Apartsell->FieldByName(Table_Apartsell->FieldDefs->Items[i]->Name)->AsString;
+			}
+		}
+		Table_Apartsell->Edit();
+		Table_Apartsell->FieldByName("swsend")->AsInteger=1;
+		countobj = countobj+1;
+		Table_Apartsell->Next();
+	}
+	Table_MySQL_Apartsell->ApplyUpdates();
+	ProgressBar1->StepIt();
+	Businesssell_Label->Visible = true;
+	Businesssell_Label->Caption = Businesssell_Label->Caption+countobj*/;
+
+
+	Label6->Visible=false;
+	Label7->Visible=false;
+	ProgressBar1->Visible=false;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSwap::Image2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSwap::Image3Click(TObject *Sender)
+{
+		FormUpdateBanner = new TFormUpdateBanner(FormSwap,SQLConnection1,MainConn);
+		FormUpdateBanner->ShowModal();
+		delete FormUpdateBanner;
+}
+//---------------------------------------------------------------------------
+
+

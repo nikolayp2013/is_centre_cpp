@@ -1,0 +1,34 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormExcelExportAdd.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormExcelExportAdd *FormExcelExportAdd;
+int * swenter;
+extern int * swenter;
+string * nameform;
+extern sytring * nameform;
+//---------------------------------------------------------------------------
+__fastcall TFormExcelExportAdd::TFormExcelExportAdd(TComponent* Owner,, int * swenter_local, string * nameform_local)
+	: TForm(Owner)
+{
+	swenter=swenter_local;
+	formname=formname_local;
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExportAdd::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExcelExportAdd::Button1Click(TObject *Sender)
+{
+	*swenter=1;
+	*nameform = Edit1->Text;
+	Close();
+}
+//---------------------------------------------------------------------------

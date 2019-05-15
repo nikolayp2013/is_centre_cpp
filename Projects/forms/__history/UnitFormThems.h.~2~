@@ -1,0 +1,47 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormThemsH
+#define UnitFormThemsH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <DBCtrls.hpp>
+#include <ExtCtrls.hpp>
+//---------------------------------------------------------------------------
+class TForm1 : public TForm
+{
+__published:	// IDE-managed Components
+	TShape *Shape1;
+	TLabel *Label1;
+	TListBox *ListBox1;
+	TShape *Shape2;
+	TLabel *Label2;
+	TDBCheckBox *DBCheckBox1;
+	TDBCheckBox *DBCheckBox2;
+	TDBCheckBox *DBCheckBox3;
+	TDBCheckBox *DBCheckBox4;
+	TDBCheckBox *DBCheckBox5;
+	TDBCheckBox *DBCheckBox6;
+	TDBCheckBox *DBCheckBox7;
+	TDBCheckBox *DBCheckBox8;
+	TDBCheckBox *DBCheckBox9;
+	TDBCheckBox *DBCheckBox10;
+	TDBCheckBox *DBCheckBox11;
+	TDBCheckBox *DBCheckBox12;
+	TDBCheckBox *DBCheckBox13;
+	TDBCheckBox *DBCheckBox14;
+	TDBCheckBox *DBCheckBox15;
+	TDBCheckBox *DBCheckBox17;
+	TDBCheckBox *DBCheckBox24;
+	TShape *Shape3;
+	TLabel *Label3;
+private:	// User declarations
+public:		// User declarations
+	__fastcall TForm1(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TForm1 *Form1;
+//---------------------------------------------------------------------------
+#endif

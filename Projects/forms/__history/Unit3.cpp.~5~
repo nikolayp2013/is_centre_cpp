@@ -1,0 +1,46 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit3.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBDatabase"
+#pragma link "IBTable"
+#pragma resource "*.dfm"
+TForm3 *Form3;
+//---------------------------------------------------------------------------
+__fastcall TForm3::TForm3(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm3::Button1Click(TObject *Sender)
+{
+	//MessageBox( 0, DataSource1->DataSet->FieldByName("ZFULLNAME")->AsString.c_str(), "Ошибка", MB_OK );
+	//Цикл по всем записям таблицы
+	 DataSource1->DataSet->First();
+	 do {
+     	DataSource2->DataSet->InsertRecord(ARRAYOFCONST(("","",0,"",
+		DataSource1->DataSet->FieldByName("ZSHORTNAME")->AsString,
+		DataSource1->DataSet->FieldByName("ZFULLNAME")->AsString,
+		DataSource1->DataSet->FieldByName("ZRAZDEL")->AsString,
+		DataSource1->DataSet->FieldByName("ZGROUP")->AsString,
+		DataSource1->DataSet->FieldByName("ZFOX")->AsString)));
+		DataSource1->DataSet->Next();
+	 } while(!DataSource1->DataSet->Eof);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm3::Button2Click(TObject *Sender)
+{
+	DataSource2->DataSet->CheckBrowseMode();
+	//Записать изменения в базу данных
+	IBTransaction1->Commit();
+	//Открыть набор данных
+	DataSource2->DataSet->Active=True;
+}
+//---------------------------------------------------------------------------
+

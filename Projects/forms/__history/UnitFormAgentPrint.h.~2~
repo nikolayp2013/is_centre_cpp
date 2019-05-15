@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormAgentPrintH
+#define UnitFormAgentPrintH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormAgentPrint : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormAgentPrint(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormAgentPrint *FormAgentPrint;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitUpdateExeH
+#define UnitUpdateExeH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormUpdateExe : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormUpdateExe(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormUpdateExe *FormUpdateExe;
+//---------------------------------------------------------------------------
+#endif

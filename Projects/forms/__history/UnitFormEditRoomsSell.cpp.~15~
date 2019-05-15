@@ -1,0 +1,1190 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormEditRoomsSell.h"
+
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBTable"
+#pragma link "IBDatabase"
+#pragma link "DBLookupListBoxCen"
+#pragma link "DBLookupComboBoxCen"
+#pragma link "DBLookupComboBoxCentre"
+#pragma link "DBLookupListBoxCentre"
+#pragma resource "*.dfm"
+
+TFormEditRoomsSell *FormEditRoomsSell;
+TIBTransaction * OtherTransaction = NULL;
+extern TIBTransaction * OtherTransaction;
+// Таблица со списком районов
+TIBTable * Table_Items_8 = NULL;
+extern TIBTable * Table_Items_8;
+TDataSource * Region_datasource = NULL;
+extern TDataSource * Region_datasource;
+// Главная таблица со списком объектов
+TDataSource * TabPricelist_Datasource_Main;
+extern TDataSource * TabPricelist_Datasource_Main;
+// Таблица со списком улиц
+TIBDataSet * Table_Streets = NULL;
+extern TIBDataSet * Table_Streets;
+TDataSource * Streets_datasource = NULL;
+extern TDataSource * Streets_datasource;
+// Таблица со списком микрорайонов
+TIBTable * Table_Items_10 = NULL;
+extern TIBTable * Table_Items_10;
+TDataSource * mRegion_datasource = NULL;
+extern TDataSource * mRegion_datasource;
+// Таблица со списком договоров
+TIBTable * Table_Contract = NULL;
+extern TIBTable * Table_Contract;
+TDataSource * Contract_datasource = NULL;
+extern TDataSource * Contract_datasource;
+// Таблица со списком источников
+TIBTable * Table_Source = NULL;
+extern TIBTable * Table_Source;
+TDataSource * Source_datasource = NULL;
+extern TDataSource * Source_datasource;
+// Таблица со списком вариантов
+TIBTable * Table_Variant = NULL;
+extern TIBTable * Table_Variant;
+TDataSource * Variant_datasource = NULL;
+extern TDataSource * Variant_datasource;
+// Таблица со списком типов домов
+TIBTable * Table_Typehouse = NULL;
+extern TIBTable * Table_Typehouse;
+TDataSource * Typehouse_datasource = NULL;
+extern TDataSource * Typehouse_datasource;
+// Таблица со списком марериалов стен
+TIBTable * Table_Stuffwall = NULL;
+extern TIBTable * Table_Stuffwall;
+TDataSource * 	Stuffwall_datasource = NULL;
+extern TDataSource * Stuffwall_datasource;
+// Таблица со списком планировок
+TIBTable * Table_Design = NULL;
+extern TIBTable * Table_Design;
+TDataSource * Design_datasource = NULL;
+extern TDataSource * Design_datasource;
+// Таблица со списком состояний
+TIBTable * Table_State = NULL;
+extern TIBTable * Table_State;
+TDataSource * 	State_datasource = NULL;
+extern TDataSource * State_datasource;
+// Таблица со списком вариантов телефона
+TIBTable * Table_Swphone = NULL;
+extern TIBTable * Table_Swphone;
+TDataSource * Swphone_datasource = NULL;
+extern TDataSource * Swphone_datasource;
+// Таблица со списком вариантов для поля санузел
+TIBTable * Table_Nodesan = NULL;
+extern TIBTable * Table_Nodesan;
+TDataSource * 	Nodesan_datasource = NULL;
+extern TDataSource * Nodesan_datasource;
+// Таблица со списком вариантов обмена
+TIBTable * Table_Varswap = NULL;
+extern TIBTable * Table_Varswap;
+TDataSource * 	Varswap_datasource = NULL;
+extern TDataSource * Varswap_datasource;
+// Таблица со списком клиентов
+TIBTable * Table_Clients = NULL;
+extern TIBTable * Table_Clients;
+TDataSource * Clients_Datasource =NULL;
+extern TDataSource * Clients_Datasource;
+// Таблица со списком категорий клиента
+TIBTable * Table_Clients_kategory1 = NULL;
+extern TIBTable * Table_Clients_kategory1;
+TIBTable * Table_Clients_kategory2 = NULL;
+extern TIBTable * Table_Clients_kategory2;
+TDataSource * Clients_Datasource_kategory =NULL;
+extern TDataSource * Clients_Datasource_kategory;
+// Для агента
+TIBTransaction * TransactionAgent = NULL;
+extern TIBTransaction * TransactionAgent;
+// Таблица со списком агентов
+TIBTable * Table_Agent = NULL;
+extern TIBTable * Table_Agent;
+TDataSource * Agent_datasource = NULL;
+extern TDataSource * Agent_datasource;
+// Таблица с историей изменений в карте
+TIBTable * Table_History = NULL;
+extern TIBTable * Table_History;
+TDataSource * History_datasource = NULL;
+extern TDataSource * History_datasource;
+// Таблица с типими действий с историей изменений в карте
+TIBTable * Table_Items_80 = NULL;
+extern TIBTable * Table_History;
+
+void __fastcall TFormEditRoomsSell::FormCreate(TObject *Sender)
+{
+	//--- Программное создание выпадающего списка со списком улиц
+	Streets_DBLookupListBox = new TMyDBLookupListBox(this);
+	Streets_DBLookupListBox->Parent= this;
+	Streets_DBLookupListBox->Name=AnsiString("Streets_DBLookupListBox");
+	Streets_DBLookupListBox->Left = 89;
+	Streets_DBLookupListBox->Top = 182;
+	Streets_DBLookupListBox->Width =160;
+	Streets_DBLookupListBox->Height = 17;
+	Streets_DBLookupListBox->TabOrder = 9;
+    Streets_DBLookupListBox->Visible = False;
+	Streets_DBLookupListBox->OnExit = Streets_DBLookupListBoxExit;
+	Streets_DBLookupListBox->OnClick = Streets_DBLookupListBoxClick;
+	Streets_DBLookupListBox->OnKeyDown = Streets_DBLookupListBoxKeyDown;
+	Streets_DBLookupListBox->OnMouseUp = Streets_DBLookupListBoxMouseUp;
+
+}
+//---------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------
+//-----  Срабатывает при запуске формы
+//---------------------------------------------------------------------------
+__fastcall TFormEditRoomsSell::TFormEditRoomsSell(TComponent* Owner)
+			: TForm(Owner)
+{
+	OtherTransaction = new TIBTransaction(NULL);
+	OtherTransaction->DefaultDatabase = MainForm->MainConn;
+
+	//Главная таблица со списком объектов (прайслист)
+	MainForm->TabPricelist_Datasource_Main->DataSet->Edit();
+	//Таблица со списком районов Самарской области
+	Table_Items_8 = new TIBTable(NULL);
+	Table_Items_8->Database=MainForm->MainConn;
+	Table_Items_8->Transaction=OtherTransaction;
+	Table_Items_8->TableName = "ITEMS";
+	Table_Items_8->Filter="RAZDEL=8";
+	Table_Items_8->Filtered=TRUE;
+	Table_Items_8->Active = TRUE;
+	Table_Items_8->FetchAll();
+	Region_datasource = new TDataSource(NULL);
+	Region_datasource->DataSet=Table_Items_8;
+	// - - - - - - - - - - - - - - - - - - - - - -
+	// Таблица со списком улиц
+	Table_Streets = new TIBDataSet(NULL);
+	Table_Streets->Database=MainForm->MainConn;
+	Table_Streets->Transaction=OtherTransaction;
+	Table_Streets->SelectSQL->Append("select STREETCODE, STREETNAME from STREETS");
+	Table_Streets->Active = TRUE;
+	Table_Streets->FetchAll();
+	Streets_datasource = new TDataSource(NULL);
+	Streets_datasource->DataSet=Table_Streets;
+	//Таблица со списком микрорайонов
+	Table_Items_10 = new TIBTable(NULL);
+	Table_Items_10->Database=MainForm->MainConn;
+	Table_Items_10->Transaction=OtherTransaction;
+	Table_Items_10->TableName = "ITEMS";
+	Table_Items_10->Filter="RAZDEL=10";
+	Table_Items_10->Filtered=TRUE;
+	Table_Items_10->Active = TRUE;
+	mRegion_datasource = new TDataSource(NULL);
+	mRegion_datasource->DataSet=Table_Items_10;
+	mRegion_datasource->DataSet->Last();
+	mRegion_datasource->DataSet->First();
+	//Таблица со списком договоров
+	Table_Contract = new TIBTable(NULL);
+	Table_Contract->Database=MainForm->MainConn;
+	Table_Contract->Transaction=OtherTransaction;
+	Table_Contract->TableName = "ITEMS";
+	Table_Contract->Filter="RAZDEL=2";
+	Table_Contract->Filtered=TRUE;
+	Table_Contract->Active = TRUE;
+	Table_Contract->FetchAll();
+	Contract_datasource = new TDataSource(NULL);
+	Contract_datasource->DataSet=Table_Contract;
+	//Таблица со списком источников
+	Table_Source = new TIBTable(NULL);
+	Table_Source->Database=MainForm->MainConn;
+	Table_Source->Transaction=OtherTransaction;
+	Table_Source->TableName = "ITEMS";
+	Table_Source->Filter="RAZDEL=55";
+	Table_Source->Filtered=TRUE;
+	Table_Source->Active = TRUE;
+	Table_Source->FetchAll();
+	Source_datasource = new TDataSource(NULL);
+	Source_datasource->DataSet=Table_Source;
+	//Таблица со списком Вариантов
+	Table_Variant = new TIBTable(NULL);
+	Table_Variant->Database=MainForm->MainConn;
+	Table_Variant->Transaction=OtherTransaction;
+	Table_Variant->TableName = "ITEMS";
+	Table_Variant->Filter="RAZDEL=3";
+	Table_Variant->Filtered=TRUE;
+	Table_Variant->Active = TRUE;
+	Table_Variant->FetchAll();
+	Variant_datasource = new TDataSource(NULL);
+	Variant_datasource->DataSet=Table_Variant;
+	//Таблица со списком типов домов
+	Table_Typehouse = new TIBTable(NULL);
+	Table_Typehouse->Database=MainForm->MainConn;
+	Table_Typehouse->Transaction=OtherTransaction;
+	Table_Typehouse->TableName = "ITEMS";
+	Table_Typehouse->Filter="RAZDEL=9";
+	Table_Typehouse->Filtered=TRUE;
+	Table_Typehouse->Active = TRUE;
+	Table_Typehouse->FetchAll();
+	Typehouse_datasource = new TDataSource(NULL);
+	Typehouse_datasource->DataSet=Table_Typehouse;
+	//Таблица со списком материалов стен
+	Table_Stuffwall = new TIBTable(NULL);
+	Table_Stuffwall->Database=MainForm->MainConn;
+	Table_Stuffwall->Transaction=OtherTransaction;
+	Table_Stuffwall->TableName = "ITEMS";
+	Table_Stuffwall->Filter="RAZDEL=6";
+	Table_Stuffwall->Filtered=TRUE;
+	Table_Stuffwall->Active = TRUE;
+	Table_Stuffwall->FetchAll();
+	Stuffwall_datasource = new TDataSource(NULL);
+	Stuffwall_datasource->DataSet=Table_Stuffwall;
+	//Таблица со списком планировок
+	Table_Design = new TIBTable(NULL);
+	Table_Design->Database=MainForm->MainConn;
+	Table_Design->Transaction=OtherTransaction;
+	Table_Design->TableName = "ITEMS";
+	Table_Design->Filter="RAZDEL=9999";
+	Table_Design->Filtered=TRUE;
+	Table_Design->Active = TRUE;
+	Table_Design->FetchAll();
+	Design_datasource = new TDataSource(NULL);
+	Design_datasource->DataSet=Table_Design;
+	//Таблица со списком состояний
+	Table_State = new TIBTable(NULL);
+	Table_State->Database=MainForm->MainConn;
+	Table_State->Transaction=OtherTransaction;
+	Table_State->TableName = "ITEMS";
+	Table_State->Filter="RAZDEL=77";
+	Table_State->Filtered=TRUE;
+	Table_State->Active = TRUE;
+	Table_State->FetchAll();
+	State_datasource = new TDataSource(NULL);
+	State_datasource->DataSet=Table_State;
+	//Таблица со списком вариантов телефонов
+	Table_Swphone = new TIBTable(NULL);
+	Table_Swphone->Database=MainForm->MainConn;
+	Table_Swphone->Transaction=OtherTransaction;
+	Table_Swphone->TableName = "ITEMS";
+	Table_Swphone->Filter="RAZDEL=7";
+	Table_Swphone->Filtered=TRUE;
+	Table_Swphone->Active = TRUE;
+	Table_Swphone->FetchAll();
+	Swphone_datasource = new TDataSource(NULL);
+	Swphone_datasource->DataSet=Table_Swphone;
+	//Таблица со списком вариантов для поля санузел
+	Table_Nodesan = new TIBTable(NULL);
+	Table_Nodesan->Database=MainForm->MainConn;
+	Table_Nodesan->Transaction=OtherTransaction;
+	Table_Nodesan->TableName = "ITEMS";
+	Table_Nodesan->Filter="RAZDEL=5";
+	Table_Nodesan->Filtered=TRUE;
+	Table_Nodesan->Active = TRUE;
+	Table_Nodesan->FetchAll();
+	Nodesan_datasource = new TDataSource(NULL);
+	Nodesan_datasource->DataSet=Table_Nodesan;
+	//Таблица со списком вариантов обмена
+	Table_Varswap = new TIBTable(NULL);
+	Table_Varswap->Database=MainForm->MainConn;
+	Table_Varswap->Transaction=OtherTransaction;
+	Table_Varswap->TableName = "ITEMS";
+	Table_Varswap->Filter="RAZDEL=78";
+	Table_Varswap->Filtered=TRUE;
+	Table_Varswap->Active = TRUE;
+	Table_Varswap->FetchAll();
+	Varswap_datasource = new TDataSource(NULL);
+	Varswap_datasource->DataSet=Table_Varswap;
+
+    //Перевод таблицы в режим редактирования
+	MainForm->TabPricelist_Datasource_Main->DataSet->Edit();
+
+	Application->OnMessage = OnApplicationMessage;
+
+	//Создать табличку со списко клиентов
+	Table_Clients = new TIBTable(NULL);
+	Table_Clients->Database=MainForm->MainConn;
+	Table_Clients->Transaction=OtherTransaction;
+	Table_Clients->TableName = "CLIENTS";
+	Table_Clients->Filter = "COMPID=";
+	char * tmpint = new char[17];
+	itoa(OwnerCode,tmpint,10);
+	Table_Clients->Filter = Table_Clients->Filter+tmpint;
+	delete tmpint;
+	Table_Clients->Filtered = true;
+	Table_Clients->Active=true;
+	Table_Clients->FetchAll();
+
+	//Создать табличку со списком категорий клиентов
+	Table_Clients_kategory1 = new TIBTable(NULL);
+	Table_Clients_kategory1->Database=MainForm->MainConn;
+	Table_Clients_kategory1->Transaction=OtherTransaction;
+	Table_Clients_kategory1->TableName = "ITEMS";
+	Table_Clients_kategory1->Filter = "RAZDEL=15 and MGROUP=0";
+	Table_Clients_kategory1->Filtered = true;
+	Table_Clients_kategory1->Active=true;
+	Table_Clients_kategory1->FetchAll();
+	Table_Clients_kategory1->Edit();
+
+	//Создать табличку со списком категорий клиентов для юр. лица
+	Table_Clients_kategory2 = new TIBTable(NULL);
+	Table_Clients_kategory2->Database=MainForm->MainConn;
+	Table_Clients_kategory2->Transaction=OtherTransaction;
+	Table_Clients_kategory2->TableName = "ITEMS";
+	Table_Clients_kategory2->Filter = "RAZDEL=15 and MGROUP=1";
+	Table_Clients_kategory2->Filtered = true;
+	Table_Clients_kategory2->Active=true;
+	Table_Clients_kategory2->FetchAll();
+	Table_Clients_kategory2->Edit();
+
+	//Создать объект DataSource для таблицы категорий клиентов
+	Clients_Datasource_kategory = new TDataSource(NULL);
+
+	//Создать объект DataSource для таблицы клиентов
+	Clients_Datasource = new TDataSource(NULL);
+	Clients_Datasource->DataSet=Table_Clients;
+
+	// Вызов процедуры обновления сведений о клиенте
+	ProcRefreshClient(this);
+
+	//Для агента
+	TransactionAgent = new TIBTransaction(NULL);
+	TransactionAgent->DefaultDatabase = MainForm->MainConn;
+
+    //Таблица со списком агентов
+	Table_Agent = new TIBTable(NULL);
+	Table_Agent->Database=MainForm->MainConn;
+	Table_Agent->Transaction=TransactionAgent;
+	Table_Agent->TableName = "PEOPLE";
+	Table_Agent->Active = true;
+	Table_Agent->FetchAll();
+	Agent_datasource = new TDataSource(NULL);
+
+	//Цикл по всем записям таблицы
+	 Table_Agent->First();
+	 do {
+		Agent_ComboBox->Items->Add(Table_Agent->FieldByName("FULLNAME")->AsString);
+		Table_Agent->Next();
+	 } while(!Table_Agent->Eof);
+	 Table_Agent->First();
+
+	Agent_datasource->DataSet=Table_Agent;
+	Agent_datasource->DataSet->Active=false;
+	if (!(MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->IsNull ||
+		MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->AsInteger==0)) {
+		Agent_datasource->DataSet->Active=True;
+		Agent_datasource->DataSet->First();
+		if (Agent_datasource->DataSet->Locate("ID",MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->AsInteger,TLocateOptions())) {
+			 Agent_ComboBox->ItemIndex = Agent_datasource->DataSet->RecNo-1;
+		} else {
+		}
+	} else {
+	}
+	if (Agent_datasource->DataSet->Active) {
+		Agent_datasource->DataSet->FieldByName("MAINPHONE")->EditMask="000\-00\-00;1;_";
+		Agent_datasource->DataSet->FieldByName("ADDPHONE")->EditMask="000\-00\-00;1;_";
+	}
+
+    // Таблица со списком типов изменений в карте
+	Table_Items_80 = new TIBTable(NULL);
+	Table_Items_80->Database=MainForm->MainConn;
+	Table_Items_80->Transaction=OtherTransaction;
+	Table_Items_80->TableName = "ITEMS";
+	Table_Items_80->Filter="RAZDEL=80";
+	Table_Items_80->Filtered=TRUE;
+	Table_Items_80->Active = TRUE;
+	Table_Items_80->FetchAll();
+
+	// История изменений в карте
+	Table_History = new TIBTable(NULL);
+	Table_History->Database=MainForm->MainConn;
+	Table_History->Transaction=OtherTransaction;
+	Table_History->TableName = "KARTHISTORY";
+	Table_History->Filter="IDPRICE=";
+	if (MainForm->TabPricelist_Datasource_Main->DataSet->RecordCount==0) {
+		Table_History->Filter=Table_History->Filter+"0";
+	} else {
+		Table_History->Filter=Table_History->Filter+MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("ID")->AsString;
+    }
+	Table_History->Filtered=TRUE;
+
+    TStringField *FKLookup = new TStringField (this);
+	FKLookup->Name = "Table_HistoryTYPEACTIONLOOKUP";
+	FKLookup->FieldName = "TYPEACTIONLOOKUP";
+	FKLookup->FieldKind = fkLookup;
+	FKLookup->Size = 200;
+	FKLookup->DataSet = Table_History;
+	FKLookup->KeyFields = "TYPEACTION"; // ключевое поле текущей таблицы
+	FKLookup->LookupDataSet = Table_Items_80; // таблица поле которой будем просматривать
+	FKLookup->LookupKeyFields = "CODE"; // ключевое поле из таблици которую будем просматривать
+	FKLookup->LookupResultField = "FULLNAME"; // просматриваемое поле в просматриваемой таблици
+	FKLookup->ReadOnly = true;
+
+	TIntegerField *FK1 = new TIntegerField (this);
+	FK1->Name = "Table_HistoryID";
+	FK1->FieldName = "ID";
+	FK1->FieldKind = fkData;
+	FK1->DataSet = Table_History;
+
+	TIntegerField *FK2 = new TIntegerField (this);
+	FK2->Name = "Table_HistoryIDPRICE";
+	FK2->FieldName = "IDPRICE";
+	FK2->FieldKind = fkData;
+	FK2->DataSet = Table_History;
+
+	TDateField *FK3 = new TDateField (this);
+	FK3->Name = "MainTableDATE_CH";
+	FK3->FieldName = "DATE_CH";
+	FK3->FieldKind = fkData;
+	FK3->ReadOnly = true;
+	FK3->DataSet = Table_History;
+
+	TIntegerField *FK4 = new TIntegerField (this);
+	FK4->Name = "Table_HistoryTYPEACTION";
+	FK4->FieldName = "TYPEACTION";
+	FK4->FieldKind = fkData;
+	FK4->DataSet = Table_History;
+
+	TIBStringField *FK5 = new TIBStringField (this);
+	FK5->Name = "MainTableFIELDVAL";
+	FK5->FieldName = "FIELDVAL";
+	FK5->FieldKind = fkData;
+	FK5->ReadOnly = true;
+	FK5->DataSet = Table_History;
+
+	Table_History->Active = TRUE;
+	Table_History->FetchAll();
+	History_datasource = new TDataSource(NULL);
+	History_datasource->DataSet=Table_History;
+
+
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormEditRoomsSell::ProcRefreshClient(TObject *Sender)
+{
+	Clients_Datasource->DataSet->Active=true;
+	if (!(MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->IsNull||
+		MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->AsInteger==0)&&
+		Table_Clients->Locate("ID", MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->AsInteger,TLocateOptions())) {
+		if (Table_Clients->FieldByName("FACE")->AsInteger==1) {
+			Clients_Datasource_kategory->DataSet=Table_Clients_kategory1;
+		} else {
+			Clients_Datasource_kategory->DataSet=Table_Clients_kategory2;
+		}
+		Clients_Datasource_kategory->DataSet->Active=TRUE;
+		if (Clients_Datasource_kategory->DataSet->Locate("CODE",Table_Clients->FieldByName("KATID")->AsInteger,TLocateOptions())) {
+			ClientKatid_Edit->Text = Clients_Datasource_kategory->DataSet->FieldByName("FULLNAME")->AsString;
+		} else {
+			ClientKatid_Edit->Text = "";
+		}
+	} else {
+		//TabPricelist_Datasource_Main->DataSet->Edit();
+		MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->AsInteger=0;
+		ClientKatid_Edit->Text = "";
+		Clients_Datasource->DataSet->Active=false;
+	}
+}
+
+//ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ
+//----------- Привязка элементов к базе данных
+//-----------
+//ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ
+
+void __fastcall TFormEditRoomsSell::FormShow(TObject *Sender)
+{
+	//Район
+	Region_DBLookComb->ListSource=Region_datasource;
+	Region_DBLookComb->ListField="FULLNAME";
+	Region_DBLookComb->KeyField="CODE";
+	Region_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Region_DBLookComb->DataField="REGION";
+	//Улица
+	Streets_DBLookupListBox->ListSource=Streets_datasource;
+	Streets_DBLookupListBox->ListField="STREETNAME";
+	Streets_DBLookupListBox->KeyField="STREETNAME";
+	Streets_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Streets_DBEdit->DataField="STREET";
+	//Указываем цвет элемента
+	Streets_DBEdit->Color=(TColor)RGB(255,220,220);
+	//Пересечение
+	Cross_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Cross_DBEdit->DataField="CRSTREET";
+	//Микрорайон
+	mRegion_DBLookComb->ListSource=mRegion_datasource;
+	mRegion_DBLookComb->ListField="FULLNAME";
+	mRegion_DBLookComb->KeyField="CODE";
+	mRegion_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	mRegion_DBLookComb->DataField="MREGION";
+	// Дом
+	House_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	House_DBEdit->DataField="HOUSE";
+	House_DBEdit->DataSource->DataSet->FieldByName("HOUSE")->Alignment=taLeftJustify;
+	// Корпус
+	Corpus_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Corpus_DBEdit->DataField="CORPUS";
+	// Квартира
+	Flat_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Flat_DBEdit->DataField="FLAT";
+	Flat_DBEdit->DataSource->DataSet->FieldByName("FLAT")->Alignment=taLeftJustify;
+	// Договор
+	Contract_DBLookComb->ListSource=Contract_datasource;
+	Contract_DBLookComb->ListField="FULLNAME";
+	Contract_DBLookComb->KeyField="ID";
+	Contract_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Contract_DBLookComb->DataField="CONTRACT";
+	// Источник
+	Source_DBLookComb->ListSource=Source_datasource;
+	Source_DBLookComb->ListField="FULLNAME";
+	Source_DBLookComb->KeyField="CODE";
+	Source_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Source_DBLookComb->DataField="SOURCED";
+	// Вариант
+	Variant_DBLookComb->ListSource=Variant_datasource;
+	Variant_DBLookComb->ListField="FULLNAME";
+	Variant_DBLookComb->KeyField="CODE";
+	Variant_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Variant_DBLookComb->DataField="VARIANT";
+	// Ипотека
+	Mortgage_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Mortgage_DBCheckBox->DataField="MORGAGE";
+	// Доля
+	Part_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Part_DBEdit->DataField="PART";
+	// Этаж
+	Level_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Level_DBEdit->DataField="LEVEL";
+	// Этажность
+	Levels_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Levels_DBEdit->DataField="LEVELS";
+	// Тип дома
+	Typehouse_DBLookComb->ListSource=Typehouse_datasource;
+	Typehouse_DBLookComb->ListField="FULLNAME";
+	Typehouse_DBLookComb->KeyField="CODE";
+	Typehouse_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Typehouse_DBLookComb->DataField="TYPEHOUSE";
+	// Материал стен
+	Stuffwall_DBLookComb->ListSource=Stuffwall_datasource;
+	Stuffwall_DBLookComb->ListField="FULLNAME";
+	Stuffwall_DBLookComb->KeyField="CODE";
+	Stuffwall_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Stuffwall_DBLookComb->DataField="STUFFWALL";
+	// Год постройки
+	Yearbuild_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Yearbuild_DBEdit->DataField="YEARBUILD";
+	// Охрана
+	Security_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Security_DBCheckBox->DataField="SECURITY";
+	// Консъерж
+	Konserg_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Konserg_DBCheckBox->DataField="KONSERG";
+	// Собств. сл. экспл.
+	Ownex_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Ownex_DBCheckBox->DataField="OWNEX";
+	// Мусоропровод
+	Trash_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Trash_DBCheckBox->DataField="TRASH";
+	// Газ
+	Gaz_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Gaz_DBCheckBox->DataField="GAZ";
+	// Паркинг
+	Parking_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Parking_DBCheckBox->DataField="PARKING";
+	// Новостройка
+	Newbuild_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Newbuild_DBCheckBox->DataField="NEWBUILD";
+	// Комнат
+	Rooms_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Rooms_DBEdit->DataField="ROOMS";
+	// Смежных комнат
+	iRooms_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	iRooms_DBEdit->DataField="IROOMS";
+	// Планировка
+	Design_DBLookComb->ListSource=Design_datasource;
+	Design_DBLookComb->ListField="FULLNAME";
+	Design_DBLookComb->KeyField="CODE";
+	Design_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Design_DBLookComb->DataField="DESIGN";
+	// Состояние
+	State_DBLookComb->ListSource=State_datasource;
+	State_DBLookComb->ListField="FULLNAME";
+	State_DBLookComb->KeyField="CODE";
+	State_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	State_DBLookComb->DataField="STATE";
+	// Балконов
+	Balcony_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Balcony_DBEdit->DataField="BALCONY";
+	// Лоджий
+	Loggia_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Loggia_DBEdit->DataField="LOGGIA";
+	// Общая площадь
+	Totalarea_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Totalarea_DBEdit->DataField="TOTALAREA";
+	// Жилая площадь
+	Livearea_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Livearea_DBEdit->DataField="LIVEAREA";
+	// Площадь кухни
+	Kitchenarea_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Kitchenarea_DBEdit->DataField="KITCHENAREA";
+	// Телефон
+	Swphone_DBLookComb->ListSource=Swphone_datasource;
+	Swphone_DBLookComb->ListField="FULLNAME";
+	Swphone_DBLookComb->KeyField="CODE";
+	Swphone_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Swphone_DBLookComb->DataField="SWPHONE";
+	// Санузел
+	Nodesan_DBLookComb->ListSource=Nodesan_datasource;
+	Nodesan_DBLookComb->ListField="FULLNAME";
+	Nodesan_DBLookComb->KeyField="CODE";
+	Nodesan_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Nodesan_DBLookComb->DataField="NODESAN";
+	// Застеклен балкон
+	Glassbalc_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Glassbalc_DBCheckBox->DataField="GLASSBALC";
+	// Стеклопакет
+	Glasspack_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Glasspack_DBCheckBox->DataField="GLASSPACK";
+	// Дополнительная информация
+	Addinfo_DBMemo->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Addinfo_DBMemo->DataField="ADDINFO";
+	// Вариант обмена
+	Varswap_DBLookComb->ListSource=Varswap_datasource;
+	Varswap_DBLookComb->ListField="FULLNAME";
+	Varswap_DBLookComb->KeyField="ID";
+	Varswap_DBLookComb->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Varswap_DBLookComb->DataField="VARSWAP";
+	// Доплата
+	Doplata_DBCheckBox->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Doplata_DBCheckBox->DataField="DOPLATA";
+	// Информация по обмену
+	Swapinfo_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Swapinfo_DBEdit->DataField="SWAPINFO";
+	// ЦЕНА
+	Price_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Price_DBEdit->DataField="PRICE";
+	MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("PRICE")->EditMask="99999;0;_";
+	// № карты
+	Num_card_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Num_card_DBEdit->DataField="NUM_CARD";
+	// Описание компании, разместившей объявление
+	Compstr_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Compstr_DBEdit->DataField="COMPSTR";
+	// Телефон клиента
+	ClientPhone_DBEdit->DataSource=Clients_Datasource;
+	ClientPhone_DBEdit->DataField="PHONE";
+	// ICQ клиента
+	ClientPager_DBEdit->DataSource=Clients_Datasource;
+	ClientPager_DBEdit->DataField="PAGER";
+	// E-mail клиента
+	ClientOperator_DBEdit->DataSource=Clients_Datasource;
+	ClientOperator_DBEdit->DataField="OPERATOR";
+	// Фирма клиента
+	ClientComp_DBEdit->DataSource=Clients_Datasource;
+	ClientComp_DBEdit->DataField="COMP";
+	// ФИО клиента
+	ClientName_DBEdit->DataSource=Clients_Datasource;
+	ClientName_DBEdit->DataField="NAME";
+	// Сотовый клиента
+	ClientMobile_DBEdit->DataSource=Clients_Datasource;
+	ClientMobile_DBEdit->DataField="MOBILE";
+	// Дополнительная информация для агента
+	Agentinfo_DBMemo->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Agentinfo_DBMemo->DataField="AGENTINFO";
+	// Рекламная информация
+	Reklinfo_DBMemo->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Reklinfo_DBMemo->DataField="REKLINFO";
+	// Телефон агента
+	AgentMainphone_DBEdit->DataSource=Agent_datasource;
+	AgentMainphone_DBEdit->DataField="MAINPHONE";
+	// Указывать в объявлениях имя
+	AgChkname_DBCheckBox->DataSource=Agent_datasource;
+	AgChkname_DBCheckBox->DataField="CHKNAME";
+	// Указывать в объявлениях цену
+	AgChkprice_DBCheckBox->DataSource=Agent_datasource;
+	AgChkprice_DBCheckBox->DataField="CHKPRICE";
+	// Указывать в объявлениях сотовый телефон
+	AgChkSot_DBCheckBox->DataSource=Agent_datasource;
+	AgChkSot_DBCheckBox->DataField="CHKSOT";
+	// Указывать в объявлениях e-mail
+	AgChke_mail_DBCheckBox->DataSource=Agent_datasource;
+	AgChke_mail_DBCheckBox->DataField="CHKE_MAIL";
+	// Указывать в объявлениях рекламный телефон
+	AgChkmain_DBCheckBox->DataSource=Agent_datasource;
+	AgChkmain_DBCheckBox->DataField="CHKMAIN";
+	// Указывать в объявлениях дополнительный телефон
+	AgChkadd_DBCheckBox->DataSource=Agent_datasource;
+	AgChkadd_DBCheckBox->DataField="CHKADD";
+	// Дата ввода карты
+	Date_enter_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Date_enter_DBEdit->DataField="DATE_ENTER";
+	// Дата корректировки
+	Date_ch_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Date_ch_DBEdit->DataField="DATE_CH";
+	// Соседей
+	Neighbors_DBEdit->DataSource=MainForm->TabPricelist_Datasource_Main;
+	Neighbors_DBEdit->DataField="NEIGHBORS";
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormEditRoomsSell::PageControl1DrawTab(TCustomTabControl *Control, int TabIndex,
+          const TRect &Rect, bool Active)
+{
+	TPageControl *control = (TPageControl*)Control;
+	//control->Canvas->Brush->Color = clRed; // НЕОБХОДИМЫЙ ЦВЕТ!!!
+	control->Canvas->Font = control->Font;
+	//control->Canvas->Font->Style = Active ? control->Canvas->Font->Style << fsBold : control->Canvas->Font->Style >> fsBold;
+
+	AnsiString text = control->Pages[TabIndex]->Caption;
+	int textWidth = control->Canvas->TextWidth(text);
+	int textHeight = control->Canvas->TextHeight(text);
+	int textTop = Rect.Top + (Rect.Height() - textHeight)/2;
+	int textLeft = Rect.Left + (Rect.Width() - textWidth)/2;
+
+	control->Canvas->FillRect(Rect);
+	control->Canvas->TextOut(textLeft, textTop, text);
+}
+//---------------------------------------------------------------------------
+
+
+
+//ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ
+//---------- БЛОК ПРОЦЕДУР, ОТВЕЧАЮЩИХ ЗА РАБОТУ СО СПИСКОМ УЛИЦ
+//----------
+//ЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖЖ
+//---------- НАЧАЛО -- блока процедур обработки списка улиц
+
+//---------- Процедура срабатывает при нажатии на поле "УЛИЦА"
+void __fastcall TFormEditRoomsSell::Streets_DBEditKeyUp(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+	Table_Streets->Locate("Streetname", Streets_DBEdit->Text.c_str(),TLocateOptions() << loPartialKey
+			<<loCaseInsensitive);
+	 Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+	 if (Key==40) {  // Клавиша "Стрелка вверх"
+		Streets_DBLookupListBox->ListSource->DataSet->Next();
+		Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->SetFocus();
+	 }
+	 if (Key==38) { // Клавиша "Стрелка вниз"
+		Streets_DBLookupListBox->ListSource->DataSet->Prior();
+		Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->SetFocus();
+	 }
+	 if (Key==13) { // Клавиша ENTER
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->Visible=FALSE;
+		Region_DBLookComb->SetFocus();
+	 }
+}
+//---------------------------------------------------------------------------
+
+
+//----- Процедура срабатывает при нажатии (клике) левой кнопкой мыши на поле "Улица"
+void __fastcall TFormEditRoomsSell::Streets_DBLookupListBoxClick(TObject *Sender)
+{
+	 if (Streets_DBLookupListBox->Top==98) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	 }
+	 if (Streets_DBLookupListBox->Top==124) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	 }
+}
+//---------------------------------------------------------------------------
+
+
+//------------ Процедура срабатывает когда поле "Улица" получает фокус
+void __fastcall TFormEditRoomsSell::Streets_DBEditEnter(TObject *Sender)
+{
+	if (Streets_DBEdit->Text.Length()==0) {
+		Streets_DBLookupListBox->ListSource->DataSet->First();
+	} else
+	{
+		Table_Streets->Locate("Streetname", Streets_DBEdit->Text.c_str(),TLocateOptions() << loPartialKey
+			<<loCaseInsensitive);
+	}
+	Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+	Streets_DBLookupListBox->Height=134;
+	Streets_DBLookupListBox->Top=98;
+	Streets_DBLookupListBox->Visible=TRUE;
+	Streets_DBLookupListBox->Enabled=TRUE;
+
+	//---- Переключение раскладки клавиатуры
+	char s[64];
+	GetKeyboardLayoutName(s);
+	//таким образом получаем текущий язык (активное окно)
+	if (s!="00000419") {
+		 //LoadKeyboardLayout("00000409", KLF_ACTIVATE);
+		//Engлиш
+		LoadKeyboardLayout("00000419", KLF_ACTIVATE);
+		//Руссиан
+	}
+}
+//---------------------------------------------------------------------------
+
+
+//------------ Процедура срабатывает когда поле "Улица" теряет фокус
+void __fastcall TFormEditRoomsSell::Streets_DBEditExit(TObject *Sender)
+{
+	if (!Streets_DBLookupListBox->Focused()){
+		if (Streets_DBEdit->Text.Length()!=0) {
+			Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+				Streets_DBLookupListBox->KeyValue;
+		}
+		Streets_DBLookupListBox->Visible=FALSE;
+	}
+}
+//---------------------------------------------------------------------------
+
+
+//--------- Процедура срабатывает когда в элементе со списком улиц нажата клавиша
+void __fastcall TFormEditRoomsSell::Streets_DBLookupListBoxKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift)
+{
+	 if (Key==13) {
+		if (Streets_DBLookupListBox->Top==98) {
+			Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+				Streets_DBLookupListBox->KeyValue;
+		}
+		if (Streets_DBLookupListBox->Top==124) {
+			Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+				Streets_DBLookupListBox->KeyValue;
+		}
+		Streets_DBLookupListBox->Visible=FALSE;
+		Region_DBLookComb->SetFocus();
+	 }
+}
+//---------------------------------------------------------------------------
+
+
+//-------- Процедура срабатывает когда в элементе со списком улиц нажата клавиша мыши
+void __fastcall TFormEditRoomsSell::Streets_DBLookupListBoxMouseUp(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y)
+{
+	if (Streets_DBLookupListBox->Top==98) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	}
+	if (Streets_DBLookupListBox->Top==124) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	}
+	Streets_DBLookupListBox->Visible=FALSE;
+}
+//---------------------------------------------------------------------------
+
+
+//-------- Процедура срабатывает когда в элементе со списком улиц теряет фокус
+void __fastcall TFormEditRoomsSell::Streets_DBLookupListBoxExit(TObject *Sender)
+{
+	if (Streets_DBLookupListBox->Top==98) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	}
+	if (Streets_DBLookupListBox->Top==124) {
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+	}
+	Streets_DBLookupListBox->Visible=FALSE;
+}
+//---------------------------------------------------------------------------
+
+
+//-------- Процедура срабатывает кгода поле "Пересечение" получает фокус
+void __fastcall TFormEditRoomsSell::Cross_DBEditEnter(TObject *Sender)
+{
+	if (Cross_DBEdit->Text.Length()==0) {
+		Streets_DBLookupListBox->ListSource->DataSet->First();
+	} else
+	{
+		Table_Streets->Locate("Streetname", Cross_DBEdit->Text.c_str(),TLocateOptions() << loPartialKey
+			<<loCaseInsensitive);
+	}
+	Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+	Streets_DBLookupListBox->Height=134;
+	Streets_DBLookupListBox->Top=124;
+	Streets_DBLookupListBox->Visible=TRUE;
+
+	//---- Переключение раскладки клавиатуры
+	char s[64];
+	GetKeyboardLayoutName(s);
+	//таким образом получаем текущий язык (активное окно)
+	if (s!="00000419") {
+		 //LoadKeyboardLayout("00000409", KLF_ACTIVATE);
+		//Engлиш
+		LoadKeyboardLayout("00000419", KLF_ACTIVATE);
+		//Руссиан
+	}
+}
+//---------------------------------------------------------------------------
+
+
+//-------- Процедура срабатывае когда в поле "Пересечение" нажата клавиша
+void __fastcall TFormEditRoomsSell::Cross_DBEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+	//loPartialKey - допустимость частичного совпадения
+	//loCaseInsensitive - нечувствительность к регистру
+	 Table_Streets->Locate("Streetname", Cross_DBEdit->Text.c_str(),TLocateOptions() << loPartialKey
+			<<loCaseInsensitive);
+	 Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+	 if (Key==40) {   //----- Клавиша стрелка вверх
+		Streets_DBLookupListBox->ListSource->DataSet->Next();
+		Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->SetFocus();
+	 }
+	 if (Key==38) {  //---- Клавиша стрелка вниз
+		Streets_DBLookupListBox->ListSource->DataSet->Prior();
+		Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->SetFocus();
+	 }
+	 if (Key==13) { //--- Клавиша ВВОД
+		Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+			Streets_DBLookupListBox->KeyValue;
+		Streets_DBLookupListBox->Visible=FALSE;
+		Region_DBLookComb->SetFocus();
+	 }
+}
+//---------------------------------------------------------------------------
+
+
+//-------- Процедура срабатывае когда поле "Пересечение" теряет фокус
+void __fastcall TFormEditRoomsSell::Cross_DBEditExit(TObject *Sender)
+{
+	if (!Streets_DBLookupListBox->Focused()){
+		if (Cross_DBEdit->Text.Length()!=0) {
+			Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+				Streets_DBLookupListBox->KeyValue;
+		}
+		Streets_DBLookupListBox->Visible=FALSE;
+	}
+}
+//---------------------------------------------------------------------------
+
+//--- Процедура реализует скроллинг
+void __fastcall TFormEditRoomsSell::OnApplicationMessage(TMsg & Msg, bool & Handled)
+{
+   if (Msg.message == WM_MOUSEWHEEL)
+	 {
+		if (ActiveControl->ClassNameIs("TDBLookupComboBoxCentre"))
+		{
+			short zDelta = HIWORD(Msg.wParam);
+			if (zDelta !=0)
+			{
+			  Msg.lParam = 0;
+			  Msg.message = WM_KEYDOWN;
+			   if (zDelta >0 )
+				 {
+					((TDBLookupComboBoxCentre*)ActiveControl)->DataList->ListSource->DataSet->Prior();
+				 }
+				 else
+				 {
+					((TDBLookupComboBoxCentre*)ActiveControl)->DataList->ListSource->DataSet->Next();
+				 }
+			}
+		}
+		if (ActiveControl->ClassNameIs("TDBEdit") &&
+				!strcmp(((TDBEdit*)ActiveControl)->Name.c_str(),"Streets_DBEdit"))
+		{
+			short zDelta = HIWORD(Msg.wParam);
+			if (zDelta !=0)
+			{
+			  Msg.lParam = 0;
+			  Msg.message = WM_KEYDOWN;
+			   if (zDelta >0 )
+				 {
+					Streets_DBLookupListBox->ListSource->DataSet->Prior();
+					//SendMessage(Streets_DBLookupListBox->Handle, WM_VSCROLL, SB_LINEUP, 0);
+				 }
+				 else
+				 {
+					Streets_DBLookupListBox->ListSource->DataSet->Next();
+					//SendMessage(Streets_DBLookupListBox->Handle, WM_VSCROLL, SB_LINEDOWN, 0);
+				 }
+				 Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+				 Streets_DBEdit->DataSource->DataSet->FieldByName("STREET")->Value=
+					Streets_DBLookupListBox->KeyValue;
+			}
+		}
+
+		if (ActiveControl->ClassNameIs("TDBEdit") &&
+				!strcmp(((TDBEdit*)ActiveControl)->Name.c_str(),"Cross_DBEdit"))
+		{
+			short zDelta = HIWORD(Msg.wParam);
+			if (zDelta !=0)
+			{
+			  Msg.lParam = 0;
+			  Msg.message = WM_KEYDOWN;
+			   if (zDelta >0 )
+				 {
+					Streets_DBLookupListBox->ListSource->DataSet->Prior();
+					//SendMessage(Streets_DBLookupListBox->Handle, WM_VSCROLL, SB_LINEUP, 0);
+				 }
+				 else
+				 {
+					Streets_DBLookupListBox->ListSource->DataSet->Next();
+					//SendMessage(Streets_DBLookupListBox->Handle, WM_VSCROLL, SB_LINEDOWN, 0);
+				 }
+				 Streets_DBLookupListBox->KeyValue = Table_Streets->FieldByName("Streetname")->AsAnsiString;
+				 Streets_DBEdit->DataSource->DataSet->FieldByName("CRSTREET")->Value=
+				 	Streets_DBLookupListBox->KeyValue;
+
+			}
+		}
+  }
+}
+
+//---------------------------------------------------------------------------
+//-------- КОНЕЦ БЛОКА процедур работы со списком улиц
+//---------------------------------------------------------------------------
+//------- Конец
+
+
+void __fastcall TFormEditRoomsSell::SpeedButton2Click(TObject *Sender)
+{
+    //Фиксация изменений
+	//TabPricelist_Datasource_Main->DataSet->CheckBrowseMode();
+	//Записать изменения в базу данных
+	//OtherTransaction->RollbackRetaining();
+	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button6Click(TObject *Sender)
+{
+	//FormGall = new TFormGall(FormEdit,MainForm->MainConn,MainTransaction,TabPricelist_Datasource_Main);
+	//FormGall->ShowModal();
+	//delete FormGall;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button4Click(TObject *Sender)
+{
+	FormMap = new TFormMap(FormEdit,MainForm->TabPricelist_Datasource_Main);
+	FormMap->ShowModal();
+	delete FormMap;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::SpeedButton1Click(TObject *Sender)
+{
+	long * retval = new long;
+	*retval = 0;
+	FormKlients = new TFormKlients(MainForm, MainForm->MainConn, retval);
+	FormKlients->ShowModal();
+	if (*retval!=0) {
+		 MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->AsInteger=*retval;
+	}
+	// Вызов процедуры обновления сведений о клиенте
+	ProcRefreshClient(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::SpeedButton3Click(TObject *Sender)
+{
+    MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("CLIENT")->AsInteger=0;
+	// Вызов процедуры обновления сведений о клиенте
+	ProcRefreshClient(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button5Click(TObject *Sender)
+{
+	// Кнопка назад
+	if (!MainForm->TabPricelist_Datasource_Main->DataSet->Bof) {
+		ProcSave(this);
+		MainForm->TabPricelist_Datasource_Main->DataSet->Prior();
+		MainForm->TabPricelist_Datasource_Main->DataSet->Edit();
+		// Вызов процедуры обновления сведений о клиенте
+		ProcRefreshClient(this);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button3Click(TObject *Sender)
+{
+	// Кнопка вперед
+	if (!MainForm->TabPricelist_Datasource_Main->DataSet->Eof) {
+		ProcSave(this);
+		MainForm->TabPricelist_Datasource_Main->DataSet->Next();
+		MainForm->TabPricelist_Datasource_Main->DataSet->Edit();
+		// Вызов процедуры обновления сведений о клиенте
+		ProcRefreshClient(this);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::ProcSave(TObject *Sender)
+{
+    //Фиксация изменений
+	//TabPricelist_Datasource_Main->DataSet->CheckBrowseMode();
+	//Записать изменения в базу данных
+	//MainTransaction->CommitRetaining();
+	//Открыть набор данных
+	MainForm->MainTable->Post();
+	MainForm->MainTable->ApplyUpdates(0);
+	MainForm->IBTransaction1->CommitRetaining();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::RefreshAgent(TObject *Sender)
+{
+	// Обновление сведений об агенте
+	Agent_datasource->DataSet->Active=false;
+	if (!(MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->IsNull ||
+		MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->AsInteger==0)) {
+		Agent_datasource->DataSet->Active=True;
+		Agent_datasource->DataSet->First();
+		if (Agent_datasource->DataSet->Locate("ID",MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->AsInteger,TLocateOptions())) {
+			 Agent_ComboBox->ItemIndex = Agent_datasource->DataSet->RecNo-1;
+		} else {
+			Agent_datasource->DataSet->Active=false;
+		}
+	} else {
+		Agent_datasource->DataSet->Active=false;
+	}
+}
+
+void __fastcall TFormEditRoomsSell::Agent_ComboBoxClick(TObject *Sender)
+{
+	 Agent_datasource->DataSet->Active=true;
+	 Agent_datasource->DataSet->First();
+	 Agent_datasource->DataSet->MoveBy(Agent_ComboBox->ItemIndex);
+	 MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("IDAGENT")->AsInteger=
+         Agent_datasource->DataSet->FieldByName("ID")->AsInteger;
+	 RefreshAgent(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button1Click(TObject *Sender)
+{
+	FormAgKartEdit = new TFormAgKartEdit(this,Agent_datasource,MainForm->MainConn,TransactionAgent);
+	FormAgKartEdit->ShowModal();
+	delete FormAgKartEdit;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button2Click(TObject *Sender)
+{
+	FormKartHistory = new TFormKartHistory(this,History_datasource);
+	FormKartHistory->ShowModal();
+	delete FormKartHistory;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormEditRoomsSell::Button7Click(TObject *Sender)
+{
+	MainForm->TabPricelist_Datasource_Main->DataSet->FieldByName("DATE_CH")->AsDateTime=Date();
+	ProcSave(this);
+	MainForm->TabPricelist_Datasource_Main->DataSet->Refresh();
+	MainForm->TabPricelist_Datasource_Main->DataSet->Active=True;
+	//Перевод таблицы в режим редактирования
+	MainForm->TabPricelist_Datasource_Main->DataSet->Edit();
+	Close();
+}
+//---------------------------------------------------------------------------
+

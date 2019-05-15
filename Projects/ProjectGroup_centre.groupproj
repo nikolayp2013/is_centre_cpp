@@ -1,0 +1,60 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{C11A25F5-7824-446D-B550-8BCA804772D0}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="centre.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects\CentrePackege.cbproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="..\Coder\Coder.cbproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="centre">
+			<MSBuild Projects="centre.cbproj"/>
+		</Target>
+		<Target Name="centre:Clean">
+			<MSBuild Targets="Clean" Projects="centre.cbproj"/>
+		</Target>
+		<Target Name="centre:Make">
+			<MSBuild Targets="Make" Projects="centre.cbproj"/>
+		</Target>
+		<Target Name="CentrePackege">
+			<MSBuild Projects="C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects\CentrePackege.cbproj"/>
+		</Target>
+		<Target Name="CentrePackege:Clean">
+			<MSBuild Targets="Clean" Projects="C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects\CentrePackege.cbproj"/>
+		</Target>
+		<Target Name="CentrePackege:Make">
+			<MSBuild Targets="Make" Projects="C:\Documents and Settings\Николай\Мои документы\RAD Studio\Projects\CentrePackege.cbproj"/>
+		</Target>
+		<Target Name="Coder">
+			<MSBuild Projects="..\Coder\Coder.cbproj"/>
+		</Target>
+		<Target Name="Coder:Clean">
+			<MSBuild Targets="Clean" Projects="..\Coder\Coder.cbproj"/>
+		</Target>
+		<Target Name="Coder:Make">
+			<MSBuild Targets="Make" Projects="..\Coder\Coder.cbproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="centre;CentrePackege;Coder"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="centre:Clean;CentrePackege:Clean;Coder:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="centre:Make;CentrePackege:Make;Coder:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>

@@ -1,0 +1,3 @@
+Consts.pas
+//SMaskEditErr = 'Invalid input value.  Use escape key to abandon changes';
+  SMaskEditErr = 'Введено некорректное значение. Нажмите Esc для отмены';

@@ -1,0 +1,47 @@
+object FormSelect: TFormSelect
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'FormSelect'
+  ClientHeight = 198
+  ClientWidth = 255
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poOwnerFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 1
+    Top = 1
+    Width = 252
+    Height = 197
+    BevelWidth = 2
+    Caption = 'Panel1'
+    ShowCaption = False
+    TabOrder = 0
+    object Item_ListBox: TListBox
+      Left = 3
+      Top = 3
+      Width = 246
+      Height = 150
+      ItemHeight = 13
+      TabOrder = 0
+    end
+    object BitBtn1: TBitBtn
+      Left = 3
+      Top = 153
+      Width = 246
+      Height = 41
+      Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 1
+      OnClick = BitBtn1Click
+    end
+  end
+end

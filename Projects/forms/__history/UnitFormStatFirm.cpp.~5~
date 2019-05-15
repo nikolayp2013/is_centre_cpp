@@ -1,0 +1,38 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormStatFirm.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBDatabase"
+#pragma link "IBQuery"
+#pragma resource "*.dfm"
+TFormStatFirm *FormStatFirm;
+//---------------------------------------------------------------------------
+__fastcall TFormStatFirm::TFormStatFirm(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormStatFirm::Button2Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormStatFirm::CheckBox1Click(TObject *Sender)
+{
+	IBQuery1->Close();
+	if (CheckBox1->Checked) {
+		IBQuery1->Filter = "cnt20<>0";
+		IBQuery1->Filtered = true;
+	} else {
+		IBQuery1->Filter = "";
+		IBQuery1->Filtered = false;
+    }
+	IBQuery1->Open();
+}
+//---------------------------------------------------------------------------
+

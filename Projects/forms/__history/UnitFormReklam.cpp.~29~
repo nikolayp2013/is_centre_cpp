@@ -1,0 +1,64 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormReklam.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormReklam *FormReklam;
+TIBQuery * QueryTab = NULL;
+extern TIBQuery * QueryTab;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+//---------------------------------------------------------------------------
+__fastcall TFormReklam::TFormReklam(TComponent* Owner, int pricetype)
+	: TForm(Owner)
+{
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = FormStart->MainConn1;
+
+	QueryTab = new TIBQuery(NULL);
+	QueryTab->Database=FormStart->MainConn1;
+	QueryTab->Transaction = MainTransaction;
+	Memo1->Text=MainForm->MainTable->FieldByName("REKLTEXT")->AsString;
+	//MainForm->MainTable->Fields->FindField()
+	//ShowMessage(MainForm->MainTable->Fields->Fields[0]->AsString);
+	//int swex = 0;
+	//Memo1->Text="";
+	//ShowMessage(MainForm->MainTable->Fields->Fields[0]->FullName);
+	//ShowMessage(MainForm->MainTable->FieldByName("REKLTEXT")->AsString);
+	/*for (int i = 0; i < MainForm->MainTable->FieldCount; i++) {
+		if (MainForm->MainTable->Fields->Fields[0]->FullName=="SWSEND") {
+			 swex = 1;
+		}
+	}*/
+	//ShowMessage(swex);
+	//Memo1->Text="";
+	if (pricetype!=3) {
+        Button2->Visible=false;
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormReklam::Button1Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormReklam::Button2Click(TObject *Sender)
+{
+	 //ShowMessage(Memo1->Text);
+	 QueryTab->SQL->Clear();
+	 QueryTab->SQL->Add("select * from abonents where compid="+(String)CompanyID);
+	 QueryTab->Open();
+	 ShowMessage(QueryTab->FieldByName("COMPNAME")->AsString);
+	 MainForm->MainTable->Edit();
+	 MainForm->MainTable->FieldByName("REKLTEXT")->AsString=Memo1->Text;
+	 MainForm->MainTable->CheckBrowseMode();
+	 MainForm->MainTable->Transaction->CommitRetaining();
+	 //ShowMessage(MainForm->MainTable->FieldByName("REKLTEXT")->AsString);
+	 Close();
+}
+//---------------------------------------------------------------------------
+

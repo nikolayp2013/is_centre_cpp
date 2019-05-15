@@ -1,0 +1,395 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormUpdateBanner.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBQuery"
+#pragma link "DBAccess"
+#pragma link "MemDS"
+#pragma link "MyAccess"
+#pragma resource "*.dfm"
+TFormUpdateBanner *FormUpdateBanner;
+TMyConnection *SQLConnection1 = NULL;
+extern TMyConnection *SQLConnection1;
+TSimpleDataSet * Table_updatebanner = NULL;
+extern TSimpleDataSet * Table_updatebanner;
+TSQLQuery * Query_temp = NULL;
+extern TSQLQuery * Query_temp;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+// Таблица квартиры
+TIBTable * Table_Apartsell = NULL;
+extern TIBTable * Table_Apartsell;
+TSimpleDataSet * Table_temp_load = NULL;
+extern TSimpleDataSet * Table_temp_load;
+// Талица со списком таблиц
+TIBTable * Table_def = NULL;
+extern TIBTable * Table_def;
+TIBQuery * Query_temp_firebird = NULL;
+extern TIBQuery * Query_temp_firebird;
+// Талица со списком улиц
+TIBTable * Table_streets = NULL;
+extern TIBTable * Table_streets;
+// Талица с обновлением ехе
+//TSQLQuery * Query_updateexe = NULL;
+//extern TSQLQuery * Query_updateexe;
+// Талица со списком скриптов для обновления
+TSQLQuery * Query_updatescript = NULL;
+extern TSQLQuery * Query_updatescript;
+// Для выполнения скриптов на firebird
+TIBQuery * Query_upd_firebird = NULL;
+extern TIBQuery * Query_upd_firebird;
+// Талица с рекламой
+TIBTable * Table_reklama = NULL;
+extern TIBTable * Table_reklama;
+// Талица с рекламой с сервера
+TSQLQuery * Query_reklama = NULL;
+extern TSQLQuery * Query_reklama;
+//---------------------------------------------------------------------------
+__fastcall TFormUpdateBanner::TFormUpdateBanner(TComponent* Owner, TMyConnection *SQLConnection1_loc,
+		TIBDatabase * MainConn_local)
+	: TForm(Owner)
+{
+	//Application->ProcessMessages();
+	MainConn = MainConn_local;
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	SQLConnection1 = SQLConnection1_loc;
+	//Table_updatebanner = new TSimpleDataSet(NULL);
+	Table_updatebanner->Connection = SQLConnection1;
+	//Table_updatebanner->DataSet->CommandType = ctTable;
+	//Table_updatebanner->DataSet->CommandText="UpdateBanner";
+	Table_updatebanner->TableName="updatebanner";
+	//Table_updatebanner->DataSet->Active = true;
+	Table_updatebanner->Active = true;
+
+
+	//ShowMessage(Query_temp->ExecSQL());
+	/*Query_temp->SQL->Clear();
+	Query_temp->SQL->Add("SELECT * FROM temp_t");
+	ShowMessage(Query_temp->ExecSQL());*/
+	//ShowMessage();
+	//ShowMessage(Query_temp->RecordCount);
+
+
+	//ShowMessage(Table_updatebanner->DataSet->RecordCount);
+	//Image1->Picture->Assign(Table_pics_Datasource->DataSet->FieldByName("PICS"));
+	//Image1->Picture->Assign(Table_updatebanner->FieldByName("BANNER"));
+
+	TJPEGImage *jpg = new TJPEGImage();
+		try {
+			jpg->Assign(Table_updatebanner->FieldByName("BANNER"));
+			Image1->Picture->Assign(jpg);
+		}
+		catch(Exception *ex) {
+			Image1->Picture->Assign(Table_updatebanner->FieldByName("BANNER"));
+		}
+		delete jpg;
+   //Image1->Refresh();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormUpdateBanner::FormActivate(TObject *Sender)
+{
+    //Application->ProcessMessages();
+	Image1->Refresh();
+	// Удалить данные из временной таблицы
+	//Query_temp = new TSQLQuery(NULL);
+	/*Query_temp->Connection = SQLConnection1;
+	//Query_temp->SQL = "CREATE TEMPORARY TABLE temp_t (id_cat INT);";
+	//Query_temp->SQL->Add("CREATE TEMPORARY TABLE temp_t (id_cat INT);");
+	Query_temp->SQL->Clear();
+	Query_temp->SQL->Add("SELECT * FROM streets;");
+	Query_temp->Open();
+
+	Query_temp_firebird = new TIBQuery(NULL);
+	Query_temp_firebird->Database = MainConn;
+	Query_temp_firebird->Transaction = MainTransaction;
+	Query_temp_firebird->SQL->Clear();
+	Query_temp_firebird->SQL->Add("delete from streets");
+	Query_temp_firebird->ExecSQL();
+
+	//Таблица со списком улиц
+	Table_streets = new TIBTable(NULL);
+	Table_streets->Database=MainConn;
+	Table_streets->Transaction=MainTransaction;
+	Table_streets->TableName = "STREETS";
+	Table_streets->Active = TRUE;
+	//Table_def->FetchAll();
+
+	Query_temp->First();
+	while (!Query_temp->Eof) {
+		Table_streets->Edit();
+		Table_streets->Append();
+		Table_streets->Edit();
+		Table_streets->FieldByName("ID")->AsString=Query_temp->FieldByName("ID")->AsString;
+		Table_streets->FieldByName("STREETCODE")->AsString=Query_temp->FieldByName("STREETCODE")->AsString;
+		Table_streets->FieldByName("STREETNAME")->AsString=Query_temp->FieldByName("STREETNAME")->AsString;
+		Table_streets->FieldByName("RAION1")->AsString=Query_temp->FieldByName("RAION1")->AsString;
+		Table_streets->FieldByName("RAION2")->AsString=Query_temp->FieldByName("RAION2")->AsString;
+		Table_streets->FieldByName("RAION3")->AsString=Query_temp->FieldByName("RAION3")->AsString;
+		Table_streets->FieldByName("RAION4")->AsString=Query_temp->FieldByName("RAION4")->AsString;
+		Table_streets->FieldByName("RAION5")->AsString=Query_temp->FieldByName("RAION5")->AsString;
+		Table_streets->FieldByName("RAION6")->AsString=Query_temp->FieldByName("RAION6")->AsString;
+		Table_streets->FieldByName("RAION7")->AsString=Query_temp->FieldByName("RAION7")->AsString;
+		Table_streets->FieldByName("RAION8")->AsString=Query_temp->FieldByName("RAION8")->AsString;
+		Table_streets->FieldByName("RAION9")->AsString=Query_temp->FieldByName("RAION9")->AsString;
+		Query_temp->Next();
+	}
+	Table_streets->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+
+	//Table_temp_load = new TSimpleDataSet(NULL);
+	Table_temp_load->Connection = SQLConnection1;
+	//Table_temp_load->DataSet->CommandType = ctTable;
+	//Table_temp_load->DataSet->CommandText="temp_load";
+	Table_temp_load->TableName="temp_load";
+	Table_temp_load->Active = false;
+
+	//Таблица со списком таблиц
+	Table_def = new TIBTable(NULL);
+	Table_def->Database=MainConn;
+	Table_def->Transaction=MainTransaction;
+	Table_def->TableName = "TABLEDEF";
+	Table_def->Active = TRUE;
+	Table_def->FetchAll();
+
+	//Таблица квартиры
+	Table_Apartsell = new TIBTable(NULL);
+	Table_Apartsell->Database=MainConn;
+	Table_Apartsell->Transaction=MainTransaction;
+	Table_Apartsell->TableName = "APARTSELL";
+	Table_Apartsell->Filter="pricetype=3";
+	Table_Apartsell->Filtered=true;
+
+	int swexist;
+	int countobj;
+
+	Table_def->First();
+	while (!Table_def->Eof) {
+		// Удаление данных из временной таблице на сервере
+		Table_temp_load->Active = false;
+		Query_temp->SQL->Clear();
+		Query_temp->SQL->Add("DELETE FROM temp_load;");
+		Query_temp->ExecSQL();
+		Table_temp_load->Active = true;
+
+		Table_Apartsell->Active=false;
+		//Table_Apartsell->TableName = "APARTSELL";
+		Table_Apartsell->TableName = Table_def->FieldByName("TABLENAME")->AsAnsiString.UpperCase();
+		Table_Apartsell->Active = TRUE;
+		Table_Apartsell->FetchAll();
+
+		Table_Apartsell->First();
+		while (!Table_Apartsell->Eof) {
+			Table_temp_load->Edit();
+			Table_temp_load->Append();
+			Table_temp_load->Edit();
+			Table_temp_load->FieldByName("GUID")->AsString=Table_Apartsell->FieldByName("GUID")->AsString;
+			Table_temp_load->FieldByName("DATE_CH")->AsString=Table_Apartsell->FieldByName("DATE_CH")->AsString;
+			Table_temp_load->FieldByName("CLIENT")->AsString=Table_Apartsell->FieldByName("AGENT")->AsString;
+			Table_Apartsell->Next();
+		}
+		//Table_temp_load->ApplyUpdates(0);
+
+		Query_temp->SQL->Clear();
+		Query_temp->SQL->Add("SELECT * FROM "+Table_def->FieldByName("TABLENAME")->AsAnsiString.LowerCase()+" WHERE concat(guid, date_ch) NOT IN (SELECT concat(guid, date_ch) FROM temp_load) and agent<>"+(UnicodeString(OwnerCode))+";");
+		Query_temp->Open();
+
+		Table_Apartsell->First();
+		Query_temp->First();
+		countobj = 0;
+		while (!Query_temp->Eof){
+			if (!Table_Apartsell->Locate("GUID",Query_temp->FieldByName("GUID")->AsString.c_str(),TLocateOptions())){
+				Table_Apartsell->Edit();
+				Table_Apartsell->Append();
+			}
+			for (int i = 0; i < Query_temp->Fields->Count; i++) {
+				swexist=0;
+				for (int j = 0; j < Table_Apartsell->Fields->Count; j++) {
+					if (Table_Apartsell->FieldDefs->Items[j]->Name ==
+						Query_temp->FieldDefs->Items[i]->Name) {
+						swexist=1;
+					}
+				}
+				if (swexist==1) {
+					Table_Apartsell->Edit();
+					Table_Apartsell->FieldByName(Query_temp->FieldDefs->Items[i]->Name)->AsString =
+						Query_temp->FieldByName(Query_temp->FieldDefs->Items[i]->Name)->AsString;
+				}
+			}
+			Table_Apartsell->FieldByName("PRICETYPE")->AsInteger=3;
+			countobj = countobj+1;
+			Query_temp->Next();
+		}
+		Table_Apartsell->CheckBrowseMode();
+		//Записать изменения в базу данных
+		MainTransaction->CommitRetaining();
+		ProgressBar1->StepIt();
+		Table_def->Next();
+	}
+
+	//Таблица с обновлением exe файла
+	//Query_updateexe = new TSQLQuery(NULL);
+	//Query_updateexe->Connection = SQLConnection1;
+	//Query_updateexe->SQL->Clear();
+	//Query_updateexe->SQL->Add("SELECT * FROM updateexe;");
+	//Query_updateexe->Open();
+	//Query_updateexe->First();
+
+	//Таблица со списком скриптов для обновления
+	//Query_updatescript = new TSQLQuery(NULL);
+	Query_updatescript->Connection = SQLConnection1;
+	Query_updatescript->SQL->Clear();
+	Query_updatescript->SQL->Add("SELECT * FROM updatescript where curversion>'"+curVersion+"' order by curversion, ord;");
+	Query_updatescript->Open();
+	Query_updatescript->First();
+
+	// Выполнение скриптов на firebird
+	Query_upd_firebird = new TIBQuery(NULL);
+	Query_upd_firebird->Database = MainConn;
+	Query_upd_firebird->Transaction = MainTransaction;
+
+	if (Query_updatescript->RecordCount>0) {
+		while (!Query_updatescript->Eof){
+			Query_upd_firebird->SQL->Clear();
+			Query_upd_firebird->SQL->Add(Query_updatescript->FieldByName("STRSCRIPT")->AsString);
+			Query_upd_firebird->ExecSQL();
+			Query_updatescript->Next();
+		}
+	} */
+	//ShowMessage(Query_updatescript->RecordCount);
+	//ShowMessage(Query_updatescript->FieldByName("STRSCRIPT")->AsString);
+	//TMemoryStream *stm = new TMemoryStream();
+	//stm->
+	//Query_updateexe->
+	//Query_updateexe->FieldByName("exefile")->
+	//ShowMessage(StartDirF);
+	//FileExists(filename)
+	//SelectDirectory("Мой компьютер", "", path)
+
+	// Обновление exe файла
+	//FormUpdateExe = new TFormUpdateExe(this);
+	//FormUpdateExe->ShowModal();
+	//delete FormUpdateExe;
+
+	TMemoryStream *s = new TMemoryStream();
+	IdHTTP1->Get("http://iscentre-samara.ru/files/centre.zip", s);
+	s->SaveToFile("c:\\temp\\centre.zip");
+	delete s;
+	ProgressBar2->Position = 0;
+
+	/*if (Query_updateexe->FieldByName("CURVERSION")->AsString>curVersion) {
+		//ShowMessage("Обновить");
+		TBlobField *fldcontent = dynamic_cast<TBlobField*>(Query_updateexe->FieldByName("exefile"));
+		fldcontent->SaveToFile(StartDirF+"exe\\centre.zip");
+		//SelectDirectory("Мой компьютер", "", path)
+		SetCurrentDir(StartDirF+"exe");
+		ShellExecute(Handle,"open",(StartDirF+"exe\\extr.bat").c_str(), NULL,NULL,SW_RESTORE);
+		//ShowMessage(GetCurrentDir());
+
+		ShellExecute(Handle,"open",(StartDirF+"start.exe").c_str(), NULL,NULL,SW_RESTORE);
+		FormStart->Close();
+	} else {
+		//ShowMessage("Не обновлять");
+	} */
+	/*ProgressBar1->StepIt();
+
+	// Оббновление таблицы с рекламой
+	//Таблица с рекламой
+	Table_reklama = new TIBTable(NULL);
+	Table_reklama->Database=MainConn;
+	Table_reklama->Transaction=MainTransaction;
+	Table_reklama->TableName = "TABLEREKLAMA";
+	Table_reklama->Active = TRUE;
+
+	Query_upd_firebird->SQL->Clear();
+	Query_upd_firebird->SQL->Add("delete from tablereklama;");
+	Query_upd_firebird->ExecSQL();
+
+	//Таблица с рекламой с сервера
+	//Query_reklama = new TSQLQuery(NULL);
+	Query_reklama->Connection = SQLConnection1;
+	Query_reklama->SQL->Clear();
+	Query_reklama->SQL->Add("SELECT * FROM tablereklama;");
+	Query_reklama->Open();
+	Query_reklama->First();
+
+	while (!Query_reklama->Eof){
+		Table_reklama->Append();
+		Table_reklama->FieldByName("TABLENAME")->AsString=Query_reklama->FieldByName("TABLENAME")->AsString;
+		Table_reklama->FieldByName("PICK")->AsBytes=Query_reklama->FieldByName("PICK")->AsBytes;
+		Table_reklama->FieldByName("DATEEND")->AsDateTime=Query_reklama->FieldByName("DATEEND")->AsDateTime;
+		Query_reklama->Next();
+	}
+	Table_reklama->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	ProgressBar1->StepIt();  */
+
+	//this->Release();
+	//Application->Terminate();
+	//Button1Click(this);
+	this->Close();
+	Perform(WM_CLOSE,0,0);
+	//this->Release();
+
+	//this->Free();
+	//this->FreeOnRelease();
+	//this->Close();
+	//this->Close();
+	//ShowMessage(countobj);
+	//ShowMessage(OwnerCode);
+	//Table_MySQL_Apartsell->ApplyUpdates(0);
+
+	//ShowMessage(Query_temp->RecordCount);
+	//Table_updatebanner->DataSet->Active = false;
+	//Table_updatebanner->DataSet->CommandText="temp_t";
+	//Table_updatebanner->DataSet->Active = true;
+	//ShowMessage(Table_updatebanner->DataSet->RecordCount);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormUpdateBanner::Button1Click(TObject *Sender)
+{
+	ShowMessage("butclick");
+	Close();
+	//Application->ProcessMessages();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormUpdateBanner::IdHTTP1Work(TObject *ASender, TWorkMode AWorkMode,
+          __int64 AWorkCount)
+{
+	ProgressBar2->Position = AWorkCount;
+	//Application->ProcessMessages();
+	//Image1->Refresh();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormUpdateBanner::IdHTTP1WorkBegin(TObject *ASender, TWorkMode AWorkMode,
+		  __int64 AWorkCountMax)
+{
+	ProgressBar2->Position = 0;
+	ProgressBar2->Max = AWorkCountMax;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormUpdateBanner::FormPaint(TObject *Sender)
+{
+	ShowMessage("onPaint");
+	Button1Click(this);
+}
+//---------------------------------------------------------------------------
+

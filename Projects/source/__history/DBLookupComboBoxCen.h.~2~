@@ -1,0 +1,20 @@
+//---------------------------------------------------------------------------
+
+#ifndef DBLookupComboBoxCenH
+#define DBLookupComboBoxCenH
+//---------------------------------------------------------------------------
+#include <SysUtils.hpp>
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <DBCtrls.hpp>
+//---------------------------------------------------------------------------
+class PACKAGE TDBLookupComboBoxCen : public TMyDBLookupComboBox
+{
+private:
+protected:
+public:
+	__fastcall TDBLookupComboBoxCen(TComponent* Owner);
+__published:
+};
+//---------------------------------------------------------------------------
+#endif

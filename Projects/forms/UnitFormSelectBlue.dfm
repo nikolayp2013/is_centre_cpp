@@ -1,0 +1,53 @@
+object FormSelectBlue: TFormSelectBlue
+  Left = 0
+  Top = 0
+  BorderStyle = bsNone
+  Caption = 'FormSelectBlue'
+  ClientHeight = 228
+  ClientWidth = 188
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poDefault
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 1
+    Top = 1
+    Width = 247
+    Height = 227
+    BevelWidth = 2
+    Caption = 'Panel1'
+    ShowCaption = False
+    TabOrder = 0
+    object Item_CheckListBox: TCheckListBox
+      Left = 4
+      Top = 1
+      Width = 181
+      Height = 189
+      ItemHeight = 13
+      TabOrder = 0
+    end
+    object BitBtn1: TBitBtn
+      Left = 4
+      Top = 191
+      Width = 181
+      Height = 33
+      Caption = #1055#1088#1080#1084#1077#1085#1080#1090#1100
+      DoubleBuffered = True
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentDoubleBuffered = False
+      ParentFont = False
+      TabOrder = 1
+      OnClick = BitBtn1Click
+    end
+  end
+end

@@ -1,0 +1,237 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormGroupEdit.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormGroupEdit *FormGroupEdit;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+// Таблица со списком групп
+TIBTable * Table_Abonents = NULL;
+extern TIBTable * Table_Abonents;
+TIBTable * Table_Group = NULL;
+extern TIBTable * Table_Group;
+TIBTable * Table_GroupList = NULL;
+extern TIBTable * Table_GroupList;
+//---------------------------------------------------------------------------
+__fastcall TFormGroupEdit::TFormGroupEdit(TComponent* Owner, TIBDatabase * MainConn_local)
+	: TForm(Owner)
+{
+	MainConn = MainConn_local;
+
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать табличку со списко абонентов
+	Table_Abonents = new TIBTable(NULL);
+	Table_Abonents->Database=MainConn;
+	Table_Abonents->Transaction=MainTransaction;
+	Table_Abonents->TableName = "ABONENTS";
+	Table_Abonents->IndexFieldNames="COMPID";
+	Table_Abonents->Active=true;
+	Table_Abonents->First();
+
+	Table_Group = new TIBTable(NULL);
+	Table_Group->Database=MainConn;
+	Table_Group->Transaction=MainTransaction;
+	Table_Group->TableName = "GROUPTABLE";
+	Table_Group->IndexFieldNames="ID";
+	Table_Group->Active=true;
+	Table_Group->First();
+
+	Table_GroupList = new TIBTable(NULL);
+	Table_GroupList->Database=MainConn;
+	Table_GroupList->Transaction=MainTransaction;
+	Table_GroupList->TableName = "GROUPLIST";
+	Table_GroupList->Filter = "IDGROUP=";
+	Table_GroupList->Filter = Table_GroupList->Filter + Table_Group->FieldByName("ID")->AsString;
+	Table_GroupList->Filtered = true;
+	Table_GroupList->Active=true;
+	Table_GroupList->FetchAll();
+
+	//Цикл по всем записям таблицы
+	 Table_Abonents->First();
+	 do {
+		GroupList_CheckListBox->Items->Add(Table_Abonents->FieldByName("COMPID")->AsString+" - "+Table_Abonents->FieldByName("COMPNAME")->AsString);
+		Table_Abonents->Next();
+	 } while(!Table_Abonents->Eof);
+	 Table_Abonents->First();
+
+	 GroupList_CheckListBox->Enabled = false;
+
+	 //Цикл по всем записям таблицы
+	 Table_Group->First();
+	 while(!Table_Group->Eof){
+		Group_ListBox->Items->Add(Table_Group->FieldByName("GROUP_NAME")->AsString);
+		Table_Group->Next();
+	 }
+	 Table_Group->First();
+	 Group_ListBox->ItemIndex=0;
+
+     // Процедура заполнения чекбокса
+	 RefreshCheck(this);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormGroupEdit::FilterCheck(TObject *Sender)
+{
+	// Фильтрация таблицы
+	Table_GroupList->Active=false;
+	Table_GroupList->Filtered = false;
+	Table_GroupList->Filter = "IDGROUP=";
+    Table_Group->First();
+	Table_Group->MoveBy(Group_ListBox->ItemIndex);
+	Table_GroupList->Filter = Table_GroupList->Filter + Table_Group->FieldByName("ID")->AsString;
+	Table_GroupList->Filtered = true;
+	Table_GroupList->Active=true;
+	Table_GroupList->FetchAll();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormGroupEdit::RefreshCheck(TObject *Sender)
+{
+	// Очистка чекбокса
+	 int i=0;
+	 while (i<GroupList_CheckListBox->Items->Count){
+		if (GroupList_CheckListBox->Checked[i]) {
+			GroupList_CheckListBox->Checked[i]=false;
+		}
+		i++;
+	 }
+	 FilterCheck(this);
+	 Table_GroupList->First();
+	 //Цикл по всем записям таблицы
+	 while(!Table_GroupList->Eof && Table_GroupList->FieldByName("IDGROUP")->AsInteger==Table_Group->FieldByName("ID")->AsInteger){
+		if (Table_Abonents->Locate("COMPID",Table_GroupList->FieldByName("IDCOMP")->AsInteger,TLocateOptions())) {
+			GroupList_CheckListBox->Checked[Table_Abonents->RecNo-1] = true;
+		}
+		Table_GroupList->Next();
+	 }
+	 Table_GroupList->First();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormGroupEdit::ButtonCloseClick(TObject *Sender)
+{
+    if (ButtonEdit->Caption=="Изменить") {
+	   Close();
+	}
+	if (ButtonEdit->Caption=="Записать") {
+		ButtonEdit->Caption="Изменить";
+		ButtonAdd->Enabled = true;
+		ButtonDelete->Enabled = true;
+		Group_ListBox->Enabled = true;
+		GroupList_CheckListBox ->Enabled = false;
+		Abort();
+	}
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormGroupEdit::ButtonAddClick(TObject *Sender)
+{
+	int * retval = new int;
+	*retval = 0;
+	Table_Group->Append();
+	Table_Group->FieldByName("ID")->AsInteger = -1;
+	FormAddGroupName = new TFormAddGroupName(this,Table_Group,retval);
+	FormAddGroupName->ShowModal();
+	if (*retval!=0) {
+		Group_ListBox->Items->Add(Table_Group->FieldByName("GROUP_NAME")->AsString);
+		ButtonEdit->Caption="Записать";
+		ButtonAdd->Enabled = false;
+		ButtonDelete->Enabled = false;
+		Group_ListBox->Enabled = false;
+		GroupList_CheckListBox ->Enabled = true;
+		Group_ListBox->ItemIndex=Group_ListBox->Items->Count-1;
+	} else {
+		Table_Group->Delete();
+	}
+	//Фиксация изменений
+	Table_Group->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	Table_Group->Refresh();
+	delete FormThems;
+	delete retval;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormGroupEdit::Group_ListBoxClick(TObject *Sender)
+{
+	 Table_Group->First();
+	 Table_Group->MoveBy(Group_ListBox->ItemIndex);
+	 // Процедура обновления и заполнения чекбокса
+	 RefreshCheck(this);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormGroupEdit::ButtonEditClick(TObject *Sender)
+{
+	if (ButtonEdit->Caption=="Изменить") {
+		ButtonEdit->Caption="Записать";
+		ButtonAdd->Enabled = false;
+		ButtonDelete->Enabled = false;
+		Group_ListBox->Enabled = false;
+		GroupList_CheckListBox ->Enabled = true;
+		Abort();
+	}
+	if (ButtonEdit->Caption=="Записать") {
+		ButtonEdit->Caption="Изменить";
+		ButtonAdd->Enabled = true;
+		ButtonDelete->Enabled = true;
+		Group_ListBox->Enabled = true;
+		GroupList_CheckListBox ->Enabled = false;
+	}
+	//Цикл по всем записям таблицы
+	 Table_GroupList->First();
+	 while(!Table_GroupList->Eof && Table_GroupList->FieldByName("IDGROUP")->AsInteger==Table_Group->FieldByName("ID")->AsInteger){
+		Table_GroupList->Delete();
+	 }
+	 //
+	 int i=0;
+	 while (i<GroupList_CheckListBox->Items->Count){
+		if (GroupList_CheckListBox->Checked[i]) {
+			 Table_GroupList->Append();
+			 Table_GroupList->FieldByName("ID")->AsInteger=-1;
+			 Table_Group->First();
+			 Table_Group->MoveBy(Group_ListBox->ItemIndex);
+			 Table_GroupList->FieldByName("IDGROUP")->AsInteger= Table_Group->FieldByName("ID")->AsInteger;
+			 Table_Abonents->First();
+			 Table_Abonents->MoveBy(i);
+			 Table_GroupList->FieldByName("IDCOMP")->AsInteger= Table_Abonents->FieldByName("COMPID")->AsInteger;
+		}
+		i++;
+	 }
+	 //Фиксация изменений
+	Table_GroupList->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	Table_GroupList->Refresh();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormGroupEdit::ButtonDeleteClick(TObject *Sender)
+{
+	// Кнопка удаления записи
+	AnsiString ds = "Вы действительно хотите удалить запись?";
+	if (MessageBox(NULL,ds.c_str(),"Подтверждение удаления",MB_YESNO | MB_TOPMOST | MB_ICONQUESTION)!=IDYES){
+		Abort();
+	}
+	Table_Group->First();
+	Table_Group->MoveBy(Group_ListBox->ItemIndex);
+	Group_ListBox->Items->Delete(Group_ListBox->ItemIndex);
+	Table_Group->Delete();
+    //Фиксация изменений
+	Table_Group->CheckBrowseMode();
+	//Записать изменения в базу данных
+	MainTransaction->CommitRetaining();
+	Table_Group->Refresh();
+	Table_Group->First();
+	Group_ListBox->ItemIndex=0;
+	RefreshCheck(this);
+}
+//---------------------------------------------------------------------------
+

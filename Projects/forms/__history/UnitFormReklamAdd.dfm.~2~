@@ -1,0 +1,30 @@
+object FormReklamAdd: TFormReklamAdd
+  Left = 0
+  Top = 0
+  BorderStyle = bsSizeToolWin
+  ClientHeight = 258
+  ClientWidth = 375
+  Color = 8421631
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poMainFormCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 9
+    Top = 4
+    Width = 166
+    Height = 13
+    Caption = #1054#1082#1085#1086' '#1088#1077#1082#1083#1072#1084#1072#1094#1080#1080' '#1085#1072' '#1086#1073#1098#1077#1082#1090
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+end

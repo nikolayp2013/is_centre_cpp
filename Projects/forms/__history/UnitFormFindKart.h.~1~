@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormFindKartH
+#define UnitFormFindKartH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormFindKart : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormFindKart(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormFindKart *FormFindKart;
+//---------------------------------------------------------------------------
+#endif

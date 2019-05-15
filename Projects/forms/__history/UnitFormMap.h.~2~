@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormMapH
+#define UnitFormMapH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+//---------------------------------------------------------------------------
+class TFormMap : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormMap(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormMap *FormMap;
+//---------------------------------------------------------------------------
+#endif

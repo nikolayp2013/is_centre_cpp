@@ -1,0 +1,22 @@
+//---------------------------------------------------------------------------
+
+#ifndef UnitFormExportGridH
+#define UnitFormExportGridH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include "MainClass.h"
+//---------------------------------------------------------------------------
+class TFormExportGrid : public TForm
+{
+__published:	// IDE-managed Components
+private:	// User declarations
+public:		// User declarations
+	__fastcall TFormExportGrid(TComponent* Owner);
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TFormExportGrid *FormExportGrid;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,16 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "FormGallaryAddRemark.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormGallaryAddRem *FormGallaryAddRem;
+//---------------------------------------------------------------------------
+__fastcall TFormGallaryAddRem::TFormGallaryAddRem(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------

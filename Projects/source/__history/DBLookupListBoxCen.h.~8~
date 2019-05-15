@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef DBLookupListBoxCenH
+#define DBLookupListBoxCenH
+//---------------------------------------------------------------------------
+#include <SysUtils.hpp>
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <DBCtrls.hpp>
+#include <My_DBCtrls.hpp>
+//---------------------------------------------------------------------------
+class PACKAGE TDBLookupListBoxCen : public TDBLookupListBox
+{
+private:
+protected:
+public:
+	__fastcall TDBLookupListBoxCen(TComponent* Owner);
+__published:
+};
+//---------------------------------------------------------------------------
+#endif

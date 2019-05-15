@@ -1,0 +1,101 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include <ComObj.hpp>
+#include <stdio.h>
+#include <math.h>
+
+#include "Unit1.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBDatabase"
+#pragma link "IBTable"
+#pragma resource "*.dfm"
+TForm1 *Form1;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+TIBTable * MainTable = NULL;
+extern TIBTable * MainTable;
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+	//Данная функция срабатывает при создании формы
+
+	//Создать главный коннект к базе
+	MainConn = new TIBDatabase(NULL);
+	MainConn->DatabaseName="localhost:centre_db";
+	MainConn->Params->Add("user_name=sysdba");
+	MainConn->Params->Add("password=masterkey");
+	MainConn->Params->Add("lc_ctype=WIN1251");
+	MainConn->LoginPrompt=FALSE;
+	MainConn->Connected=TRUE;
+
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать объект табличку
+	MainTable = new TIBTable(NULL);
+	MainTable->Database=MainConn;
+	MainTable->Transaction=MainTransaction;
+	MainTable->TableName = "PRICELIST";
+	MainTable->Active = TRUE;
+
+
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button26Click(TObject *Sender)
+{
+	Form3->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button27Click(TObject *Sender)
+{
+	//Фиксация изменений
+	DataSource1->DataSet->CheckBrowseMode();
+	//Записать изменения в базу данных
+	//IBTransaction1->Commit();
+	//Открыть набор данных
+	IBTable1->Active=True;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::SpeedButton2Click(TObject *Sender)
+{
+	//SpeedButton2->Down = True;
+	//Вызов формы редактирования карточки
+	Form2->ShowModal();
+	//SpeedButton2->Down = False;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+	//dim MainConn;
+	//IBDataBaseMain = createobject()
+	//TIBDatabase * MainConn = NULL;
+	/*MainConn = new TIBDatabase(NULL);
+	MainConn->DatabaseName="localhost:centre_db";
+	MainConn->Params->Add("user_name=sysdba");
+	MainConn->Params->Add("password=masterkey");
+	MainConn->Params->Add("lc_ctype=WIN1251");
+	MainConn->LoginPrompt=FALSE;
+	MainConn->Connected=TRUE; */
+	//ShowMessage(MainConn->Connected);
+}
+
+

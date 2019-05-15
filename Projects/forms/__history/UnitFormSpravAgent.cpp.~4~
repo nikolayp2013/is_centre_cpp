@@ -1,0 +1,24 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormSpravAgent.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "IBCustomDataSet"
+#pragma link "IBDatabase"
+#pragma resource "*.dfm"
+TFormSpravAgent *FormSpravAgent;
+//---------------------------------------------------------------------------
+__fastcall TFormSpravAgent::TFormSpravAgent(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormSpravAgent::Button3Click(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+

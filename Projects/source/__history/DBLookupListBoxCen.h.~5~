@@ -1,0 +1,21 @@
+//---------------------------------------------------------------------------
+
+#ifndef DBLookupListBoxCenH
+#define DBLookupListBoxCenH
+//---------------------------------------------------------------------------
+#include <SysUtils.hpp>
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <DBCtrls.hpp>
+//---------------------------------------------------------------------------
+class PACKAGE TDBLookupListBoxCen : public TDBLookupListBox
+{
+private:
+	__fastcall UpdateScrollBar();
+protected:
+public:
+	__fastcall TDBLookupListBoxCen(TComponent* Owner);
+__published:
+};
+//---------------------------------------------------------------------------
+#endif

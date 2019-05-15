@@ -1,0 +1,353 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormFilterAddArend.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TFormFilterAddArend *FormFilterAddArend;
+int leftside;
+extern int leftside;
+TIBDatabase * MainConn = NULL;
+extern TIBDatabase * MainConn;
+TIBTransaction * MainTransaction = NULL;
+extern TIBTransaction * MainTransaction;
+TIBTable * Table_Region = NULL;
+extern TIBTable * Table_Region;
+TIBDataSet * Table_Streets = NULL;
+extern TIBDataSet * Table_Streets;
+UnicodeString * strFilterAdd;
+extern UnicodeString * strFilterAdd;
+TIBTable * Table_Filterdop = NULL;
+extern TIBTable * Table_Filterdop;
+//---------------------------------------------------------------------------
+__fastcall TFormFilterAddArend::TFormFilterAddArend(TComponent* Owner, TIBDatabase * MainConn_loc,
+		UnicodeString * strFilterAdd_loc)
+	: TForm(Owner)
+{
+	strFilterAdd = strFilterAdd_loc;
+	//FormFilterAdd->Left = leftside - FormFilterAdd->Width;
+	//leftside = leftsideloc;
+	MainConn = MainConn_loc;
+	//Создать объект транзакций
+	MainTransaction = new TIBTransaction(NULL);
+	MainTransaction->DefaultDatabase = MainConn;
+
+	//Создать табличку короткое наименование района
+	Table_Region = new TIBTable(NULL);
+	Table_Region->Database=MainConn;
+	Table_Region->Transaction=MainTransaction;
+	Table_Region->TableName = "ITEMS";
+	Table_Region->Filter = "RAZDEL=8";
+	Table_Region->Filtered = true;
+	Table_Region->Active=true;
+	Table_Region->FetchAll();
+
+	//Создать табличку по дополнительному фильтру
+	Table_Filterdop = new TIBTable(NULL);
+	Table_Filterdop->Database=MainConn;
+	Table_Filterdop->Transaction=MainTransaction;
+	Table_Filterdop->TableName = "FILTERDOP";
+	//Table_Region->Filter = "RAZDEL=8";
+	//Table_Region->Filtered = true;
+	Table_Filterdop->Active=true;
+	Table_Filterdop->FetchAll();
+
+	Table_Region->First();
+	while (!Table_Region->Eof){
+		Region_ComboBox->Items->Add(Table_Region->FieldByName("FULLNAME")->AsString);
+		Table_Region->Next();
+	}
+	Region_ComboBox->Items->Add("Неважно");
+	Region_ComboBox->ItemIndex=Region_ComboBox->Items->Count-1;
+	//Region_ComboBox->Items->Selected = false;
+
+	Table_Streets = new TIBDataSet(NULL);
+	Table_Streets->Database=MainConn;
+	Table_Streets->Transaction=MainTransaction;
+	Table_Streets->SelectSQL->Clear();
+	Table_Streets->SelectSQL->Append("Select * from streets order by streetname");
+	Table_Streets->Filtered = true;
+	Table_Streets->Active = TRUE;
+	Table_Streets->FetchAll();
+
+	Table_Streets->First();
+	while (!Table_Streets->Eof){
+		Streest_ListBox->Items->Add(Table_Streets->FieldByName("STREETNAME")->AsString);
+		Table_Streets->Next();
+	}
+
+	Balcony_ComboBox->Items->Add("Не важно");
+	Balcony_ComboBox->Items->Add("Балкон");
+	Balcony_ComboBox->Items->Add("Лоджия");
+	Balcony_ComboBox->Items->Add("Балкон и Лоджия");
+	Balcony_ComboBox->Items->Add("Балкон или Лоджия");
+	Balcony_ComboBox->Items->Add("Только Балкон");
+	Balcony_ComboBox->Items->Add("Только Лоджия");
+
+	Newbuild_ComboBox->Items->Add("Не важно");
+	Newbuild_ComboBox->Items->Add("Показать");
+	Newbuild_ComboBox->Items->Add("Убрать");
+}//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::StreetFilter(TObject *Sender)
+{
+	//Фильтр улица по району
+	//Region_ComboBox
+	Table_Streets->Active = false;
+	Table_Streets->Filtered=false;
+	Table_Streets->SelectSQL->Clear();
+
+	if (Region_ComboBox->Items->Count==Region_ComboBox->ItemIndex+1) {
+		Table_Streets->SelectSQL->Append("Select * from streets order by streetname");
+	} else {
+		Table_Region->RecNo=Region_ComboBox->ItemIndex+1;
+		Table_Streets->SelectSQL->Append("Select * from streets where raion1="+
+			Table_Region->FieldByName("MGROUP")->AsString+" or raion2="+
+			Table_Region->FieldByName("MGROUP")->AsString+" or raion3="+
+			Table_Region->FieldByName("MGROUP")->AsString+" or raion4="+
+			Table_Region->FieldByName("MGROUP")->AsString+" or raion5="+
+			Table_Region->FieldByName("MGROUP")->AsString+" order by streetname");
+	}
+	Table_Streets->Filtered = true;
+	Table_Streets->Active = TRUE;
+	Table_Streets->FetchAll();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton9Click(TObject *Sender)
+{
+    *strFilterAdd = "";
+	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton7Click(TObject *Sender)
+{
+	*strFilterAdd = "";
+	if (Selected_ListBox->Items->Count>0) {
+		*strFilterAdd = "(a.street = '"+Selected_ListBox->Items->Strings[0]+"'";
+		for (int i = 1; i < Selected_ListBox->Items->Count; i++) {
+			 *strFilterAdd = *strFilterAdd + " or a.street = '"+Selected_ListBox->Items->Strings[i]+"'";
+		}
+		*strFilterAdd = *strFilterAdd + ")";
+	}
+	if (!Totalarea1_Edit->Text.IsEmpty() || !Totalarea2_Edit->Text.IsEmpty()) {
+		if (!(*strFilterAdd).IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + " and ";
+		}
+		*strFilterAdd = *strFilterAdd + "totalarea between " ;
+		if (Totalarea1_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "0";
+		} else {
+			*strFilterAdd = *strFilterAdd + Totalarea1_Edit->Text;
+		}
+		*strFilterAdd = *strFilterAdd + " and ";
+		if (Totalarea2_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "99999";
+		} else {
+			*strFilterAdd = *strFilterAdd + Totalarea2_Edit->Text;
+		}
+	}
+	if (!Livearea1_Edit->Text.IsEmpty() || !Livearea2_Edit->Text.IsEmpty()) {
+		if (!(*strFilterAdd).IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + " and ";
+		}
+		*strFilterAdd = *strFilterAdd + "Livearea between " ;
+		if (Livearea1_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "0";
+		} else {
+			*strFilterAdd = *strFilterAdd + Livearea1_Edit->Text;
+		}
+		*strFilterAdd = *strFilterAdd + " and ";
+		if (Livearea2_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "99999";
+		} else {
+			*strFilterAdd = *strFilterAdd + Livearea2_Edit->Text;
+		}
+	}
+	if (!Kitchenarea1_Edit->Text.IsEmpty() || !Kitchenarea2_Edit->Text.IsEmpty()) {
+		if (!(*strFilterAdd).IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + " and ";
+		}
+		*strFilterAdd = *strFilterAdd + "Kitchenarea between " ;
+		if (Kitchenarea1_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "0";
+		} else {
+			*strFilterAdd = *strFilterAdd + Kitchenarea1_Edit->Text;
+		}
+		*strFilterAdd = *strFilterAdd + " and ";
+		if (Kitchenarea2_Edit->Text.IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + "99999";
+		} else {
+			*strFilterAdd = *strFilterAdd + Kitchenarea2_Edit->Text;
+		}
+	}
+
+	if (Balcony_ComboBox->ItemIndex>0) {
+		if (!(*strFilterAdd).IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + " and ";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Балкон") {
+			*strFilterAdd = *strFilterAdd + "balcony >0";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Лоджия") {
+			*strFilterAdd = *strFilterAdd + "loggia >0";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Балкон и Лоджия") {
+			*strFilterAdd = *strFilterAdd + "loggia >0 and balcony>0";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Балкон или Лоджия") {
+			*strFilterAdd = *strFilterAdd + "loggia >0 or balcony>0";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Только Балкон") {
+			*strFilterAdd = *strFilterAdd + "balcony>0 and loggia = 0";
+		}
+		if (Balcony_ComboBox->Items->Strings[Balcony_ComboBox->ItemIndex] =="Только Лоджия") {
+			*strFilterAdd = *strFilterAdd + "loggia >0 and balcony=0";
+		}
+	}
+
+	if (Newbuild_ComboBox->ItemIndex>0) {
+		if (!(*strFilterAdd).IsEmpty()) {
+			*strFilterAdd = *strFilterAdd + " and ";
+		}
+		if (Newbuild_ComboBox->Items->Strings[Newbuild_ComboBox->ItemIndex] =="Показать") {
+			*strFilterAdd = *strFilterAdd + "Newbuild=1";
+		}
+		if (Newbuild_ComboBox->Items->Strings[Newbuild_ComboBox->ItemIndex] =="Убрать") {
+			*strFilterAdd = *strFilterAdd + "Newbuild=0";
+		}
+	}
+	if (Table_Filterdop->RecordCount>0) {
+		if (RadioButton2->Checked) {
+			if (!(*strFilterAdd).IsEmpty()) {
+				*strFilterAdd = *strFilterAdd + " and ";
+			}
+			*strFilterAdd = *strFilterAdd + "(";
+			Table_Filterdop->First();
+			while (!Table_Filterdop->Eof){
+				*strFilterAdd = *strFilterAdd + "upper(addinfo collate PXW_CYRL) like'%"+
+					AnsiUpperCase(Table_Filterdop->FieldByName("FLT_NAME")->AsString)+
+					"%' or ";
+				Table_Filterdop->Next();
+			}
+			*strFilterAdd = *strFilterAdd + "1=2)";
+		}
+		if (RadioButton3->Checked) {
+			if (!(*strFilterAdd).IsEmpty()) {
+				*strFilterAdd = *strFilterAdd + " and ";
+			}
+			*strFilterAdd = *strFilterAdd + "(";
+			Table_Filterdop->First();
+			while (!Table_Filterdop->Eof){
+				*strFilterAdd = *strFilterAdd + "upper(addinfo collate PXW_CYRL) not like'%"+
+					AnsiUpperCase(Table_Filterdop->FieldByName("FLT_NAME")->AsString)+
+					"%' and ";
+				Table_Filterdop->Next();
+			}
+			*strFilterAdd = *strFilterAdd + "2=2 or addinfo is null)" ;
+		}
+	}
+	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::FormResize(TObject *Sender)
+{
+	//FormFilterAdd->Left = leftside - FormFilterAdd->Width;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::FormShow(TObject *Sender)
+{
+	//ShowMessage(FormFilterAdd->Left);
+	//ShowMessage(leftside);
+	//ShowMessage(leftside - FormFilterAdd->Width);
+	//FormFilterAdd->Left = leftside - FormFilterAdd->Width;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::Region_ComboBoxClick(TObject *Sender)
+{
+	StreetFilter(this);
+	Table_Streets->First();
+	Streest_ListBox->Items->Clear();
+	while (!Table_Streets->Eof){
+		Streest_ListBox->Items->Add(Table_Streets->FieldByName("STREETNAME")->AsString);
+		Table_Streets->Next();
+	}
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::Street_EditKeyUp(TObject *Sender, WORD &Key, TShiftState Shift)
+
+{
+	// Поиск улицы
+	if (Table_Streets->Locate("STREETNAME",Street_Edit->Text.c_str(),TLocateOptions() << loPartialKey
+			<<loCaseInsensitive)) {
+		Streest_ListBox->ItemIndex = Table_Streets->RecNo-1;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton1Click(TObject *Sender)
+{
+	// Добавить улицу
+	//ShowMessage(Streest_ListBox->Items->Strings[Selected_ListBox->ItemIndex]);
+	for (int i = 0; i < Selected_ListBox->Items->Count; i++) {
+		if (Selected_ListBox->Items->Strings[i]==Streest_ListBox->Items->Strings[Streest_ListBox->ItemIndex]) {
+             Abort();
+		}
+	}
+	Selected_ListBox->Items->Add(Streest_ListBox->Items->Strings[Streest_ListBox->ItemIndex]);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton2Click(TObject *Sender)
+{
+	// Удалить улицу из списка
+	Selected_ListBox->Items->Delete(Selected_ListBox->ItemIndex);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton3Click(TObject *Sender)
+{
+	// Очистить список улиц
+	Selected_ListBox->Items->Clear();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton6Click(TObject *Sender)
+{
+	Totalarea1_Edit->Text = "";
+	Totalarea2_Edit->Text = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton5Click(TObject *Sender)
+{
+	Livearea1_Edit->Text = "";
+	Livearea2_Edit->Text = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton4Click(TObject *Sender)
+{
+	Kitchenarea1_Edit->Text = "";
+	Kitchenarea2_Edit->Text = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormFilterAddArend::SpeedButton8Click(TObject *Sender)
+{
+	// Параметры фильтра
+	FormFilterAddDop = new TFormFilterAddDop(MainForm,MainConn);
+	FormFilterAddDop->ShowModal();
+	delete FormFilterAddDop;
+}
+//---------------------------------------------------------------------------
+

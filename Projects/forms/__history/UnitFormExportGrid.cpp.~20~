@@ -1,0 +1,97 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "UnitFormExportGrid.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "frxClass"
+#pragma link "frxDBSet"
+#pragma link "frxExportPDF"
+#pragma link "frxExportXLS"
+#pragma resource "*.dfm"
+TFormExportGrid *FormExportGrid;
+//---------------------------------------------------------------------------
+__fastcall TFormExportGrid::TFormExportGrid(TComponent* Owner)
+	: TForm(Owner)
+{
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExportGrid::SpeedButton1Click(TObject *Sender)
+{
+	// Excel
+	MainForm->MainTable->DisableControls();
+	// Печать только отмеченных позиций
+	if (CheckBox1->Checked) {
+		 if (MainForm->MainTable->Filter!="") {
+			 MainForm->MainTable->Filter = MainForm->MainTable->Filter + " and ";
+		 }
+		 MainForm->MainTable->Filter = MainForm->MainTable->Filter+" check = 1";
+	}
+	if (MainForm->MainTable->Filter!="") {
+		MainForm->MainTable->Filtered=true;
+	}
+	frxReport1->LoadFromFile(sPath+"\\reports\\exportPDF.fr3",true);
+	frxReport1->PrepareReport();
+	if (SaveDialog1->Execute()) {
+		if (SaveDialog1->FileName!="") {
+			frxPDFExport1->FileName = SaveDialog1->FileName;
+			frxReport1->Export(frxPDFExport1);
+			MainForm->MainTable->Filtered=false;
+			MainForm->MainTable->Filter = "";
+			MainForm->MainTable->EnableControls();
+			Close();
+		}
+	}
+	MainForm->MainTable->Filtered=false;
+	MainForm->MainTable->Filter = "";
+	MainForm->MainTable->EnableControls();
+	/*if (SaveDialog2->Execute()) {
+		if (SaveDialog2->FileName!="") {
+			//ShowMessage(SaveDialog1->FileName);
+			SaveDBGridEhToExportFile(__classid(TDBGridEhExportAsXLS),MainForm->DBMainGrid,SaveDialog2->FileName,true);
+			Close();
+			//frxPDFExport1->FileName = SaveDialog1->FileName;
+			//frxReport1->Export(frxPDFExport1);
+		}
+	} */
+	//SaveDBGridEhToExportFile(__classid(TDBGridEhExportAsXLS),MainForm->DBMainGrid,"c:\\temp\\file1.xls",true);
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExportGrid::SpeedButton2Click(TObject *Sender)
+{
+	// PDF
+	MainForm->MainTable->DisableControls();
+	// Печать только отмеченных позиций
+	if (CheckBox1->Checked) {
+		 if (MainForm->MainTable->Filter!="") {
+			 MainForm->MainTable->Filter = MainForm->MainTable->Filter + " and ";
+		 }
+		 MainForm->MainTable->Filter = MainForm->MainTable->Filter+" check = 1";
+	}
+	if (MainForm->MainTable->Filter!="") {
+		MainForm->MainTable->Filtered=true;
+	}
+	frxReport1->LoadFromFile(sPath+"\\reports\\exportPDF.fr3",true);
+	frxReport1->PrepareReport();
+	if (SaveDialog1->Execute()) {
+		if (SaveDialog1->FileName!="") {
+			frxPDFExport1->FileName = SaveDialog1->FileName;
+			frxReport1->Export(frxPDFExport1);
+			MainForm->MainTable->Filtered=false;
+			MainForm->MainTable->Filter = "";
+			MainForm->MainTable->EnableControls();
+			Close();
+		}
+	}
+	MainForm->MainTable->Filtered=false;
+	MainForm->MainTable->Filter = "";
+	MainForm->MainTable->EnableControls();
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormExportGrid::SpeedButton3Click(TObject *Sender)
+{
+	// SQL
+}
+//---------------------------------------------------------------------------
